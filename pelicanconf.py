@@ -8,7 +8,7 @@ SITENAME = 'agren.cc'
 SITEURL = ''
 JINJA_ENVIRONMENT = {'extensions': ['jinja2.ext.i18n']}
 
-DEFAULT_DATE_FORMAT = '%d %B %Y'
+DEFAULT_DATE_FORMAT = '%Y-%m-%d'
 
 #PLUGIN_PATHS = ['pelican-plugins']
 #PLUGINS = ['i18n_subsites','bootstrap-rst']
