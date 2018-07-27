@@ -30,9 +30,9 @@ AUTHOR_FEED_RSS = None
          # ('Jinja2', 'http://jinja.pocoo.org/'),
          # ('You can modify those links in your config file', '#'),)
 
-# # Social widget
-# SOCIAL = (('You can add links in your config file', '#'),
-          # ('Another social link', '#'),)
+# Social widget
+SOCIAL = (('Twitter', 'https://twitter.com/obygd'),
+         ('Github', 'https://github.com/lgrn'),)
 
 DEFAULT_PAGINATION = 10
 
