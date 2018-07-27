@@ -1,18 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>agren.cc</title><link href="https://lgrn.github.io/" rel="alternate"></link><link href="https://lgrn.github.io/feeds/all.atom.xml" rel="self"></link><id>https://lgrn.github.io/</id><updated>2010-10-04T18:40:00+02:00</updated><entry><title>Heading 1</title><link href="https://lgrn.github.io/my-super-post.html" rel="alternate"></link><published>2010-10-03T10:20:00+02:00</published><updated>2010-10-04T18:40:00+02:00</updated><author><name>lgrn</name></author><id>tag:lgrn.github.io,2010-10-03:/my-super-post.html</id><summary type="html">&lt;p class="first last"&gt;Short version for index and feeds&lt;/p&gt;
-</summary><content type="html">&lt;div class="section" id="heading-2"&gt;
-&lt;h2&gt;Heading 2&lt;/h2&gt;
-&lt;div class="section" id="heading-3"&gt;
-&lt;h3&gt;Heading 3&lt;/h3&gt;
-&lt;div class="section" id="heading-4"&gt;
-&lt;h4&gt;Heading 4&lt;/h4&gt;
-&lt;div class="section" id="heading-5"&gt;
-&lt;h5&gt;Heading 5&lt;/h5&gt;
-&lt;div class="section" id="heading-6"&gt;
-&lt;h6&gt;Heading 6&lt;/h6&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-</content><category term="thats"></category><category term="awesome"></category></entry></feed>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>agren.cc</title><link href="https://lgrn.github.io/" rel="alternate"></link><link href="https://lgrn.github.io/feeds/all.atom.xml" rel="self"></link><id>https://lgrn.github.io/</id><updated>2010-12-05T19:30:00+01:00</updated><entry><title>My super title</title><link href="https://lgrn.github.io/my-super-post.html" rel="alternate"></link><published>2010-12-03T10:20:00+01:00</published><updated>2010-12-05T19:30:00+01:00</updated><author><name>lgrn</name></author><id>tag:lgrn.github.io,2010-12-03:/my-super-post.html</id><summary type="html">&lt;p&gt;Short version for index and feeds&lt;/p&gt;</summary><content type="html">&lt;p&gt;This is the content of my super blog post.&lt;/p&gt;</content><category term="pelican"></category><category term="publishing"></category></entry></feed>

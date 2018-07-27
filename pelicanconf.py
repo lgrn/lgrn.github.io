@@ -2,14 +2,14 @@
 # -*- coding: utf-8 -*- #
 from __future__ import unicode_literals
 
-THEME = 'pelican-bootstrap3'
+THEME = 'nikhil-theme'
 AUTHOR = 'lgrn'
 SITENAME = 'agren.cc'
 SITEURL = ''
 JINJA_ENVIRONMENT = {'extensions': ['jinja2.ext.i18n']}
 
-PLUGIN_PATHS = ['pelican-plugins']
-PLUGINS = ['i18n_subsites']
+#PLUGIN_PATHS = ['pelican-plugins']
+#PLUGINS = ['i18n_subsites','bootstrap-rst']
 
 PATH = 'content'
 
