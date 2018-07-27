@@ -1,0 +1,1 @@
+pelican content --debug --autoreload  --output . --settings pelicanconf.py
