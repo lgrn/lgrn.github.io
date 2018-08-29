@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*- #
 from __future__ import unicode_literals
 
-THEME = 'nikhil-theme'
+THEME = 'pelican-mg'
 AUTHOR = 'lgrn'
 SITENAME = 'agren.cc'
 SITEURL = ''
