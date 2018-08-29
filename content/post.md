@@ -1,9 +1,11 @@
-Title: My super title
-Date: 2010-12-03 10:20
-Modified: 2010-12-05 19:30
-Category: Python
-Tags: pelican, publishing
-Slug: my-super-post
-Summary: Short version for index and feeds
+Title: First post on github.io
+Date: 2018-08-29 13:02
+Category: random
+Slug: first-post
+Summary: My first post, with some placeholder content.
 
-This is the content of my super blog post.
+The Roman Republic (Latin: Res publica Romana, Classical Latin: [ˈreːs ˈpuːb.lɪ.ka roːˈmaː.na]) was the era of classical Roman civilization beginning with the overthrow of the Roman Kingdom, traditionally dated to 509 BC, and ending in 27 BC with the establishment of the Roman Empire. It was during this period that Rome's control expanded from the city's immediate surroundings to hegemony over the entire Mediterranean world.
+
+Unlike the Pax Romana of the Roman Empire, the Republic was in a state of quasi-perpetual war throughout its existence. Its first enemies were its Latin and Etruscan neighbours, as well as the Gauls, who even sacked the city in 387 BC. The Republic nonetheless demonstrated extreme resilience and always managed to overcome its losses, however catastrophic. After the Gallic Sack, Rome indeed conquered the whole Italian peninsula in a century, which turned the Republic into a major player in the Mediterranean. The Republic's greatest enemy was doubtless Carthage, against which it waged three wars. Its general Hannibal famously invaded Italy by crossing the Alps and inflicted Rome two devastating defeats at the Lake Trasimene and Cannae, but the Republic once again recovered and won the war thanks to Scipio Africanus at the Battle of Zama in 202 BC. Carthage defeated, Rome became the dominant power of the ancient world. It then embarked in a long series of difficult conquests, after having notably defeated Philip V and Perseus of Macedon, Antiochus III of the Seleucid Empire, the Lusitanian Viriathis, the Numidian Jugurtha, the great Pontic king Mithridates VI, the Gaul Vercingetorix, and the Egyptian queen Cleopatra.
+
+At home, the Republic similarly experienced a long streak of social and political crises, which ended in several bloody civil wars. At first, the Conflict of the Orders opposed the patricians, the closed oligarchic elite, to the far more numerous plebs, who finally achieved political equality in several steps during the 4th century BC. Later, the vast conquests of the Republic disrupted its society, as the immense influx of slaves they brought enriched the aristocracy, but ruined the peasantry and urban workers. In order to solve this issue, several social reformers, known as the Populares, tried to pass agrarian laws, but the Gracchi brothers, Saturninus, or Clodius Pulcher, were all murdered by their opponents: the Optimates, keepers of the traditional aristocratic order. Mass slavery also caused three Servile Wars; the last of them was lead by Spartacus, a skilful gladiator who ravaged Italy and left Rome powerless until his defeat in 71 BC. In this context, the last decades of the Republic were marked by the rise of great generals, who exploited their military conquests and the factional situation in Rome to gain control of the political system. Marius (between 105-86), then Sulla (between 82-78) dominated in turn the Republic; both used extraordinary powers to purge their opponents. These multiple tensions lead to a series of civil wars; the first between the two generals Julius Caesar and Pompey. Despite his victory and appointment as dictator for life, Caesar was murdered in 44. Caesar's heir Octavian and lieutenant Mark Antony defeated Caesar's assassins Brutus and Cassius in 42, but then turned against each other. The final defeat of Mark Antony and his ally Cleopatra at the Battle of Actium in 31 BC, and the Senate's grant of extraordinary powers to Octavian as Augustus in 27 BC, which effectively made him the first Roman emperor, thus ended the Republic. 
