@@ -33,8 +33,9 @@ AUTHOR_FEED_RSS = None
          # ('You can modify those links in your config file', '#'),)
 
 # Social widget
-SOCIAL = (('Twitter', 'https://twitter.com/obygd'),
-         ('Github', 'https://github.com/lgrn'),)
+SOCIAL = (
+         ('Github', 'https://github.com/lgrn'),
+         )
 
 DEFAULT_PAGINATION = 10
 
