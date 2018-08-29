@@ -1,6 +1,6 @@
 html {
   font: 400 14px / 20px "Lato", "Helvetica Neue",Helvetica,Arial,sans-serif;
-  pre.highlight { font-family: 'IBM Plex Mono', monospace !important; }
+  pre { font-family: 'IBM Plex Mono', monospace !important; }
 }
 
 a {
