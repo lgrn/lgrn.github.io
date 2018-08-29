@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 THEME = 'pelican-mg'
 AUTHOR = 'lgrn'
 SITENAME = 'agren.cc'
-SITEURL = ''
+SITEURL = 'https://agren.cc'
 JINJA_ENVIRONMENT = {'extensions': ['jinja2.ext.i18n']}
 
 DEFAULT_DATE_FORMAT = '%Y-%m-%d'
