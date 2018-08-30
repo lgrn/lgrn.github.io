@@ -3,7 +3,7 @@
 from __future__ import unicode_literals
 
 FAVICON = 'favicon.ico'
-FAVICON_TYPE = 'image/vnd.microsoft.icon'
+FAVICON_TYPE = 'image/x-icon'
 
 THEME = 'pelican-mg'
 AUTHOR = 'lgrn'
