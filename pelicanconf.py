@@ -2,6 +2,9 @@
 # -*- coding: utf-8 -*- #
 from __future__ import unicode_literals
 
+FAVICON = 'favicon.ico'
+FAVICON_TYPE = 'image/vnd.microsoft.icon'
+
 THEME = 'pelican-mg'
 AUTHOR = 'lgrn'
 SITENAME = 'agren.cc'
