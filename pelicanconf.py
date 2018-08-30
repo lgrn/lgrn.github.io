@@ -41,3 +41,8 @@ DEFAULT_PAGINATION = 10
 
 # Uncomment following line if you want document-relative URLs when developing
 #RELATIVE_URLS = True
+
+TAG_SAVE_AS = ''
+AUTHOR_SAVE_AS = ''
+DIRECT_TEMPLATES = ('index', 'categories', 'archives')
+DISABLE_SEARCH = True
