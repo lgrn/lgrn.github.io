@@ -8,8 +8,15 @@ pre{
   font-family: 'IBM Plex Mono', monospace !important;
 }
 
+code{
+  font-family: 'IBM Plex Mono', monospace !important;
+  font-size: 16px !important;
+}
+
 a {
-  color: #33b5e5; }
+  color: #33b5e5;
+  text-decoration: underline;
+}
   a:hover {
     color: #0099cc; }
 
@@ -121,7 +128,8 @@ a {
   margin-bottom: 1em; }
 
 .mg-author {
-  margin-top: 1em; }
+  margin-top: 1em;
+  font-size:12px !important; }
 
 .mg-icon-link:hover {
   text-decoration: none; }
