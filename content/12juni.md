@@ -31,3 +31,16 @@ Det som jag skriver ned på dessa blad är icke någon bikt; för vem skulle jag
 *
 
 Därute hänger den stora blå natten över kyrkogårdens träd. Det är tyst i staden nu, så tyst att suckarna och viskningarna från skuggorna därnere tränga ända hit upp, och en enstaka gång skär ett fräckt skratt igenom. Jag känner det som om i denna stund ingen i världen vore ensam mer än jag. Jag, medicine licentiaten Tyko Gabriel Glas, som stundom hjälper andra men aldrig har kunnat hjälpa mig själv, och som vid fyllda trettitre år aldrig har varit när en kvinna. 
+
+```
+
+.mg-tagline {
+  font-family: "Sweden Sans", sans-serif;
+  font-weight: 800;
+  padding: 1em 0 0;
+  color: white; }
+  @media (min-width: 1220px) {
+    .mg-tagline {
+      padding-left: 0 !important; } }
+
+```
