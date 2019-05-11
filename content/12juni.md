@@ -1,6 +1,7 @@
 Title: 12 juni
 Date: 1905-06-12 13:37
-Category: runeberg
+Category: runeberg 
+Tags: swedish
 Slug: 12-juni
 Summary:
 
