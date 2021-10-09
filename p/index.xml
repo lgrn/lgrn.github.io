@@ -15,7 +15,7 @@
       <guid>https://agren.cc/p/fail2ban-on-el8/</guid>
       <description>fail2ban is commonly used to take a certain action, such as automatically blocking an IP, after repeated authentication failures or other generally bad behavior against applications, as detected by regex matching against log output.</description>
       <content>&lt;p&gt;fail2ban is commonly used to  take a certain action, such as automatically blocking an IP, after repeated authentication failures or other generally bad behavior against applications, as detected by regex matching against log output.&lt;/p&gt;
-&lt;p&gt;This example will show how to install and configure fail2ban on EL8 (Rocky Linux 8.4), and to configure it to block an IP after multiple failed login attempts against a non-standard SSH port.&lt;/p&gt;
+&lt;p&gt;This example will show how to install and configure fail2ban on EL8 (Rocky Linux 8.4), and to configure it to block an IP after multiple failed login attempts.&lt;/p&gt;
 &lt;h4 id=&#34;installing-fail2ban-via-epel&#34;&gt;Installing fail2ban via EPEL&lt;/h4&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;# yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
 # yum install fail2ban
@@ -51,9 +51,6 @@ banaction = nftables[type=allports]
 
 [sshd]
 enabled = true
-
-[INCLUDES]
-before = paths-fedora.conf
 &lt;/code&gt;&lt;/pre&gt;
   &lt;/div&gt;
 

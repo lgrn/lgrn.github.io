@@ -6,7 +6,7 @@ draft: false
 
 fail2ban is commonly used to  take a certain action, such as automatically blocking an IP, after repeated authentication failures or other generally bad behavior against applications, as detected by regex matching against log output.
 
-This example will show how to install and configure fail2ban on EL8 (Rocky Linux 8.4), and to configure it to block an IP after multiple failed login attempts against a non-standard SSH port.
+This example will show how to install and configure fail2ban on EL8 (Rocky Linux 8.4), and to configure it to block an IP after multiple failed login attempts.
 
 #### Installing fail2ban via EPEL
 ```
@@ -37,9 +37,6 @@ banaction = nftables[type=allports]
 
 [sshd]
 enabled = true
-
-[INCLUDES]
-before = paths-fedora.conf
 {{< /code >}}
 This will ban an IP for `24h` if `3` failed attempts happen within `60m`. The IP will be banned on all ports and is actioned through `nftables`.
 
