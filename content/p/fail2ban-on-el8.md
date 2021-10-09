@@ -2,6 +2,10 @@
 title: "fail2ban on EL8"
 date: 2021-10-08T15:30:51+02:00
 draft: false
+tags:
+    - fail2ban
+    - EL8
+    - sysadmin
 ---
 
 fail2ban is commonly used to  take a certain action, such as automatically blocking an IP, after repeated authentication failures or other generally bad behavior against applications, as detected by regex matching against log output.
