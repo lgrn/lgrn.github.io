@@ -14,7 +14,7 @@
       
       <guid>https://agren.cc/p/scratchpad/</guid>
       <description>This page is a collection of useful commands or one-liners collected through the years.</description>
-      <content>&lt;p&gt;This page is a collection of useful commands or one-liners collected through the years. They are sorted in general categories, but I&amp;rsquo;ve attempted to describe them as well as I can so hopefully CTRL+F will work decently if you know what you&amp;rsquo;re looking for. I&amp;rsquo;ve only included commands that are generally usable for now, i.e. not tied to a specific application.&lt;/p&gt;
+      <content>&lt;p&gt;This page is a collection of useful commands or one-liners collected through the years. They are sorted in general categories, but I&amp;rsquo;ve attempted to describe them as well as I can so hopefully CTRL+F will work decently if you know what you&amp;rsquo;re looking for.&lt;/p&gt;
 &lt;h1 id=&#34;scratch-pad&#34;&gt;Scratch pad&lt;/h1&gt;
 &lt;h2 id=&#34;level-1-warmup&#34;&gt;Level 1: Warmup&lt;/h2&gt;
 &lt;h3 id=&#34;converting-unix-epoch-time&#34;&gt;Converting Unix epoch time&lt;/h3&gt;

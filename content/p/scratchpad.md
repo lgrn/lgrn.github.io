@@ -6,7 +6,7 @@ tags:
     - sysadmin
 ---
 
-This page is a collection of useful commands or one-liners collected through the years. They are sorted in general categories, but I've attempted to describe them as well as I can so hopefully CTRL+F will work decently if you know what you're looking for. I've only included commands that are generally usable for now, i.e. not tied to a specific application.
+This page is a collection of useful commands or one-liners collected through the years. They are sorted in general categories, but I've attempted to describe them as well as I can so hopefully CTRL+F will work decently if you know what you're looking for.
 
 # Scratch pad
 
