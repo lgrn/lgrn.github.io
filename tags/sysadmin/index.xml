@@ -6,7 +6,132 @@
     <description>Recent content in sysadmin on agren.cc</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 08 Oct 2021 15:30:51 +0200</lastBuildDate><atom:link href="https://agren.cc/tags/sysadmin/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 23 Sep 2022 14:26:00 +0200</lastBuildDate><atom:link href="https://agren.cc/tags/sysadmin/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Linux Sysadmin Scratchpad</title>
+      <link>https://agren.cc/p/scratchpad/</link>
+      <pubDate>Fri, 23 Sep 2022 14:26:00 +0200</pubDate>
+      
+      <guid>https://agren.cc/p/scratchpad/</guid>
+      <description>This page is a collection of useful commands or one-liners collected through the years.</description>
+      <content>&lt;p&gt;This page is a collection of useful commands or one-liners collected through the years. They are sorted in general categories, but I&amp;rsquo;ve attempted to describe them as well as I can so hopefully CTRL+F will work decently if you know what you&amp;rsquo;re looking for. I&amp;rsquo;ve only included commands that are generally usable for now, i.e. not tied to a specific application.&lt;/p&gt;
+&lt;h1 id=&#34;scratch-pad&#34;&gt;Scratch pad&lt;/h1&gt;
+&lt;h2 id=&#34;level-1-warmup&#34;&gt;Level 1: Warmup&lt;/h2&gt;
+&lt;h3 id=&#34;converting-unix-epoch-time&#34;&gt;Converting Unix epoch time&lt;/h3&gt;
+&lt;p&gt;If &lt;code&gt;1660000000&lt;/code&gt; doesn&amp;rsquo;t tell you much, here&amp;rsquo;s a few conversion examples:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;$ echo 1660000000 | perl -pe &amp;#39;use POSIX qw/strftime/; s/(\d{10})/strftime(&amp;#34;%Y-%m-%d %H:%M:%S&amp;#34;,localtime($1))/e&amp;#39;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;2022-08-09 01:06:40
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Note that this prints &lt;code&gt;localtime()&lt;/code&gt; which depends on your system, and looks for exactly 10 numbers.&lt;/p&gt;
+&lt;p&gt;If you have a log that begins with a very specific epoch timestamp syntax (nagios) this is an alternative way of doing it that also looks for brackets:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;$ echo &amp;#34;[1660000000] foo&amp;#34; | perl -pe &amp;#39;s/\[(\d{10})]/localtime($1)/e&amp;#39;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Tue Aug  9 01:06:40 2022 foo
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;You can combine it with the above to get ISO-timestamps instead.&lt;/p&gt;
+&lt;h3 id=&#34;print-a-config-file-but-remove-all-comments--and-empty-rows&#34;&gt;Print a config file, but remove all comments (#) and empty rows&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;grep -vE &amp;#39;^[[:space:]]*#|^$&amp;#39; file
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;poor-mans-jq&#34;&gt;Poor man&amp;rsquo;s jq&lt;/h3&gt;
+&lt;p&gt;If you&amp;rsquo;re on a system without jq but you&amp;rsquo;re just looking to make a json blob readable, you can use python&amp;rsquo;s json.tool instead:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;$ echo &amp;#39;{&amp;#34;bax&amp;#34;:{&amp;#34;foo&amp;#34;:&amp;#34;bar&amp;#34;,&amp;#34;baz&amp;#34;:[&amp;#34;ba&amp;#34;,&amp;#34;ba&amp;#34;,&amp;#34;ba&amp;#34;]}}&amp;#39; | python -m json.tool
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &amp;#34;bax&amp;#34;: {
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &amp;#34;foo&amp;#34;: &amp;#34;bar&amp;#34;,
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &amp;#34;baz&amp;#34;: [
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &amp;#34;ba&amp;#34;,
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &amp;#34;ba&amp;#34;,
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &amp;#34;ba&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        ]
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;replace-every-instance-of-x-in-a-file&#34;&gt;Replace every instance of x in a file&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sed -i &amp;#39;s/val=foo/val=bar/g&amp;#39; /etc/file
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;show-frequently-recurring-lines-in-a-log-file&#34;&gt;Show frequently recurring lines in a log file&lt;/h3&gt;
+&lt;p&gt;If you know that the timestamp is 14 characters long, this will cut out the timestamp and show you a count of the worst offenders:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;cat file.log | cut -c14- | sort | uniq -c | sort | tail
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;test-outbound-connectivity-on-a-specific-port&#34;&gt;Test outbound connectivity on a specific port&lt;/h3&gt;
+&lt;p&gt;Single port, or range of:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;nc -zv host 80
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;nc -zv host 20-30
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;time-travel&#34;&gt;Time travel&lt;/h3&gt;
+&lt;p&gt;If your testing depends on the system clock being wrong, you can disable NTP and set it to whatever like this:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;# timedatectl set-ntp 0
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;# timedatectl set-time &amp;#39;2016-12-13 13:45&amp;#39;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;# date
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Tue Dec 13 13:45:01 WST 2016
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;To re-enable NTP:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;timedatectl set-ntp 1 &amp;amp;&amp;amp; timedatectl --adjust-system-clock
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;level-2-kinda-cool&#34;&gt;Level 2: Kinda cool&lt;/h2&gt;
+&lt;h3 id=&#34;push-a-thousand-things-to-an-apiconfig-file&#34;&gt;Push a thousand things to an API/config file&lt;/h3&gt;
+&lt;p&gt;Useful for load testing, or just filling up a bunch of garbage.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;JSON_DATA_OBJECT&lt;/code&gt;: What you want to send to the API, in this case assumed JSON. If you need certain fields to be random, you could fill them with &lt;code&gt;$(cat /proc/sys/kernel/random/uuid)&lt;/code&gt; for example.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The response is assumed to be JSON and piped for formatting.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;#!/bin/bash
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; i in &lt;span class=&#34;k&#34;&gt;$(&lt;/span&gt;seq &lt;span class=&#34;m&#34;&gt;1&lt;/span&gt; 1001&lt;span class=&#34;k&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;do&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   curl -sk -H &lt;span class=&#34;s1&#34;&gt;&amp;#39;content-type: application/json&amp;#39;&lt;/span&gt; -d &lt;span class=&#34;s1&#34;&gt;&amp;#39;JSON_DATA_OBJECT&amp;#39;&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;https://url/api&amp;#39;&lt;/span&gt; -u &lt;span class=&#34;s1&#34;&gt;&amp;#39;user:password&amp;#39;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; python -m json.tool
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;done&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;If you need to do a &lt;code&gt;POST&lt;/code&gt; or some other type of request with no data to apply the change, just pass &lt;code&gt;-X POST&lt;/code&gt; instead of &lt;code&gt;-d&lt;/code&gt;ata.&lt;/p&gt;
+&lt;h4 id=&#34;config-file&#34;&gt;Config file&lt;/h4&gt;
+&lt;p&gt;To create a bunch of blocks with the expected syntax (here it&amp;rsquo;s nagios), you can do:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;#!/bin/bash
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;cd&lt;/span&gt; /somewhere
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; i in &lt;span class=&#34;k&#34;&gt;$(&lt;/span&gt;seq &lt;span class=&#34;m&#34;&gt;1&lt;/span&gt; 10001&lt;span class=&#34;k&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;do&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nv&#34;&gt;UUID&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;$(&lt;/span&gt;cat /proc/sys/kernel/random/uuid&lt;span class=&#34;k&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;define host {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s2&#34;&gt;    use                            default-host-template
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s2&#34;&gt;    host_name                      &lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;$UUID&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s2&#34;&gt;    address                        127.0.0.1
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s2&#34;&gt;    register                       1
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s2&#34;&gt;    }&amp;#34;&lt;/span&gt; &amp;gt;&amp;gt; hosts.cfg
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;done&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;sort-a-file-alphabetically-by-object-name-not-by-line&#34;&gt;Sort a file alphabetically by object name, not by line&lt;/h3&gt;
+&lt;p&gt;Assume you have this:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;gamma {
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    banana
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;alpha {
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    apple
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    pear
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;How do you sort this alphabetically by &lt;code&gt;object{}&lt;/code&gt;, not by line? There&amp;rsquo;s always a million ways, but one way to do it is to replace all linebreaks with some kind of unique placeholder character that appears nowhere in the file, like &lt;code&gt;§&lt;/code&gt;. This can be done in &lt;code&gt;vim&lt;/code&gt; with:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;:%g/.*{$/;/^}$/s/\n/§/
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This gives us:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;gamma {§    banana§}§ 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;alpha {§    apple§    pear§}§
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Note that this only works if &lt;code&gt;}&lt;/code&gt; also has a newline after it. You can now sort it normally:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;:%sort
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;When it&amp;rsquo;s all sorted, restore the newlines by replacing the &lt;code&gt;§&lt;/code&gt; characters:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;:g/.*{/s/§/\r/g
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;create-tar-on-a-remote-system-but-compress-it-locally&#34;&gt;Create TAR on a remote system, but compress it locally&lt;/h3&gt;
+&lt;p&gt;When bandwidth isn&amp;rsquo;t the issue and you don&amp;rsquo;t want to use up any space on the remote system, you may want to do the compression yourself locally and stream the tarball. If &lt;code&gt;sudo&lt;/code&gt; is required, you can put it in a variable, but note that it will show up in the process list as long as the command is running.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;2&amp;gt;/dev/null&lt;/code&gt; will hide the sudo prompt.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;$ read -s sudopass
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;$ ssh you@host &amp;#34;echo $sudopass | sudo -S tar cf - /dir&amp;#34; 2&amp;gt;/dev/null | XZ_OPT=&amp;#39;-9 -T0 -v&amp;#39; xz &amp;gt; dir.txz
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Verify that the file has contents:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;$ tar tvf dir.txz | head
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;You can also do the same only for a specific subset of files, for example all log files:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;$ ssh you@host &amp;#34;echo $sudopass | sudo -S find &amp;#39;/dir&amp;#39; -name &amp;#39;*.log&amp;#39; | sudo tar -cf- -T-&amp;#34; | XZ_OPT=&amp;#39;-9 -T0 -v&amp;#39; xz &amp;gt; logs.txz
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;encrypt-a-file-with-openssl&#34;&gt;Encrypt a file with OpenSSL&lt;/h3&gt;
+&lt;p&gt;If you&amp;rsquo;re going to be throwing logs across the internet, it&amp;rsquo;s probably a good idea to encrypt the file. One way to do this is:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;$ openssl enc -e -aes-256-cbc -md sha512 -pbkdf2 -iter 10000 -in [PLAIN_FILE] -out [ENCRYPTED_FILE]
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;It will ask you for a passphrase. To decrypt, use the &lt;code&gt;-d&lt;/code&gt; flag in an otherwise very similar command:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;$ openssl enc -d -aes-256-cbc -md sha512 -pbkdf2 -iter 10000 -in [ENCRYPTED_FILE] -out [PLAIN_FILE]
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Enter your passphrase and you&amp;rsquo;ll have the decrypted file ready for decompression.&lt;/p&gt;
+&lt;h2 id=&#34;level-0-product-specific&#34;&gt;Level 0: Product-specific&lt;/h2&gt;
+&lt;h3 id=&#34;salt-stack&#34;&gt;Salt-stack&lt;/h3&gt;
+&lt;h4 id=&#34;filtering-by-grains-and-listing-grains&#34;&gt;Filtering by grains, and listing grains&lt;/h4&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;# salt -C &amp;#39;prefix-* and G@osmajorrelease:14&amp;#39; grains.get &amp;#39;osrelease&amp;#39;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;apply-a-state-only-to-nodes-that-have-it&#34;&gt;Apply a state only to nodes that have it&lt;/h4&gt;
+&lt;p&gt;Get all states for a specific group of nodes:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;# salt &amp;#39;prefix-*&amp;#39; state.show_lowstate --out=json &amp;gt; out.json
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Use &lt;code&gt;jq&lt;/code&gt; to only return nodes that have a specific &lt;code&gt;state&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;cat out.json | jq -r &amp;#39;select(.[][].__sls__ == &amp;#34;state&amp;#34;) | keys[]&amp;#39; | sort -u
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Wrangle this string to make it into a salt-compatible list (comma-separated), and then use that, ping to check before trying &lt;code&gt;state.apply&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sudo salt -L &amp;#39;host,host,host&amp;#39; test.ping
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content>
+    </item>
+    
     <item>
       <title>fail2ban on EL8</title>
       <link>https://agren.cc/p/fail2ban-on-el8/</link>
