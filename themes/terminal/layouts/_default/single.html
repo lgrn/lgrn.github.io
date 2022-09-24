@@ -5,9 +5,9 @@
   </h1>
   <div class="post-meta">
     <span class="post-date" style="font-size: 0.8rem">
-      {{ .Date.Format "2006-01-02" }}
+      Post created or last updated on {{ .Date.Format "2006-01-02" }},
       {{ if .Params.tags }}
-      tagged 
+      tagged:
         {{ range .Params.tags }}
         #<a href="{{ (urlize (printf "tags/%s/" . )) | absLangURL }}">
           {{- . -}}

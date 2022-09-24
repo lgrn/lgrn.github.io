@@ -23,7 +23,7 @@
           <span class="post-date" style="font-size: 0.8rem">
             {{ .Date.Format "2006-01-02" }}
             {{ if .Params.tags }}
-            tagged 
+            :: 
               {{ range .Params.tags }}
               #<a href="{{ (urlize (printf "tags/%s/" . )) | absLangURL }}">
                 {{- . -}}

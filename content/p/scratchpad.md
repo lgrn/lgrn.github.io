@@ -1,6 +1,6 @@
 ---
 title: "Linux Sysadmin Scratchpad"
-date: 2022-09-23T14:26:00+02:00
+date: 2022-09-24T12:51:00+02:00
 draft: false
 tags:
     - sysadmin
@@ -8,11 +8,9 @@ tags:
 
 This page is a collection of useful commands or one-liners collected through the years. They are sorted in general categories, but I've attempted to describe them as well as I can so hopefully CTRL+F will work decently if you know what you're looking for.
 
-# Scratch pad
+This post will be updated in-place, refer to the date above.
 
-## Level 1: Warmup
-
-### Converting Unix epoch time
+## Converting Unix epoch time
 
 If `1660000000` doesn't tell you much, here's a few conversion examples:
 
@@ -31,13 +29,13 @@ Tue Aug  9 01:06:40 2022 foo
 
 You can combine it with the above to get ISO-timestamps instead.
 
-### Print a config file, but remove all comments (#) and empty rows
+## Print a config file, but remove all comments (#) and empty rows
 
 ```
 grep -vE '^[[:space:]]*#|^$' file
 ```
 
-### Poor man's jq
+## Poor man's jq
 
 If you're on a system without jq but you're just looking to make a json blob readable, you can use python's json.tool instead:
 
@@ -55,13 +53,13 @@ $ echo '{"bax":{"foo":"bar","baz":["ba","ba","ba"]}}' | python -m json.tool
 }
 ```
 
-### Replace every instance of x in a file
+## Replace every instance of x in a file
 
 ```
 sed -i 's/val=foo/val=bar/g' /etc/file
 ```
 
-### Show frequently recurring lines in a log file
+## Show frequently recurring lines in a log file
 
 If you know that the timestamp is 14 characters long, this will cut out the timestamp and show you a count of the worst offenders:
 
@@ -69,7 +67,7 @@ If you know that the timestamp is 14 characters long, this will cut out the time
 cat file.log | cut -c14- | sort | uniq -c | sort | tail
 ```
 
-### Test outbound connectivity on a specific port
+## Test outbound connectivity on a specific port
 
 Single port, or range of:
 ```
@@ -77,7 +75,7 @@ nc -zv host 80
 nc -zv host 20-30
 ```
 
-### Time travel
+## Time travel
 
 If your testing depends on the system clock being wrong, you can disable NTP and set it to whatever like this:
 
@@ -94,9 +92,7 @@ To re-enable NTP:
 timedatectl set-ntp 1 && timedatectl --adjust-system-clock
 ```
 
-## Level 2: Kinda cool
-
-### Push a thousand things to an API/config file
+## Push a thousand things to an API/config file
 
 Useful for load testing, or just filling up a bunch of garbage.
 
@@ -132,7 +128,7 @@ for i in $(seq 1 10001); do
 done
 ```
 
-### Sort a file alphabetically by object name, not by line
+## Sort a file alphabetically by object name, not by line
 
 Assume you have this:
 ```
@@ -171,7 +167,7 @@ When it's all sorted, restore the newlines by replacing the `§` characters:
 :g/.*{/s/§/\r/g
 ```
 
-### Create TAR on a remote system, but compress it locally
+## Create TAR on a remote system, but compress it locally
 
 When bandwidth isn't the issue and you don't want to use up any space on the remote system, you may want to do the compression yourself locally and stream the tarball. If `sudo` is required, you can put it in a variable, but note that it will show up in the process list as long as the command is running.
 
@@ -194,7 +190,7 @@ You can also do the same only for a specific subset of files, for example all lo
 $ ssh you@host "echo $sudopass | sudo -S find '/dir' -name '*.log' | sudo tar -cf- -T-" | XZ_OPT='-9 -T0 -v' xz > logs.txz
 ```
 
-### Encrypt a file with OpenSSL
+## Encrypt a file with OpenSSL
 
 If you're going to be throwing logs across the internet, it's probably a good idea to encrypt the file. One way to do this is:
 
@@ -210,9 +206,36 @@ $ openssl enc -d -aes-256-cbc -md sha512 -pbkdf2 -iter 10000 -in [ENCRYPTED_FILE
 
 Enter your passphrase and you'll have the decrypted file ready for decompression.
 
-## Level 0: Product-specific
+## Bash
 
-### Salt-stack
+Since `!!` refers to the previous command, you can re-run a failed command as root with:
+
+```
+$ sudo !!
+```
+
+So-called *brace expansion* is commonly used to move or copy one or many files as backups:
+
+```
+$ mv -v file{,.bak}
+renamed 'file' -> 'file.bak'
+```
+
+For multiple files, `find` with `-exec` is a lot more flexible:
+```
+$ touch fakelog{1..10}.log          # create 10 fake log files
+$ find . -type f -name '*.log'      # find all *.log files recursively
+# now execute 'mv -v fakelog{1..10}.log fakelog{1..10}.log.bak' for every file found
+$ find . -type f -name '*.log' -exec mv -v {} {}.bak \;
+```
+
+**Final advice** for everything bash:
+
+Use [shellcheck](https://github.com/koalaman/shellcheck) when writing scripts, available as an extension in most editors. The [Google Shell Style Guide](https://google.github.io/styleguide/shellguide.html) isn't bad either.
+
+## Product-specific: Salt-stack
+
+If you don't use [salt](https://saltproject.io/whats-saltstack/), you can disregard this section.
 
 #### Filtering by grains, and listing grains
 
