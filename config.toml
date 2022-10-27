@@ -1,6 +1,7 @@
 
 baseURL = "https://agren.cc"
-languageCode = "en"
+copyright = 'This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License. Attribution: agren.cc'
+languageCode = 'en-us'
 DefaultContentLanguage = "en"
 title = "agren.cc"
 theme = "terminal"
@@ -47,7 +48,5 @@ pygmentsCodefencesGuessSyntax = true
         name = "About/Contact"
         url = "/about/index.html"
 
-copyright = 'This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License. Attribution: agren.cc'
-languageCode = 'en-us'
 [author]
   name = 'agren.cc'
