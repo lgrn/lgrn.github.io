@@ -15,7 +15,8 @@ This post will be updated in-place, refer to the date above.
 If `1660000000` doesn't tell you much, here's a few conversion examples:
 
 ```
-$ echo 1660000000 | perl -pe 'use POSIX qw/strftime/; s/(\d{10})/strftime("%Y-%m-%d %H:%M:%S",localtime($1))/e'
+$ echo 1660000000 | perl -pe 'use POSIX qw/strftime/; \
+s/(\d{10})/strftime("%Y-%m-%d %H:%M:%S",localtime($1))/e'
 2022-08-09 01:06:40
 ```
 Note that this prints `localtime()` which depends on your system, and looks for exactly 10 numbers.
@@ -103,7 +104,9 @@ The response is assumed to be JSON and piped for formatting.
 ```
 #!/bin/bash
 for i in $(seq 1 1001); do
-   curl -sk -H 'content-type: application/json' -d 'JSON_DATA_OBJECT' 'https://url/api' -u 'user:password' | python -m json.tool
+   curl -sk -H 'content-type: application/json' \
+   -d 'JSON_DATA_OBJECT' 'https://url/api' \
+   -u 'user:password' | python -m json.tool
 done
 ```
 
@@ -175,7 +178,9 @@ When bandwidth isn't the issue and you don't want to use up any space on the rem
 
 ```
 $ read -s sudopass
-$ ssh you@host "echo $sudopass | sudo -S tar cf - /dir" 2>/dev/null | XZ_OPT='-9 -T0 -v' xz > dir.txz
+$ ssh you@host "echo $sudopass | \
+sudo -S tar cf - /dir" 2>/dev/null | \
+XZ_OPT='-9 -T0 -v' xz > dir.txz
 ```
 
 Verify that the file has contents:
@@ -187,7 +192,10 @@ $ tar tvf dir.txz | head
 You can also do the same only for a specific subset of files, for example all log files:
 
 ```
-$ ssh you@host "echo $sudopass | sudo -S find '/dir' -name '*.log' | sudo tar -cf- -T-" | XZ_OPT='-9 -T0 -v' xz > logs.txz
+$ ssh you@host "echo $sudopass | \
+sudo -S find '/dir' -name '*.log' | \
+sudo tar -cf- -T-" | \
+XZ_OPT='-9 -T0 -v' xz > logs.txz
 ```
 
 ## Encrypt a file with OpenSSL
@@ -195,13 +203,15 @@ $ ssh you@host "echo $sudopass | sudo -S find '/dir' -name '*.log' | sudo tar -c
 If you're going to be throwing logs across the internet, it's probably a good idea to encrypt the file. One way to do this is:
 
 ```
-$ openssl enc -e -aes-256-cbc -md sha512 -pbkdf2 -iter 10000 -in [PLAIN_FILE] -out [ENCRYPTED_FILE]
+$ openssl enc -e -aes-256-cbc -md sha512 -pbkdf2 \
+-iter 10000 -in [PLAIN_FILE] -out [ENCRYPTED_FILE]
 ```
 
 It will ask you for a passphrase. To decrypt, use the `-d` flag in an otherwise very similar command:
 
 ```
-$ openssl enc -d -aes-256-cbc -md sha512 -pbkdf2 -iter 10000 -in [ENCRYPTED_FILE] -out [PLAIN_FILE]
+$ openssl enc -d -aes-256-cbc -md sha512 -pbkdf2 \
+-iter 10000 -in [ENCRYPTED_FILE] -out [PLAIN_FILE]
 ```
 
 Enter your passphrase and you'll have the decrypted file ready for decompression.
@@ -254,7 +264,9 @@ Get all states for a specific group of nodes:
 Use `jq` to only return nodes that have a specific `state`:
 
 ```
-cat out.json | jq -r 'select(.[][].__sls__ == "state") | keys[]' | sort -u
+cat out.json | \
+jq -r 'select(.[][].__sls__ == "state") | keys[]' | \
+sort -u
 ```
 
 Wrangle this string to make it into a salt-compatible list (comma-separated), and then use that, ping to check before trying `state.apply`:
