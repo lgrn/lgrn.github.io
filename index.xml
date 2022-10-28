@@ -1,154 +1,197 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>agren.cc</title><link>https://agren.cc/</link><description>Recent content on agren.cc</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 24 Sep 2022 12:51:00 +0200</lastBuildDate><atom:link href="https://agren.cc/index.xml" rel="self" type="application/rss+xml"/><item><title>Linux Sysadmin Scratchpad</title><link>https://agren.cc/p/scratchpad/</link><pubDate>Sat, 24 Sep 2022 12:51:00 +0200</pubDate><guid>https://agren.cc/p/scratchpad/</guid><description>This page is a collection of useful commands or one-liners collected through the years.</description><content>&lt;p>This page is a collection of useful commands or one-liners collected through the years. They are sorted in general categories, but I&amp;rsquo;ve attempted to describe them as well as I can so hopefully CTRL+F will work decently if you know what you&amp;rsquo;re looking for.&lt;/p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>agren.cc</title><link>https://agren.cc/</link><description>Recent content on agren.cc</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Fri, 28 Oct 2022 15:59:51 +0200</lastBuildDate><atom:link href="https://agren.cc/index.xml" rel="self" type="application/rss+xml"/><item><title>Encrypted LUKS file container</title><link>https://agren.cc/p/luks-file/</link><pubDate>Fri, 28 Oct 2022 15:59:51 +0200</pubDate><guid>https://agren.cc/p/luks-file/</guid><description>While Linux Unified Key Setup — LUKS — is mostly used to encrypt entire disks under Linux, it can also be used to easily create an encrypted file container.</description><content>&lt;p>While &lt;a href="https://en.wikipedia.org/wiki/Linux_Unified_Key_Setup">Linux Unified Key Setup&lt;/a> — &lt;code>LUKS&lt;/code> — is mostly used to encrypt entire disks under Linux, it can also be used to easily create an encrypted file container. This can be used as an alternative to encrypting something like a &lt;code>.tar.gz&lt;/code> file directly, and will be easier to mount and read, without having to write decrypted data to disk.&lt;/p>
+&lt;h3 id="creating-a-container">Creating a container&lt;/h3>
+&lt;p>The first step is to quite simply reserve disk space for the container by creating an empty file:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">$ dd if=/dev/zero of=container.luks bs=1 count=0 seek=2G
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>This tells input file &lt;code>/dev/zero&lt;/code> to write &lt;code>2G&lt;/code> of its output (zeroes) to &lt;code>container.luks&lt;/code>.&lt;/p>
+&lt;p>While it&amp;rsquo;s possible to use a &lt;a href="https://en.wikipedia.org/wiki/Keyfile">keyfile&lt;/a> for the encryption, in this example we will use a passphrase.&lt;/p>
+&lt;p>Formatting this file as a &lt;code>LUKS&lt;/code> container is easy:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">$ cryptsetup -y -v luksFormat container.luks
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">WARNING!
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">========
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">This will overwrite data on container.luks irrevocably.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Are you sure? (Type &amp;#39;yes&amp;#39; in capital letters): YES
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Enter passphrase for container.luks:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Verify passphrase:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Key slot 0 created.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Command successful.
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The next step is to mount this file as a device, which requires us to be root.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">$ sudo cryptsetup luksOpen container.luks container
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>This container is now available as a device (symlink) under &lt;code>/dev/mapper&lt;/code>, but since it&amp;rsquo;s completely empty we need to format it with a filesystem. You can probably use any filesystem you prefer, but in this case we&amp;rsquo;ll go for &lt;code>ext4&lt;/code>:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">$ sudo mkfs.ext4 /dev/mapper/container
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">mke2fs 1.46.5 (30-Dec-2021)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Creating filesystem with 520192 4k blocks and 130048 inodes
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">(...)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Writing superblocks and filesystem accounting information: done
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The device is now formatted and ready to use.&lt;/p>
+&lt;h3 id="mounting">Mounting&lt;/h3>
+&lt;p>You can either rely on the auto-mount, typically this will make the encrypted container available after running &lt;code>luksOpen&lt;/code> at a path like:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">/run/media/your_name/g-u-i-d
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The easiest way to get to this is to open your file explorer, as it will usually show in the left hand column.&lt;/p>
+&lt;p>If you want to mount it somewhere else however, you first need to make sure that path exists.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">$ mkdir /mnt/container
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>If &lt;code>luksOpen&lt;/code> has completed, the device is available to mount as &lt;code>root&lt;/code>.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">$ sudo mount /dev/mapper/container /mnt/container
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Since manual mounting happens as &lt;code>root&lt;/code>, we need to fix our permissions. This sets &lt;code>$ME&lt;/code> to the current user, and sets ownerships with that variable:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">$ ME=&amp;#34;$(whoami)&amp;#34; &amp;amp;&amp;amp; sudo chown -Rv $ME:$ME /mnt/container
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>When you&amp;rsquo;re done with the container, simply unmount it and use &lt;code>luksClose&lt;/code>:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">$ sudo umount /dev/mapper/container &amp;amp;&amp;amp; sudo cryptsetup luksClose container
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div></content></item><item><title>Linux Sysadmin Scratchpad</title><link>https://agren.cc/p/scratchpad/</link><pubDate>Sat, 24 Sep 2022 12:51:00 +0200</pubDate><guid>https://agren.cc/p/scratchpad/</guid><description>This page is a collection of useful commands or one-liners collected through the years.</description><content>&lt;p>This page is a collection of useful commands or one-liners collected through the years. They are sorted in general categories, but I&amp;rsquo;ve attempted to describe them as well as I can so hopefully CTRL+F will work decently if you know what you&amp;rsquo;re looking for.&lt;/p>
 &lt;p>This post will be updated in-place, refer to the date above.&lt;/p>
 &lt;h2 id="converting-unix-epoch-time">Converting Unix epoch time&lt;/h2>
 &lt;p>If &lt;code>1660000000&lt;/code> doesn&amp;rsquo;t tell you much, here&amp;rsquo;s a few conversion examples:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">$ echo 1660000000 | perl -pe &amp;#39;use POSIX qw/strftime/; \
-s/(\d{10})/strftime(&amp;#34;%Y-%m-%d %H:%M:%S&amp;#34;,localtime($1))/e&amp;#39;
-2022-08-09 01:06:40
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>Note that this prints &lt;code>localtime()&lt;/code> which depends on your system, and looks for exactly 10 numbers.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">$ echo 1660000000 | perl -pe &amp;#39;use POSIX qw/strftime/; \
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">s/(\d{10})/strftime(&amp;#34;%Y-%m-%d %H:%M:%S&amp;#34;,localtime($1))/e&amp;#39;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">2022-08-09 01:06:40
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Note that this prints &lt;code>localtime()&lt;/code> which depends on your system, and looks for exactly 10 numbers.&lt;/p>
 &lt;p>If you have a log that begins with a very specific epoch timestamp syntax (nagios) this is an alternative way of doing it that also looks for brackets:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">$ echo &amp;#34;[1660000000] foo&amp;#34; | perl -pe &amp;#39;s/\[(\d{10})]/localtime($1)/e&amp;#39;
-Tue Aug 9 01:06:40 2022 foo
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>You can combine it with the above to get ISO-timestamps instead.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">$ echo &amp;#34;[1660000000] foo&amp;#34; | perl -pe &amp;#39;s/\[(\d{10})]/localtime($1)/e&amp;#39;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Tue Aug 9 01:06:40 2022 foo
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>You can combine it with the above to get ISO-timestamps instead.&lt;/p>
 &lt;h2 id="print-a-config-file-but-remove-all-comments--and-empty-rows">Print a config file, but remove all comments (#) and empty rows&lt;/h2>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">grep -vE &amp;#39;^[[:space:]]*#|^$&amp;#39; file
-&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="poor-mans-jq">Poor man&amp;rsquo;s jq&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">grep -vE &amp;#39;^[[:space:]]*#|^$&amp;#39; file
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="poor-mans-jq">Poor man&amp;rsquo;s jq&lt;/h2>
 &lt;p>If you&amp;rsquo;re on a system without jq but you&amp;rsquo;re just looking to make a json blob readable, you can use python&amp;rsquo;s json.tool instead:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">$ echo &amp;#39;{&amp;#34;bax&amp;#34;:{&amp;#34;foo&amp;#34;:&amp;#34;bar&amp;#34;,&amp;#34;baz&amp;#34;:[&amp;#34;ba&amp;#34;,&amp;#34;ba&amp;#34;,&amp;#34;ba&amp;#34;]}}&amp;#39; | python -m json.tool
-{
-&amp;#34;bax&amp;#34;: {
-&amp;#34;foo&amp;#34;: &amp;#34;bar&amp;#34;,
-&amp;#34;baz&amp;#34;: [
-&amp;#34;ba&amp;#34;,
-&amp;#34;ba&amp;#34;,
-&amp;#34;ba&amp;#34;
-]
-}
-}
-&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="replace-every-instance-of-x-in-a-file">Replace every instance of x in a file&lt;/h2>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">sed -i &amp;#39;s/val=foo/val=bar/g&amp;#39; /etc/file
-&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="show-frequently-recurring-lines-in-a-log-file">Show frequently recurring lines in a log file&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">$ echo &amp;#39;{&amp;#34;bax&amp;#34;:{&amp;#34;foo&amp;#34;:&amp;#34;bar&amp;#34;,&amp;#34;baz&amp;#34;:[&amp;#34;ba&amp;#34;,&amp;#34;ba&amp;#34;,&amp;#34;ba&amp;#34;]}}&amp;#39; | python -m json.tool
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">{
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &amp;#34;bax&amp;#34;: {
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &amp;#34;foo&amp;#34;: &amp;#34;bar&amp;#34;,
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &amp;#34;baz&amp;#34;: [
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &amp;#34;ba&amp;#34;,
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &amp;#34;ba&amp;#34;,
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &amp;#34;ba&amp;#34;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> ]
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> }
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="replace-every-instance-of-x-in-a-file">Replace every instance of x in a file&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">sed -i &amp;#39;s/val=foo/val=bar/g&amp;#39; /etc/file
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="show-frequently-recurring-lines-in-a-log-file">Show frequently recurring lines in a log file&lt;/h2>
 &lt;p>If you know that the timestamp is 14 characters long, this will cut out the timestamp and show you a count of the worst offenders:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">cat file.log | cut -c14- | sort | uniq -c | sort | tail
-&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="test-outbound-connectivity-on-a-specific-port">Test outbound connectivity on a specific port&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">cat file.log | cut -c14- | sort | uniq -c | sort | tail
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="test-outbound-connectivity-on-a-specific-port">Test outbound connectivity on a specific port&lt;/h2>
 &lt;p>Single port, or range of:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">nc -zv host 80
-nc -zv host 20-30
-&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="time-travel">Time travel&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">nc -zv host 80
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">nc -zv host 20-30
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="time-travel">Time travel&lt;/h2>
 &lt;p>If your testing depends on the system clock being wrong, you can disable NTP and set it to whatever like this:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback"># timedatectl set-ntp 0
-# timedatectl set-time &amp;#39;2016-12-13 13:45&amp;#39;
-# date
-Tue Dec 13 13:45:01 WST 2016
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>To re-enable NTP:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">timedatectl set-ntp 1 &amp;amp;&amp;amp; timedatectl --adjust-system-clock
-&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="push-a-thousand-things-to-an-apiconfig-file">Push a thousand things to an API/config file&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># timedatectl set-ntp 0
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># timedatectl set-time &amp;#39;2016-12-13 13:45&amp;#39;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># date
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Tue Dec 13 13:45:01 WST 2016
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>To re-enable NTP:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">timedatectl set-ntp 1 &amp;amp;&amp;amp; timedatectl --adjust-system-clock
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="push-a-thousand-things-to-an-apiconfig-file">Push a thousand things to an API/config file&lt;/h2>
 &lt;p>Useful for load testing, or just filling up a bunch of garbage.&lt;/p>
 &lt;ul>
 &lt;li>&lt;code>JSON_DATA_OBJECT&lt;/code>: What you want to send to the API, in this case assumed JSON. If you need certain fields to be random, you could fill them with &lt;code>$(cat /proc/sys/kernel/random/uuid)&lt;/code> for example.&lt;/li>
 &lt;/ul>
 &lt;p>The response is assumed to be JSON and piped for formatting.&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="cp">#!/bin/bash
-&lt;/span>&lt;span class="cp">&lt;/span>&lt;span class="k">for&lt;/span> i in &lt;span class="k">$(&lt;/span>seq &lt;span class="m">1&lt;/span> 1001&lt;span class="k">)&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="k">do&lt;/span>
-curl -sk -H &lt;span class="s1">&amp;#39;content-type: application/json&amp;#39;&lt;/span> &lt;span class="se">\
-&lt;/span>&lt;span class="se">&lt;/span> -d &lt;span class="s1">&amp;#39;JSON_DATA_OBJECT&amp;#39;&lt;/span> &lt;span class="s1">&amp;#39;https://url/api&amp;#39;&lt;/span> &lt;span class="se">\
-&lt;/span>&lt;span class="se">&lt;/span> -u &lt;span class="s1">&amp;#39;user:password&amp;#39;&lt;/span> &lt;span class="p">|&lt;/span> python -m json.tool
-&lt;span class="k">done&lt;/span>
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>If you need to do a &lt;code>POST&lt;/code> or some other type of request with no data to apply the change, just pass &lt;code>-X POST&lt;/code> instead of &lt;code>-d&lt;/code>ata.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="cp">#!/bin/bash
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cp">&lt;/span>&lt;span class="k">for&lt;/span> i in &lt;span class="k">$(&lt;/span>seq &lt;span class="m">1&lt;/span> 1001&lt;span class="k">)&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="k">do&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> curl -sk -H &lt;span class="s1">&amp;#39;content-type: application/json&amp;#39;&lt;/span> &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> -d &lt;span class="s1">&amp;#39;JSON_DATA_OBJECT&amp;#39;&lt;/span> &lt;span class="s1">&amp;#39;https://url/api&amp;#39;&lt;/span> &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> -u &lt;span class="s1">&amp;#39;user:password&amp;#39;&lt;/span> &lt;span class="p">|&lt;/span> python -m json.tool
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">done&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>If you need to do a &lt;code>POST&lt;/code> or some other type of request with no data to apply the change, just pass &lt;code>-X POST&lt;/code> instead of &lt;code>-d&lt;/code>ata.&lt;/p>
 &lt;h4 id="config-file">Config file&lt;/h4>
 &lt;p>To create a bunch of blocks with the expected syntax (here it&amp;rsquo;s nagios), you can do:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="cp">#!/bin/bash
-&lt;/span>&lt;span class="cp">&lt;/span>&lt;span class="nb">cd&lt;/span> /somewhere
-&lt;span class="k">for&lt;/span> i in &lt;span class="k">$(&lt;/span>seq &lt;span class="m">1&lt;/span> 10001&lt;span class="k">)&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="k">do&lt;/span>
-&lt;span class="nv">UUID&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>cat /proc/sys/kernel/random/uuid&lt;span class="k">)&lt;/span>
-&lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;define host {
-&lt;/span>&lt;span class="s2"> use default-host-template
-&lt;/span>&lt;span class="s2"> host_name &lt;/span>&lt;span class="nv">$UUID&lt;/span>&lt;span class="s2">
-&lt;/span>&lt;span class="s2"> address 127.0.0.1
-&lt;/span>&lt;span class="s2"> register 1
-&lt;/span>&lt;span class="s2"> }&amp;#34;&lt;/span> &amp;gt;&amp;gt; hosts.cfg
-&lt;span class="k">done&lt;/span>
-&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="sort-a-file-alphabetically-by-object-name-not-by-line">Sort a file alphabetically by object name, not by line&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="cp">#!/bin/bash
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cp">&lt;/span>&lt;span class="nb">cd&lt;/span> /somewhere
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">for&lt;/span> i in &lt;span class="k">$(&lt;/span>seq &lt;span class="m">1&lt;/span> 10001&lt;span class="k">)&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="k">do&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nv">UUID&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>cat /proc/sys/kernel/random/uuid&lt;span class="k">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;define host {
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="s2"> use default-host-template
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="s2"> host_name &lt;/span>&lt;span class="nv">$UUID&lt;/span>&lt;span class="s2">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="s2"> address 127.0.0.1
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="s2"> register 1
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="s2"> }&amp;#34;&lt;/span> &amp;gt;&amp;gt; hosts.cfg
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">done&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="sort-a-file-alphabetically-by-object-name-not-by-line">Sort a file alphabetically by object name, not by line&lt;/h2>
 &lt;p>Assume you have this:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">gamma {
-banana
-}
-alpha {
-apple
-pear
-}
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>How do you sort this alphabetically by &lt;code>object{}&lt;/code>, not by line? There&amp;rsquo;s always a million ways, but one way to do it is to replace all linebreaks with some kind of unique placeholder character that appears nowhere in the file, like &lt;code>§&lt;/code>. This can be done in &lt;code>vim&lt;/code> with:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">:%g/.*{$/;/^}$/s/\n/§/
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>This gives us:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">gamma {§ banana§}§
-alpha {§ apple§ pear§}§
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>Note that this only works if &lt;code>}&lt;/code> also has a newline after it. You can now sort it normally:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">:%sort
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>When it&amp;rsquo;s all sorted, restore the newlines by replacing the &lt;code>§&lt;/code> characters:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">:g/.*{/s/§/\r/g
-&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="create-tar-on-a-remote-system-but-compress-it-locally">Create TAR on a remote system, but compress it locally&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">gamma {
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> banana
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">}
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">alpha {
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> apple
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> pear
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>How do you sort this alphabetically by &lt;code>object{}&lt;/code>, not by line? There&amp;rsquo;s always a million ways, but one way to do it is to replace all linebreaks with some kind of unique placeholder character that appears nowhere in the file, like &lt;code>§&lt;/code>. This can be done in &lt;code>vim&lt;/code> with:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">:%g/.*{$/;/^}$/s/\n/§/
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>This gives us:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">gamma {§ banana§}§
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">alpha {§ apple§ pear§}§
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Note that this only works if &lt;code>}&lt;/code> also has a newline after it. You can now sort it normally:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">:%sort
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>When it&amp;rsquo;s all sorted, restore the newlines by replacing the &lt;code>§&lt;/code> characters:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">:g/.*{/s/§/\r/g
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="create-tar-on-a-remote-system-but-compress-it-locally">Create TAR on a remote system, but compress it locally&lt;/h2>
 &lt;p>When bandwidth isn&amp;rsquo;t the issue and you don&amp;rsquo;t want to use up any space on the remote system, you may want to do the compression yourself locally and stream the tarball. If &lt;code>sudo&lt;/code> is required, you can put it in a variable, but note that it will show up in the process list as long as the command is running.&lt;/p>
 &lt;p>&lt;code>2&amp;gt;/dev/null&lt;/code> will hide the sudo prompt.&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">$ read -s sudopass
-$ ssh you@host &amp;#34;echo $sudopass | \
-sudo -S tar cf - /dir&amp;#34; 2&amp;gt;/dev/null | \
-XZ_OPT=&amp;#39;-9 -T0 -v&amp;#39; xz &amp;gt; dir.txz
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>Verify that the file has contents:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">$ tar tvf dir.txz | head
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>You can also do the same only for a specific subset of files, for example all log files:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">$ ssh you@host &amp;#34;echo $sudopass | \
-sudo -S find &amp;#39;/dir&amp;#39; -name &amp;#39;*.log&amp;#39; | \
-sudo tar -cf- -T-&amp;#34; | \
-XZ_OPT=&amp;#39;-9 -T0 -v&amp;#39; xz &amp;gt; logs.txz
-&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="encrypt-a-file-with-openssl">Encrypt a file with OpenSSL&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">$ read -s sudopass
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">$ ssh you@host &amp;#34;echo $sudopass | \
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo -S tar cf - /dir&amp;#34; 2&amp;gt;/dev/null | \
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">XZ_OPT=&amp;#39;-9 -T0 -v&amp;#39; xz &amp;gt; dir.txz
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Verify that the file has contents:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">$ tar tvf dir.txz | head
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>You can also do the same only for a specific subset of files, for example all log files:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">$ ssh you@host &amp;#34;echo $sudopass | \
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo -S find &amp;#39;/dir&amp;#39; -name &amp;#39;*.log&amp;#39; | \
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo tar -cf- -T-&amp;#34; | \
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">XZ_OPT=&amp;#39;-9 -T0 -v&amp;#39; xz &amp;gt; logs.txz
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="encrypt-a-file-with-openssl">Encrypt a file with OpenSSL&lt;/h2>
 &lt;p>If you&amp;rsquo;re going to be throwing logs across the internet, it&amp;rsquo;s probably a good idea to encrypt the file. One way to do this is:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">$ openssl enc -e -aes-256-cbc -md sha512 -pbkdf2 \
--iter 10000 -in [PLAIN_FILE] -out [ENCRYPTED_FILE]
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>It will ask you for a passphrase. To decrypt, use the &lt;code>-d&lt;/code> flag in an otherwise very similar command:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">$ openssl enc -d -aes-256-cbc -md sha512 -pbkdf2 \
--iter 10000 -in [ENCRYPTED_FILE] -out [PLAIN_FILE]
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>Enter your passphrase and you&amp;rsquo;ll have the decrypted file ready for decompression.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">$ openssl enc -e -aes-256-cbc -md sha512 -pbkdf2 \
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">-iter 10000 -in [PLAIN_FILE] -out [ENCRYPTED_FILE]
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>It will ask you for a passphrase. To decrypt, use the &lt;code>-d&lt;/code> flag in an otherwise very similar command:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">$ openssl enc -d -aes-256-cbc -md sha512 -pbkdf2 \
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">-iter 10000 -in [ENCRYPTED_FILE] -out [PLAIN_FILE]
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Enter your passphrase and you&amp;rsquo;ll have the decrypted file ready for decompression.&lt;/p>
 &lt;h2 id="bash">Bash&lt;/h2>
 &lt;p>Since &lt;code>!!&lt;/code> refers to the previous command, you can re-run a failed command as root with:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">$ sudo !!
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>So-called &lt;em>brace expansion&lt;/em> is commonly used to move or copy one or many files as backups:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">$ mv -v file{,.bak}
-renamed &amp;#39;file&amp;#39; -&amp;gt; &amp;#39;file.bak&amp;#39;
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>For multiple files, &lt;code>find&lt;/code> with &lt;code>-exec&lt;/code> is a lot more flexible:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">$ touch fakelog{1..10}.log # create 10 fake log files
-$ find . -type f -name &amp;#39;*.log&amp;#39; # find all *.log files recursively
-# now execute &amp;#39;mv -v fakelog{1..10}.log fakelog{1..10}.log.bak&amp;#39; for every file found
-$ find . -type f -name &amp;#39;*.log&amp;#39; -exec mv -v {} {}.bak \;
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;strong>Final advice&lt;/strong> for everything bash:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">$ sudo !!
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>So-called &lt;em>brace expansion&lt;/em> is commonly used to move or copy one or many files as backups:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">$ mv -v file{,.bak}
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">renamed &amp;#39;file&amp;#39; -&amp;gt; &amp;#39;file.bak&amp;#39;
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>For multiple files, &lt;code>find&lt;/code> with &lt;code>-exec&lt;/code> is a lot more flexible:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">$ touch fakelog{1..10}.log # create 10 fake log files
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">$ find . -type f -name &amp;#39;*.log&amp;#39; # find all *.log files recursively
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># now execute &amp;#39;mv -v fakelog{1..10}.log fakelog{1..10}.log.bak&amp;#39; for every file found
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">$ find . -type f -name &amp;#39;*.log&amp;#39; -exec mv -v {} {}.bak \;
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;strong>Final advice&lt;/strong> for everything bash:&lt;/p>
 &lt;p>Use &lt;a href="https://github.com/koalaman/shellcheck">shellcheck&lt;/a> when writing scripts, available as an extension in most editors. The &lt;a href="https://google.github.io/styleguide/shellguide.html">Google Shell Style Guide&lt;/a> isn&amp;rsquo;t bad either.&lt;/p>
 &lt;h2 id="product-specific-salt-stack">Product-specific: Salt-stack&lt;/h2>
 &lt;p>If you don&amp;rsquo;t use &lt;a href="https://saltproject.io/whats-saltstack/">salt&lt;/a>, you can disregard this section.&lt;/p>
 &lt;h4 id="filtering-by-grains-and-listing-grains">Filtering by grains, and listing grains&lt;/h4>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback"># salt -C &amp;#39;prefix-* and G@osmajorrelease:14&amp;#39; grains.get &amp;#39;osrelease&amp;#39;
-&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="apply-a-state-only-to-nodes-that-have-it">Apply a state only to nodes that have it&lt;/h4>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># salt -C &amp;#39;prefix-* and G@osmajorrelease:14&amp;#39; grains.get &amp;#39;osrelease&amp;#39;
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="apply-a-state-only-to-nodes-that-have-it">Apply a state only to nodes that have it&lt;/h4>
 &lt;p>Get all states for a specific group of nodes:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback"># salt &amp;#39;prefix-*&amp;#39; state.show_lowstate --out=json &amp;gt; out.json
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>Use &lt;code>jq&lt;/code> to only return nodes that have a specific &lt;code>state&lt;/code>:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">cat out.json | \
-jq -r &amp;#39;select(.[][].__sls__ == &amp;#34;state&amp;#34;) | keys[]&amp;#39; | \
-sort -u
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>Wrangle this string to make it into a salt-compatible list (comma-separated), and then use that, ping to check before trying &lt;code>state.apply&lt;/code>:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">sudo salt -L &amp;#39;host,host,host&amp;#39; test.ping
-&lt;/code>&lt;/pre>&lt;/div></content></item><item><title>fail2ban on EL8</title><link>https://agren.cc/p/fail2ban-on-el8/</link><pubDate>Fri, 08 Oct 2021 15:30:51 +0200</pubDate><guid>https://agren.cc/p/fail2ban-on-el8/</guid><description>fail2ban is commonly used to take a certain action, such as automatically blocking an IP, after repeated authentication failures or other generally bad behavior against applications, as detected by regex matching against log output.</description><content>&lt;p>fail2ban is commonly used to take a certain action, such as automatically blocking an IP, after repeated authentication failures or other generally bad behavior against applications, as detected by regex matching against log output.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># salt &amp;#39;prefix-*&amp;#39; state.show_lowstate --out=json &amp;gt; out.json
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Use &lt;code>jq&lt;/code> to only return nodes that have a specific &lt;code>state&lt;/code>:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">cat out.json | \
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">jq -r &amp;#39;select(.[][].__sls__ == &amp;#34;state&amp;#34;) | keys[]&amp;#39; | \
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sort -u
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Wrangle this string to make it into a salt-compatible list (comma-separated), and then use that, ping to check before trying &lt;code>state.apply&lt;/code>:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">sudo salt -L &amp;#39;host,host,host&amp;#39; test.ping
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div></content></item><item><title>fail2ban on EL8</title><link>https://agren.cc/p/fail2ban-on-el8/</link><pubDate>Fri, 08 Oct 2021 15:30:51 +0200</pubDate><guid>https://agren.cc/p/fail2ban-on-el8/</guid><description>fail2ban is commonly used to take a certain action, such as automatically blocking an IP, after repeated authentication failures or other generally bad behavior against applications, as detected by regex matching against log output.</description><content>&lt;p>fail2ban is commonly used to take a certain action, such as automatically blocking an IP, after repeated authentication failures or other generally bad behavior against applications, as detected by regex matching against log output.&lt;/p>
 &lt;p>This example will show how to install and configure fail2ban on EL8 (Rocky Linux 8.4), and to configure it to block an IP after multiple failed login attempts.&lt;/p>
 &lt;h4 id="installing-fail2ban-via-epel">Installing fail2ban via EPEL&lt;/h4>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback"># yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
-# yum install fail2ban
-# fail2ban-client --version
-Fail2Ban v0.11.2
-# systemctl enable fail2ban --now
-# fail2ban-client status
-Status
-|- Number of jail: 0
-`- Jail list:
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>At this point, fail2ban is installed and running, but does not have any active jails. The first step is therefore to enable the jails we want, which is done by copying the default file in &lt;code>/etc/fail2ban&lt;/code> called &lt;code>jail.conf&lt;/code> to &lt;code>jail.local&lt;/code>, which is the fail2ban syntax for a user-defined override file.&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback"># cp jail.conf jail.local &amp;amp;&amp;amp; vim jail.local
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>Since all the commented help text is still available in &lt;code>jail.conf&lt;/code>, we can make our override file short and sweet. The options should be pretty self-explanatory:
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># yum install fail2ban
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># fail2ban-client --version
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Fail2Ban v0.11.2
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># systemctl enable fail2ban --now
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># fail2ban-client status
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Status
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">|- Number of jail: 0
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">`- Jail list:
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>At this point, fail2ban is installed and running, but does not have any active jails. The first step is therefore to enable the jails we want, which is done by copying the default file in &lt;code>/etc/fail2ban&lt;/code> called &lt;code>jail.conf&lt;/code> to &lt;code>jail.local&lt;/code>, which is the fail2ban syntax for a user-defined override file.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># cp jail.conf jail.local &amp;amp;&amp;amp; vim jail.local
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Since all the commented help text is still available in &lt;code>jail.conf&lt;/code>, we can make our override file short and sweet. The options should be pretty self-explanatory:
 &lt;div class="collapsable-code">
 &lt;input id="1" type="checkbox" />
 &lt;label for="1">
@@ -169,38 +212,38 @@ enabled = true
 &lt;/div>
 This will ban an IP for &lt;code>24h&lt;/code> if &lt;code>3&lt;/code> failed attempts happen within &lt;code>60m&lt;/code>. The IP will be banned on all ports and is actioned through &lt;code>nftables&lt;/code>.&lt;/p>
 &lt;p>When the file is saved, let&amp;rsquo;s restart fail2ban and verify that the jail is active:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback"># systemctl restart fail2ban
-# fail2ban-client status
-Status
-|- Number of jail: 1
-`- Jail list: sshd
-&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="trust-but-verify">Trust, but verify&lt;/h4>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># systemctl restart fail2ban
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># fail2ban-client status
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Status
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">|- Number of jail: 1
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">`- Jail list: sshd
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="trust-but-verify">Trust, but verify&lt;/h4>
 &lt;p>Now let&amp;rsquo;s do something dumb and enable passwords for SSH authentication, then attempt to get ourselves banned when failing to login from &lt;code>127.0.0.1&lt;/code>. First, ensure password authentication is enabled in &lt;code>/etc/ssh/sshd_config&lt;/code>:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">PasswordAuthentication yes
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>Restart the SSH daemon:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback"># systemctl restart sshd
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>Attempt an SSH login with an incorrect password:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback"># ssh localhost -P
-root@localhost&amp;#39;s password:
-Permission denied, please try again.
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>This failed attempt should now be visible in &lt;code>/var/log/secure&lt;/code>:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">unix_chkpwd[1373]: password check failed for user (root)
-sshd[1371]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 .0.1 user=root
-sshd[1371]: Failed password for root from 127.0.0.1 port 37780 ssh2
-sshd[1371]: Connection closed by authenticating user root 127.0.0.1 port 37780 [preauth]
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>This very serious breach attempt was naively ignored by fail2ban though, as visible in &lt;code>/var/log/fail2ban.log&lt;/code>:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">fail2ban.filter [1305]: INFO [sshd] Ignore 127.0.0.1 by ignoreself rule
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>Luckily, this is something we can override in our &lt;code>jail.local&lt;/code> file by setting &lt;code>ignoreself = false&lt;/code> under &lt;code>[DEFAULT]&lt;/code>. After restarting fail2ban, repeated attempts gives us this in &lt;code>fail2ban.log&lt;/code>:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">fail2ban.filter [1451]: INFO [sshd] Found 127.0.0.1 - 2021-10-08 14:38:01
-fail2ban.filter [1451]: INFO [sshd] Found 127.0.0.1 - 2021-10-08 14:38:49
-fail2ban.filter [1451]: INFO [sshd] Found 127.0.0.1 - 2021-10-08 14:38:51
-fail2ban.actions [1451]: NOTICE [sshd] Ban 127.0.0.1
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>Congratulations, you&amp;rsquo;ve banned yourself:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback"># fail2ban-client banned
-[{&amp;#39;sshd&amp;#39;: [&amp;#39;127.0.0.1&amp;#39;]}]
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>Clearing all bans:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback"># fail2ban-client unban --all
-&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="summary">Summary&lt;/h4>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">PasswordAuthentication yes
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Restart the SSH daemon:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># systemctl restart sshd
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Attempt an SSH login with an incorrect password:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># ssh localhost -P
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">root@localhost&amp;#39;s password:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Permission denied, please try again.
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>This failed attempt should now be visible in &lt;code>/var/log/secure&lt;/code>:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">unix_chkpwd[1373]: password check failed for user (root)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sshd[1371]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 .0.1 user=root
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sshd[1371]: Failed password for root from 127.0.0.1 port 37780 ssh2
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sshd[1371]: Connection closed by authenticating user root 127.0.0.1 port 37780 [preauth]
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>This very serious breach attempt was naively ignored by fail2ban though, as visible in &lt;code>/var/log/fail2ban.log&lt;/code>:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">fail2ban.filter [1305]: INFO [sshd] Ignore 127.0.0.1 by ignoreself rule
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Luckily, this is something we can override in our &lt;code>jail.local&lt;/code> file by setting &lt;code>ignoreself = false&lt;/code> under &lt;code>[DEFAULT]&lt;/code>. After restarting fail2ban, repeated attempts gives us this in &lt;code>fail2ban.log&lt;/code>:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">fail2ban.filter [1451]: INFO [sshd] Found 127.0.0.1 - 2021-10-08 14:38:01
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">fail2ban.filter [1451]: INFO [sshd] Found 127.0.0.1 - 2021-10-08 14:38:49
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">fail2ban.filter [1451]: INFO [sshd] Found 127.0.0.1 - 2021-10-08 14:38:51
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">fail2ban.actions [1451]: NOTICE [sshd] Ban 127.0.0.1
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Congratulations, you&amp;rsquo;ve banned yourself:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># fail2ban-client banned
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">[{&amp;#39;sshd&amp;#39;: [&amp;#39;127.0.0.1&amp;#39;]}]
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Clearing all bans:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># fail2ban-client unban --all
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="summary">Summary&lt;/h4>
 &lt;p>What we&amp;rsquo;ve done:&lt;/p>
 &lt;ul>
 &lt;li>We created a &lt;code>jail.local&lt;/code> override file with our own settings.&lt;/li>

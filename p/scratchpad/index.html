@@ -1,227 +1,87 @@
-<!doctype html><html lang=en>
-<head>
-<title>Linux Sysadmin Scratchpad :: agren.cc</title>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<meta name=description content="This page is a collection of useful commands or one-liners collected through the years.">
-<meta name=keywords content>
-<meta name=robots content="noodp">
-<link rel=canonical href=https://agren.cc/p/scratchpad/>
-<link rel=stylesheet href=/style.css>
-<link rel="shortcut icon" href=https://agren.cc/img/theme-colors/green.png>
-<link rel=apple-touch-icon href=https://agren.cc/img/theme-colors/green.png>
-<meta name=twitter:card content="summary">
-<meta property="og:locale" content="en">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Linux Sysadmin Scratchpad">
-<meta property="og:description" content="This page is a collection of useful commands or one-liners collected through the years.">
-<meta property="og:url" content="https://agren.cc/p/scratchpad/">
-<meta property="og:site_name" content="agren.cc">
-<meta property="og:image" content="https://agren.cc/img/favicon/green.png">
-<meta property="og:image:width" content="2048">
-<meta property="og:image:height" content="1024">
-<meta property="article:published_time" content="2022-09-24 12:51:00 +0200 CEST">
-</head>
-<body class=green>
-<div class="container center headings--one-size">
-<header class=header>
-<div class=header__inner>
-<div class=header__logo>
-<a href=/>
-<div class=logo>
-agren.cc
-</div>
-</a>
-</div>
-<div class=menu-trigger>menu</div>
-</div>
-<nav class="menu hidden-on-mobile">
-<ul class="menu__inner menu__inner--desktop">
-<li><a href=/about/index.html>About/Contact</a></li>
-</ul>
-<ul class="menu__inner menu__inner--mobile">
-<li><a href=/about/index.html>About/Contact</a></li>
-</ul>
-</nav>
-</header>
-<div class=content>
-<article class=post>
-<h1 class=post-title>
-<a href=https://agren.cc/p/scratchpad/>Linux Sysadmin Scratchpad</a>
-</h1>
-<div class=post-meta>
-<time class=post-date>
-2022-09-24 ::
-</time>
-</div>
-<span class=post-tags>
-#<a href=https://agren.cc/tags/sysadmin/>sysadmin</a>&nbsp;
-</span>
-<div class=post-content><div>
-<p>This page is a collection of useful commands or one-liners collected through the years. They are sorted in general categories, but I&rsquo;ve attempted to describe them as well as I can so hopefully CTRL+F will work decently if you know what you&rsquo;re looking for.</p>
-<p>This post will be updated in-place, refer to the date above.</p>
-<h2 id=converting-unix-epoch-time>Converting Unix epoch time<a href=#converting-unix-epoch-time class=hanchor arialabel=Anchor>&#8983;</a> </h2>
-<p>If <code>1660000000</code> doesn&rsquo;t tell you much, here&rsquo;s a few conversion examples:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>$ echo 1660000000 | perl -pe &#39;use POSIX qw/strftime/; \
-s/(\d{10})/strftime(&#34;%Y-%m-%d %H:%M:%S&#34;,localtime($1))/e&#39;
-2022-08-09 01:06:40
-</code></pre></div><p>Note that this prints <code>localtime()</code> which depends on your system, and looks for exactly 10 numbers.</p>
-<p>If you have a log that begins with a very specific epoch timestamp syntax (nagios) this is an alternative way of doing it that also looks for brackets:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>$ echo &#34;[1660000000] foo&#34; | perl -pe &#39;s/\[(\d{10})]/localtime($1)/e&#39;
-Tue Aug  9 01:06:40 2022 foo
-</code></pre></div><p>You can combine it with the above to get ISO-timestamps instead.</p>
-<h2 id=print-a-config-file-but-remove-all-comments--and-empty-rows>Print a config file, but remove all comments (#) and empty rows<a href=#print-a-config-file-but-remove-all-comments--and-empty-rows class=hanchor arialabel=Anchor>&#8983;</a> </h2>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>grep -vE &#39;^[[:space:]]*#|^$&#39; file
-</code></pre></div><h2 id=poor-mans-jq>Poor man&rsquo;s jq<a href=#poor-mans-jq class=hanchor arialabel=Anchor>&#8983;</a> </h2>
-<p>If you&rsquo;re on a system without jq but you&rsquo;re just looking to make a json blob readable, you can use python&rsquo;s json.tool instead:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>$ echo &#39;{&#34;bax&#34;:{&#34;foo&#34;:&#34;bar&#34;,&#34;baz&#34;:[&#34;ba&#34;,&#34;ba&#34;,&#34;ba&#34;]}}&#39; | python -m json.tool
-{
-    &#34;bax&#34;: {
-        &#34;foo&#34;: &#34;bar&#34;,
-        &#34;baz&#34;: [
-            &#34;ba&#34;,
-            &#34;ba&#34;,
-            &#34;ba&#34;
-        ]
-    }
-}
-</code></pre></div><h2 id=replace-every-instance-of-x-in-a-file>Replace every instance of x in a file<a href=#replace-every-instance-of-x-in-a-file class=hanchor arialabel=Anchor>&#8983;</a> </h2>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>sed -i &#39;s/val=foo/val=bar/g&#39; /etc/file
-</code></pre></div><h2 id=show-frequently-recurring-lines-in-a-log-file>Show frequently recurring lines in a log file<a href=#show-frequently-recurring-lines-in-a-log-file class=hanchor arialabel=Anchor>&#8983;</a> </h2>
-<p>If you know that the timestamp is 14 characters long, this will cut out the timestamp and show you a count of the worst offenders:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>cat file.log | cut -c14- | sort | uniq -c | sort | tail
-</code></pre></div><h2 id=test-outbound-connectivity-on-a-specific-port>Test outbound connectivity on a specific port<a href=#test-outbound-connectivity-on-a-specific-port class=hanchor arialabel=Anchor>&#8983;</a> </h2>
-<p>Single port, or range of:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>nc -zv host 80
-nc -zv host 20-30
-</code></pre></div><h2 id=time-travel>Time travel<a href=#time-travel class=hanchor arialabel=Anchor>&#8983;</a> </h2>
-<p>If your testing depends on the system clock being wrong, you can disable NTP and set it to whatever like this:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback># timedatectl set-ntp 0
-# timedatectl set-time &#39;2016-12-13 13:45&#39;
-# date
-Tue Dec 13 13:45:01 WST 2016
-</code></pre></div><p>To re-enable NTP:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>timedatectl set-ntp 1 &amp;&amp; timedatectl --adjust-system-clock
-</code></pre></div><h2 id=push-a-thousand-things-to-an-apiconfig-file>Push a thousand things to an API/config file<a href=#push-a-thousand-things-to-an-apiconfig-file class=hanchor arialabel=Anchor>&#8983;</a> </h2>
-<p>Useful for load testing, or just filling up a bunch of garbage.</p>
-<ul>
-<li><code>JSON_DATA_OBJECT</code>: What you want to send to the API, in this case assumed JSON. If you need certain fields to be random, you could fill them with <code>$(cat /proc/sys/kernel/random/uuid)</code> for example.</li>
-</ul>
-<p>The response is assumed to be JSON and piped for formatting.</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=cp>#!/bin/bash
-</span><span class=cp></span><span class=k>for</span> i in <span class=k>$(</span>seq <span class=m>1</span> 1001<span class=k>)</span><span class=p>;</span> <span class=k>do</span>
-   curl -sk -H <span class=s1>&#39;content-type: application/json&#39;</span> <span class=se>\
-</span><span class=se></span>   -d <span class=s1>&#39;JSON_DATA_OBJECT&#39;</span> <span class=s1>&#39;https://url/api&#39;</span> <span class=se>\
-</span><span class=se></span>   -u <span class=s1>&#39;user:password&#39;</span> <span class=p>|</span> python -m json.tool
-<span class=k>done</span>
-</code></pre></div><p>If you need to do a <code>POST</code> or some other type of request with no data to apply the change, just pass <code>-X POST</code> instead of <code>-d</code>ata.</p>
-<h4 id=config-file>Config file<a href=#config-file class=hanchor arialabel=Anchor>&#8983;</a> </h4>
-<p>To create a bunch of blocks with the expected syntax (here it&rsquo;s nagios), you can do:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=cp>#!/bin/bash
-</span><span class=cp></span><span class=nb>cd</span> /somewhere
-
-<span class=k>for</span> i in <span class=k>$(</span>seq <span class=m>1</span> 10001<span class=k>)</span><span class=p>;</span> <span class=k>do</span>
-    <span class=nv>UUID</span><span class=o>=</span><span class=k>$(</span>cat /proc/sys/kernel/random/uuid<span class=k>)</span>
-    <span class=nb>echo</span> <span class=s2>&#34;define host {
-</span><span class=s2>    use                            default-host-template
-</span><span class=s2>    host_name                      </span><span class=nv>$UUID</span><span class=s2>
-</span><span class=s2>    address                        127.0.0.1
-</span><span class=s2>    register                       1
-</span><span class=s2>    }&#34;</span> &gt;&gt; hosts.cfg
-<span class=k>done</span>
-</code></pre></div><h2 id=sort-a-file-alphabetically-by-object-name-not-by-line>Sort a file alphabetically by object name, not by line<a href=#sort-a-file-alphabetically-by-object-name-not-by-line class=hanchor arialabel=Anchor>&#8983;</a> </h2>
-<p>Assume you have this:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>gamma {
-    banana
-}
-
-alpha {
-    apple
-    pear
-}
-</code></pre></div><p>How do you sort this alphabetically by <code>object{}</code>, not by line? There&rsquo;s always a million ways, but one way to do it is to replace all linebreaks with some kind of unique placeholder character that appears nowhere in the file, like <code>§</code>. This can be done in <code>vim</code> with:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>:%g/.*{$/;/^}$/s/\n/§/
-</code></pre></div><p>This gives us:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>gamma {§    banana§}§ 
-alpha {§    apple§    pear§}§
-</code></pre></div><p>Note that this only works if <code>}</code> also has a newline after it. You can now sort it normally:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>:%sort
-</code></pre></div><p>When it&rsquo;s all sorted, restore the newlines by replacing the <code>§</code> characters:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>:g/.*{/s/§/\r/g
-</code></pre></div><h2 id=create-tar-on-a-remote-system-but-compress-it-locally>Create TAR on a remote system, but compress it locally<a href=#create-tar-on-a-remote-system-but-compress-it-locally class=hanchor arialabel=Anchor>&#8983;</a> </h2>
-<p>When bandwidth isn&rsquo;t the issue and you don&rsquo;t want to use up any space on the remote system, you may want to do the compression yourself locally and stream the tarball. If <code>sudo</code> is required, you can put it in a variable, but note that it will show up in the process list as long as the command is running.</p>
-<p><code>2>/dev/null</code> will hide the sudo prompt.</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>$ read -s sudopass
-$ ssh you@host &#34;echo $sudopass | \
-sudo -S tar cf - /dir&#34; 2&gt;/dev/null | \
-XZ_OPT=&#39;-9 -T0 -v&#39; xz &gt; dir.txz
-</code></pre></div><p>Verify that the file has contents:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>$ tar tvf dir.txz | head
-</code></pre></div><p>You can also do the same only for a specific subset of files, for example all log files:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>$ ssh you@host &#34;echo $sudopass | \
-sudo -S find &#39;/dir&#39; -name &#39;*.log&#39; | \
-sudo tar -cf- -T-&#34; | \
-XZ_OPT=&#39;-9 -T0 -v&#39; xz &gt; logs.txz
-</code></pre></div><h2 id=encrypt-a-file-with-openssl>Encrypt a file with OpenSSL<a href=#encrypt-a-file-with-openssl class=hanchor arialabel=Anchor>&#8983;</a> </h2>
-<p>If you&rsquo;re going to be throwing logs across the internet, it&rsquo;s probably a good idea to encrypt the file. One way to do this is:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>$ openssl enc -e -aes-256-cbc -md sha512 -pbkdf2 \
--iter 10000 -in [PLAIN_FILE] -out [ENCRYPTED_FILE]
-</code></pre></div><p>It will ask you for a passphrase. To decrypt, use the <code>-d</code> flag in an otherwise very similar command:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>$ openssl enc -d -aes-256-cbc -md sha512 -pbkdf2 \
--iter 10000 -in [ENCRYPTED_FILE] -out [PLAIN_FILE]
-</code></pre></div><p>Enter your passphrase and you&rsquo;ll have the decrypted file ready for decompression.</p>
-<h2 id=bash>Bash<a href=#bash class=hanchor arialabel=Anchor>&#8983;</a> </h2>
-<p>Since <code>!!</code> refers to the previous command, you can re-run a failed command as root with:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>$ sudo !!
-</code></pre></div><p>So-called <em>brace expansion</em> is commonly used to move or copy one or many files as backups:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>$ mv -v file{,.bak}
-renamed &#39;file&#39; -&gt; &#39;file.bak&#39;
-</code></pre></div><p>For multiple files, <code>find</code> with <code>-exec</code> is a lot more flexible:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>$ touch fakelog{1..10}.log          # create 10 fake log files
-$ find . -type f -name &#39;*.log&#39;      # find all *.log files recursively
-# now execute &#39;mv -v fakelog{1..10}.log fakelog{1..10}.log.bak&#39; for every file found
-$ find . -type f -name &#39;*.log&#39; -exec mv -v {} {}.bak \;
-</code></pre></div><p><strong>Final advice</strong> for everything bash:</p>
-<p>Use <a href=https://github.com/koalaman/shellcheck>shellcheck</a> when writing scripts, available as an extension in most editors. The <a href=https://google.github.io/styleguide/shellguide.html>Google Shell Style Guide</a> isn&rsquo;t bad either.</p>
-<h2 id=product-specific-salt-stack>Product-specific: Salt-stack<a href=#product-specific-salt-stack class=hanchor arialabel=Anchor>&#8983;</a> </h2>
-<p>If you don&rsquo;t use <a href=https://saltproject.io/whats-saltstack/>salt</a>, you can disregard this section.</p>
-<h4 id=filtering-by-grains-and-listing-grains>Filtering by grains, and listing grains<a href=#filtering-by-grains-and-listing-grains class=hanchor arialabel=Anchor>&#8983;</a> </h4>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback># salt -C &#39;prefix-* and G@osmajorrelease:14&#39; grains.get &#39;osrelease&#39;
-</code></pre></div><h4 id=apply-a-state-only-to-nodes-that-have-it>Apply a state only to nodes that have it<a href=#apply-a-state-only-to-nodes-that-have-it class=hanchor arialabel=Anchor>&#8983;</a> </h4>
-<p>Get all states for a specific group of nodes:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback># salt &#39;prefix-*&#39; state.show_lowstate --out=json &gt; out.json
-</code></pre></div><p>Use <code>jq</code> to only return nodes that have a specific <code>state</code>:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>cat out.json | \
-jq -r &#39;select(.[][].__sls__ == &#34;state&#34;) | keys[]&#39; | \
-sort -u
-</code></pre></div><p>Wrangle this string to make it into a salt-compatible list (comma-separated), and then use that, ping to check before trying <code>state.apply</code>:</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>sudo salt -L &#39;host,host,host&#39; test.ping
-</code></pre></div>
-</div></div>
-<div class=pagination>
-<div class=pagination__title>
-<span class=pagination__title-h>Read other posts</span>
-<hr>
-</div>
-<div class=pagination__buttons>
-<span class="button next">
-<a href=https://agren.cc/p/fail2ban-on-el8/>
-<span class=button__text>fail2ban on EL8</span>
-<span class=button__icon>→</span>
-</a>
-</span>
-</div>
-</div>
-</article>
-</div>
-<footer class=footer>
-<div class=footer__inner>
-<div class=copyright>
-<span>All content on this site is licensed under <a href=https://creativecommons.org/licenses/by-sa/4.0/ target=_blank>CC-BY-SA 4.0</a>, attribute "agren.cc". Powered by <a href=http://gohugo.io>hugo</a> and the <a href=https://github.com/panr/hugo-theme-terminal target=_blank>terminal</a> theme.</span>
-</div>
-</div>
-</footer>
-<script type=text/javascript src=/bundle.min.js></script>
-</div>
-</body>
-</html>
+<!doctype html><html lang=en><head><title>Linux Sysadmin Scratchpad :: agren.cc</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="This page is a collection of useful commands or one-liners collected through the years."><meta name=keywords content><meta name=robots content="noodp"><link rel=canonical href=https://agren.cc/p/scratchpad/><link rel=stylesheet href=/style.css><link rel="shortcut icon" href=https://agren.cc/img/theme-colors/green.png><link rel=apple-touch-icon href=https://agren.cc/img/theme-colors/green.png><meta name=twitter:card content="summary"><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="og:title" content="Linux Sysadmin Scratchpad"><meta property="og:description" content="This page is a collection of useful commands or one-liners collected through the years."><meta property="og:url" content="https://agren.cc/p/scratchpad/"><meta property="og:site_name" content="agren.cc"><meta property="og:image" content="https://agren.cc/img/favicon/green.png"><meta property="og:image:width" content="2048"><meta property="og:image:height" content="1024"><meta property="article:published_time" content="2022-09-24 12:51:00 +0200 CEST"></head><body class=green><div class="container center headings--one-size"><header class=header><div class=header__inner><div class=header__logo><a href=/><div class=logo>agren.cc</div></a></div><div class=menu-trigger>menu</div></div><nav class="menu hidden-on-mobile"><ul class="menu__inner menu__inner--desktop"><li><a href=/about/index.html>About/Contact</a></li></ul><ul class="menu__inner menu__inner--mobile"><li><a href=/about/index.html>About/Contact</a></li></ul></nav></header><div class=content><article class=post><h1 class=post-title><a href=https://agren.cc/p/scratchpad/>Linux Sysadmin Scratchpad</a></h1><div class=post-meta><time class=post-date>2022-09-24 ::</time></div><span class=post-tags>#<a href=https://agren.cc/tags/sysadmin/>sysadmin</a>&nbsp;</span><div class=post-content><div><p>This page is a collection of useful commands or one-liners collected through the years. They are sorted in general categories, but I&rsquo;ve attempted to describe them as well as I can so hopefully CTRL+F will work decently if you know what you&rsquo;re looking for.</p><p>This post will be updated in-place, refer to the date above.</p><h2 id=converting-unix-epoch-time>Converting Unix epoch time<a href=#converting-unix-epoch-time class=hanchor arialabel=Anchor>&#8983;</a></h2><p>If <code>1660000000</code> doesn&rsquo;t tell you much, here&rsquo;s a few conversion examples:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>$ echo 1660000000 | perl -pe &#39;use POSIX qw/strftime/; \
+</span></span><span class=line><span class=cl>s/(\d{10})/strftime(&#34;%Y-%m-%d %H:%M:%S&#34;,localtime($1))/e&#39;
+</span></span><span class=line><span class=cl>2022-08-09 01:06:40
+</span></span></code></pre></div><p>Note that this prints <code>localtime()</code> which depends on your system, and looks for exactly 10 numbers.</p><p>If you have a log that begins with a very specific epoch timestamp syntax (nagios) this is an alternative way of doing it that also looks for brackets:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>$ echo &#34;[1660000000] foo&#34; | perl -pe &#39;s/\[(\d{10})]/localtime($1)/e&#39;
+</span></span><span class=line><span class=cl>Tue Aug  9 01:06:40 2022 foo
+</span></span></code></pre></div><p>You can combine it with the above to get ISO-timestamps instead.</p><h2 id=print-a-config-file-but-remove-all-comments--and-empty-rows>Print a config file, but remove all comments (#) and empty rows<a href=#print-a-config-file-but-remove-all-comments--and-empty-rows class=hanchor arialabel=Anchor>&#8983;</a></h2><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>grep -vE &#39;^[[:space:]]*#|^$&#39; file
+</span></span></code></pre></div><h2 id=poor-mans-jq>Poor man&rsquo;s jq<a href=#poor-mans-jq class=hanchor arialabel=Anchor>&#8983;</a></h2><p>If you&rsquo;re on a system without jq but you&rsquo;re just looking to make a json blob readable, you can use python&rsquo;s json.tool instead:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>$ echo &#39;{&#34;bax&#34;:{&#34;foo&#34;:&#34;bar&#34;,&#34;baz&#34;:[&#34;ba&#34;,&#34;ba&#34;,&#34;ba&#34;]}}&#39; | python -m json.tool
+</span></span><span class=line><span class=cl>{
+</span></span><span class=line><span class=cl>    &#34;bax&#34;: {
+</span></span><span class=line><span class=cl>        &#34;foo&#34;: &#34;bar&#34;,
+</span></span><span class=line><span class=cl>        &#34;baz&#34;: [
+</span></span><span class=line><span class=cl>            &#34;ba&#34;,
+</span></span><span class=line><span class=cl>            &#34;ba&#34;,
+</span></span><span class=line><span class=cl>            &#34;ba&#34;
+</span></span><span class=line><span class=cl>        ]
+</span></span><span class=line><span class=cl>    }
+</span></span><span class=line><span class=cl>}
+</span></span></code></pre></div><h2 id=replace-every-instance-of-x-in-a-file>Replace every instance of x in a file<a href=#replace-every-instance-of-x-in-a-file class=hanchor arialabel=Anchor>&#8983;</a></h2><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>sed -i &#39;s/val=foo/val=bar/g&#39; /etc/file
+</span></span></code></pre></div><h2 id=show-frequently-recurring-lines-in-a-log-file>Show frequently recurring lines in a log file<a href=#show-frequently-recurring-lines-in-a-log-file class=hanchor arialabel=Anchor>&#8983;</a></h2><p>If you know that the timestamp is 14 characters long, this will cut out the timestamp and show you a count of the worst offenders:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>cat file.log | cut -c14- | sort | uniq -c | sort | tail
+</span></span></code></pre></div><h2 id=test-outbound-connectivity-on-a-specific-port>Test outbound connectivity on a specific port<a href=#test-outbound-connectivity-on-a-specific-port class=hanchor arialabel=Anchor>&#8983;</a></h2><p>Single port, or range of:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>nc -zv host 80
+</span></span><span class=line><span class=cl>nc -zv host 20-30
+</span></span></code></pre></div><h2 id=time-travel>Time travel<a href=#time-travel class=hanchor arialabel=Anchor>&#8983;</a></h2><p>If your testing depends on the system clock being wrong, you can disable NTP and set it to whatever like this:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl># timedatectl set-ntp 0
+</span></span><span class=line><span class=cl># timedatectl set-time &#39;2016-12-13 13:45&#39;
+</span></span><span class=line><span class=cl># date
+</span></span><span class=line><span class=cl>Tue Dec 13 13:45:01 WST 2016
+</span></span></code></pre></div><p>To re-enable NTP:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>timedatectl set-ntp 1 &amp;&amp; timedatectl --adjust-system-clock
+</span></span></code></pre></div><h2 id=push-a-thousand-things-to-an-apiconfig-file>Push a thousand things to an API/config file<a href=#push-a-thousand-things-to-an-apiconfig-file class=hanchor arialabel=Anchor>&#8983;</a></h2><p>Useful for load testing, or just filling up a bunch of garbage.</p><ul><li><code>JSON_DATA_OBJECT</code>: What you want to send to the API, in this case assumed JSON. If you need certain fields to be random, you could fill them with <code>$(cat /proc/sys/kernel/random/uuid)</code> for example.</li></ul><p>The response is assumed to be JSON and piped for formatting.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/bin/bash
+</span></span></span><span class=line><span class=cl><span class=cp></span><span class=k>for</span> i in <span class=k>$(</span>seq <span class=m>1</span> 1001<span class=k>)</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>   curl -sk -H <span class=s1>&#39;content-type: application/json&#39;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>   -d <span class=s1>&#39;JSON_DATA_OBJECT&#39;</span> <span class=s1>&#39;https://url/api&#39;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>   -u <span class=s1>&#39;user:password&#39;</span> <span class=p>|</span> python -m json.tool
+</span></span><span class=line><span class=cl><span class=k>done</span>
+</span></span></code></pre></div><p>If you need to do a <code>POST</code> or some other type of request with no data to apply the change, just pass <code>-X POST</code> instead of <code>-d</code>ata.</p><h4 id=config-file>Config file<a href=#config-file class=hanchor arialabel=Anchor>&#8983;</a></h4><p>To create a bunch of blocks with the expected syntax (here it&rsquo;s nagios), you can do:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/bin/bash
+</span></span></span><span class=line><span class=cl><span class=cp></span><span class=nb>cd</span> /somewhere
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>for</span> i in <span class=k>$(</span>seq <span class=m>1</span> 10001<span class=k>)</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>    <span class=nv>UUID</span><span class=o>=</span><span class=k>$(</span>cat /proc/sys/kernel/random/uuid<span class=k>)</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;define host {
+</span></span></span><span class=line><span class=cl><span class=s2>    use                            default-host-template
+</span></span></span><span class=line><span class=cl><span class=s2>    host_name                      </span><span class=nv>$UUID</span><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>    address                        127.0.0.1
+</span></span></span><span class=line><span class=cl><span class=s2>    register                       1
+</span></span></span><span class=line><span class=cl><span class=s2>    }&#34;</span> &gt;&gt; hosts.cfg
+</span></span><span class=line><span class=cl><span class=k>done</span>
+</span></span></code></pre></div><h2 id=sort-a-file-alphabetically-by-object-name-not-by-line>Sort a file alphabetically by object name, not by line<a href=#sort-a-file-alphabetically-by-object-name-not-by-line class=hanchor arialabel=Anchor>&#8983;</a></h2><p>Assume you have this:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>gamma {
+</span></span><span class=line><span class=cl>    banana
+</span></span><span class=line><span class=cl>}
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>alpha {
+</span></span><span class=line><span class=cl>    apple
+</span></span><span class=line><span class=cl>    pear
+</span></span><span class=line><span class=cl>}
+</span></span></code></pre></div><p>How do you sort this alphabetically by <code>object{}</code>, not by line? There&rsquo;s always a million ways, but one way to do it is to replace all linebreaks with some kind of unique placeholder character that appears nowhere in the file, like <code>§</code>. This can be done in <code>vim</code> with:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>:%g/.*{$/;/^}$/s/\n/§/
+</span></span></code></pre></div><p>This gives us:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>gamma {§    banana§}§ 
+</span></span><span class=line><span class=cl>alpha {§    apple§    pear§}§
+</span></span></code></pre></div><p>Note that this only works if <code>}</code> also has a newline after it. You can now sort it normally:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>:%sort
+</span></span></code></pre></div><p>When it&rsquo;s all sorted, restore the newlines by replacing the <code>§</code> characters:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>:g/.*{/s/§/\r/g
+</span></span></code></pre></div><h2 id=create-tar-on-a-remote-system-but-compress-it-locally>Create TAR on a remote system, but compress it locally<a href=#create-tar-on-a-remote-system-but-compress-it-locally class=hanchor arialabel=Anchor>&#8983;</a></h2><p>When bandwidth isn&rsquo;t the issue and you don&rsquo;t want to use up any space on the remote system, you may want to do the compression yourself locally and stream the tarball. If <code>sudo</code> is required, you can put it in a variable, but note that it will show up in the process list as long as the command is running.</p><p><code>2>/dev/null</code> will hide the sudo prompt.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>$ read -s sudopass
+</span></span><span class=line><span class=cl>$ ssh you@host &#34;echo $sudopass | \
+</span></span><span class=line><span class=cl>sudo -S tar cf - /dir&#34; 2&gt;/dev/null | \
+</span></span><span class=line><span class=cl>XZ_OPT=&#39;-9 -T0 -v&#39; xz &gt; dir.txz
+</span></span></code></pre></div><p>Verify that the file has contents:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>$ tar tvf dir.txz | head
+</span></span></code></pre></div><p>You can also do the same only for a specific subset of files, for example all log files:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>$ ssh you@host &#34;echo $sudopass | \
+</span></span><span class=line><span class=cl>sudo -S find &#39;/dir&#39; -name &#39;*.log&#39; | \
+</span></span><span class=line><span class=cl>sudo tar -cf- -T-&#34; | \
+</span></span><span class=line><span class=cl>XZ_OPT=&#39;-9 -T0 -v&#39; xz &gt; logs.txz
+</span></span></code></pre></div><h2 id=encrypt-a-file-with-openssl>Encrypt a file with OpenSSL<a href=#encrypt-a-file-with-openssl class=hanchor arialabel=Anchor>&#8983;</a></h2><p>If you&rsquo;re going to be throwing logs across the internet, it&rsquo;s probably a good idea to encrypt the file. One way to do this is:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>$ openssl enc -e -aes-256-cbc -md sha512 -pbkdf2 \
+</span></span><span class=line><span class=cl>-iter 10000 -in [PLAIN_FILE] -out [ENCRYPTED_FILE]
+</span></span></code></pre></div><p>It will ask you for a passphrase. To decrypt, use the <code>-d</code> flag in an otherwise very similar command:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>$ openssl enc -d -aes-256-cbc -md sha512 -pbkdf2 \
+</span></span><span class=line><span class=cl>-iter 10000 -in [ENCRYPTED_FILE] -out [PLAIN_FILE]
+</span></span></code></pre></div><p>Enter your passphrase and you&rsquo;ll have the decrypted file ready for decompression.</p><h2 id=bash>Bash<a href=#bash class=hanchor arialabel=Anchor>&#8983;</a></h2><p>Since <code>!!</code> refers to the previous command, you can re-run a failed command as root with:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>$ sudo !!
+</span></span></code></pre></div><p>So-called <em>brace expansion</em> is commonly used to move or copy one or many files as backups:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>$ mv -v file{,.bak}
+</span></span><span class=line><span class=cl>renamed &#39;file&#39; -&gt; &#39;file.bak&#39;
+</span></span></code></pre></div><p>For multiple files, <code>find</code> with <code>-exec</code> is a lot more flexible:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>$ touch fakelog{1..10}.log          # create 10 fake log files
+</span></span><span class=line><span class=cl>$ find . -type f -name &#39;*.log&#39;      # find all *.log files recursively
+</span></span><span class=line><span class=cl># now execute &#39;mv -v fakelog{1..10}.log fakelog{1..10}.log.bak&#39; for every file found
+</span></span><span class=line><span class=cl>$ find . -type f -name &#39;*.log&#39; -exec mv -v {} {}.bak \;
+</span></span></code></pre></div><p><strong>Final advice</strong> for everything bash:</p><p>Use <a href=https://github.com/koalaman/shellcheck>shellcheck</a> when writing scripts, available as an extension in most editors. The <a href=https://google.github.io/styleguide/shellguide.html>Google Shell Style Guide</a> isn&rsquo;t bad either.</p><h2 id=product-specific-salt-stack>Product-specific: Salt-stack<a href=#product-specific-salt-stack class=hanchor arialabel=Anchor>&#8983;</a></h2><p>If you don&rsquo;t use <a href=https://saltproject.io/whats-saltstack/>salt</a>, you can disregard this section.</p><h4 id=filtering-by-grains-and-listing-grains>Filtering by grains, and listing grains<a href=#filtering-by-grains-and-listing-grains class=hanchor arialabel=Anchor>&#8983;</a></h4><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl># salt -C &#39;prefix-* and G@osmajorrelease:14&#39; grains.get &#39;osrelease&#39;
+</span></span></code></pre></div><h4 id=apply-a-state-only-to-nodes-that-have-it>Apply a state only to nodes that have it<a href=#apply-a-state-only-to-nodes-that-have-it class=hanchor arialabel=Anchor>&#8983;</a></h4><p>Get all states for a specific group of nodes:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl># salt &#39;prefix-*&#39; state.show_lowstate --out=json &gt; out.json
+</span></span></code></pre></div><p>Use <code>jq</code> to only return nodes that have a specific <code>state</code>:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>cat out.json | \
+</span></span><span class=line><span class=cl>jq -r &#39;select(.[][].__sls__ == &#34;state&#34;) | keys[]&#39; | \
+</span></span><span class=line><span class=cl>sort -u
+</span></span></code></pre></div><p>Wrangle this string to make it into a salt-compatible list (comma-separated), and then use that, ping to check before trying <code>state.apply</code>:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>sudo salt -L &#39;host,host,host&#39; test.ping
+</span></span></code></pre></div></div></div><div class=pagination><div class=pagination__title><span class=pagination__title-h>Read other posts</span><hr></div><div class=pagination__buttons><span class="button previous"><a href=https://agren.cc/p/luks-file/><span class=button__icon>←</span>
+<span class=button__text>Encrypted LUKS file container</span></a></span>
+<span class="button next"><a href=https://agren.cc/p/fail2ban-on-el8/><span class=button__text>fail2ban on EL8</span>
+<span class=button__icon>→</span></a></span></div></div></article></div><footer class=footer><div class=footer__inner><div class=copyright><span>All content on this site is licensed under <a href=https://creativecommons.org/licenses/by-sa/4.0/ target=_blank>CC-BY-SA 4.0</a>, attribute "agren.cc". Powered by <a href=http://gohugo.io>hugo</a> and the <a href=https://github.com/panr/hugo-theme-terminal target=_blank>terminal</a> theme.</span></div></div></footer><script type=text/javascript src=/bundle.min.js></script></div></body></html>
