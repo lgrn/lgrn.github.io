@@ -1,4 +1,75 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>sysadmin on agren.cc</title><link>https://agren.cc/tags/sysadmin/</link><description>Recent content in sysadmin on agren.cc</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Fri, 28 Oct 2022 15:59:51 +0200</lastBuildDate><atom:link href="https://agren.cc/tags/sysadmin/index.xml" rel="self" type="application/rss+xml"/><item><title>Encrypted LUKS file container</title><link>https://agren.cc/p/luks-file/</link><pubDate>Fri, 28 Oct 2022 15:59:51 +0200</pubDate><guid>https://agren.cc/p/luks-file/</guid><description>While Linux Unified Key Setup — LUKS — is mostly used to encrypt entire disks under Linux, it can also be used to easily create an encrypted file container.</description><content>&lt;p>While &lt;a href="https://en.wikipedia.org/wiki/Linux_Unified_Key_Setup">Linux Unified Key Setup&lt;/a> — &lt;code>LUKS&lt;/code> — is mostly used to encrypt entire disks under Linux, it can also be used to easily create an encrypted file container. This can be used as an alternative to encrypting something like a &lt;code>.tar.gz&lt;/code> file directly, and will be easier to mount and read, without having to write decrypted data to disk.&lt;/p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>sysadmin on agren.cc</title><link>https://agren.cc/tags/sysadmin/</link><description>Recent content in sysadmin on agren.cc</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 03 Dec 2022 15:00:00 +0200</lastBuildDate><atom:link href="https://agren.cc/tags/sysadmin/index.xml" rel="self" type="application/rss+xml"/><item><title>Manual disk encryption on Ubuntu</title><link>https://agren.cc/p/manual-disk-encryption/</link><pubDate>Sat, 03 Dec 2022 15:00:00 +0200</pubDate><guid>https://agren.cc/p/manual-disk-encryption/</guid><description>Ubuntu makes it very easy to set up full disk encryption, but it requires you to wipe the entire disk if you want the wizard to do it for you, so this is how you can set it up manually.</description><content>&lt;p>Ubuntu makes it very easy to set up full disk encryption, but it requires you to wipe the entire disk if you want the wizard to do it for you, so this is how you can set it up manually.&lt;/p>
+&lt;p>One common reason you may want to do this is in a dual boot scenario, where one or several leading partitions are already taken &amp;ndash; or maybe you simply want to keep whatever is there.&lt;/p>
+&lt;p>The option in the Ubuntu installer to &lt;em>&amp;ldquo;Encrypt the new Ubuntu installation for security&amp;rdquo;&lt;/em> is only available when choosing &lt;em>&amp;ldquo;Erase disk and install Ubuntu&amp;rdquo;&lt;/em>. So, if you don&amp;rsquo;t want to wipe the entire disk, but you still want to boot an encrypted root partition, it needs some preparation.&lt;/p>
+&lt;p>This also gives some useful insight into how the disk encryption is actually set up behind the scenes.&lt;/p>
+&lt;p>In this guide we will:&lt;/p>
+&lt;ul>
+&lt;li>Set up the partitions we want manually using &lt;code>sgdisk&lt;/code> &amp;ndash; but you can use &lt;code>gparted&lt;/code> or similar if you prefer.&lt;/li>
+&lt;li>Use &lt;code>cryptsetup&lt;/code> to encrypt a partition&lt;/li>
+&lt;li>Decrypt (open) and mount this encrypted device, and set up LVM within it&lt;/li>
+&lt;li>Have Ubuntu run its installation against the unlocked partition, like any normal installation.&lt;/li>
+&lt;li>Manually configure the new installation to prompt the user for a passphrase to unlock the device on boot&lt;/li>
+&lt;/ul>
+&lt;p>This may sound like a lot, but it&amp;rsquo;s pretty straight forward.&lt;/p>
+&lt;p>This guide assumes that you already have, or that you will create, an EFI system partition. This is outside the scope of the guide.&lt;/p>
+&lt;p>&lt;em>Note: This post is heavily inspired by &lt;a href="https://www.mikekasberg.com/blog/2020/04/08/dual-boot-ubuntu-and-windows-with-encryption.html">this post&lt;/a> by Mike Kasberg.&lt;/em>&lt;/p>
+&lt;h3 id="graphical-representation">Graphical representation&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">| ### sda1 ### | ## sda2 ## | ######### sda3 ######### | -,
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> ^-untouched ^-/boot ^- LUKS LVM (encrypted) |
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> |
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">| ####################### sda3 ####################### | &amp;lt;´
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">| ## swap (lv) ## | ########### root (lv) ########### |
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="introduction">Introduction&lt;/h3>
+&lt;p>In this example, &lt;code>/dev/sda1&lt;/code> is taken and we do not want to remove it. After &lt;code>sda1&lt;/code>, there is free space available. You may very well have multiple partitions &amp;ldquo;taken&amp;rdquo;. If so, the partitions you create might be &lt;code>sda5&lt;/code>, or &lt;code>sda6&lt;/code> etc.&lt;/p>
+&lt;h3 id="partitions">Partitions&lt;/h3>
+&lt;p>First, create a &lt;code>2G&lt;/code> partition for /boot (we&amp;rsquo;re not encrypting this) on &lt;code>/dev/sda&lt;/code> as partition &lt;code>2&lt;/code>, which is the next free partition number available in this example where only &lt;code>sda1&lt;/code> exists.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># sgdisk --new=2:0:+2G /dev/sda
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Let the next partition &lt;code>3&lt;/code> fill the remaining space:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># sgdisk --new=3:0:0 /dev/sda
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Now set the name of &lt;code>2&lt;/code> to /boot and &lt;code>3&lt;/code> to rootfs&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># sgdisk --change-name=2:/boot --change-name=3:rootfs /dev/sda
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Then set the typecode to 8300 on both (Linux filesystem)&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># sgdisk --typecode=2:8300 --typecode=3:8300 /dev/sda
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>At this point, we&amp;rsquo;re going to use LUKS to encrypt what will later become our root disk (&lt;code>sda3&lt;/code>):&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># cryptsetup luksFormat --type=luks1 /dev/sda3
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Then open it with the passphrase you chose and call it &amp;ldquo;root&amp;rdquo;, or whatever really:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># cryptsetup open /dev/sda3 root
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The naming &lt;code>root&lt;/code> makes the unlocked device available at &lt;code>/dev/mapper/root&lt;/code>&lt;/p>
+&lt;h3 id="lvm">LVM&lt;/h3>
+&lt;p>We can now treat this meta-device as a regular HDD and create a physical volume for LVM as you would normally:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># pvcreate /dev/mapper/root
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Create a volume group, then one logical volume for swap, and use the rest for our root partition.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># vgcreate ubuntu-vg /dev/mapper/root
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># lvcreate -L 4G -n swap ubuntu-vg
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># lvcreate -l 100%FREE -n root ubuntu-vg
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="install-ubuntu">Install Ubuntu&lt;/h3>
+&lt;p>Since this encrypted device is already unlocked and LVM has been prepared, we can use the normal GUI installation in Ubuntu to install into it.&lt;/p>
+&lt;p>If you want to double check at this point, you can run &lt;code>gparted&lt;/code> as root which should show the partitions you just created.&lt;/p>
+&lt;p>Start the regular Ubuntu installation, select language, keyboard layout etc. and then select &amp;ldquo;Something else&amp;rdquo; when asked about how you want to install.&lt;/p>
+&lt;p>Here&amp;rsquo;s what we&amp;rsquo;ll do in the installation GUI:&lt;/p>
+&lt;ul>
+&lt;li>Edit /dev/mapper/ubuntu&amp;ndash;vg-root, set to ext4 mounted at /, and format it.&lt;/li>
+&lt;li>Edit /dev/mapper/ubuntu&amp;ndash;vg-swap, set to swap area.&lt;/li>
+&lt;li>Edit /dev/sda2, set to ext4 mounted at /boot, and format it.&lt;/li>
+&lt;/ul>
+&lt;p>Let the installation complete, but &amp;ndash; &lt;strong>do not&lt;/strong> &amp;ndash; reboot or shut down the installation (select &amp;ldquo;Continue Testing&amp;rdquo;).&lt;/p>
+&lt;p>The reason we must keep the installation going is that the installation wizard does not understand that it has actually installed Ubuntu into an encrypted device, so we need to add some configuration to the installation we just did while it&amp;rsquo;s still open so that it will prompt the user for the passphrase to decrypt it.&lt;/p>
+&lt;h3 id="chroot-into-the-installation">chroot into the installation&lt;/h3>
+&lt;p>We&amp;rsquo;ll use &lt;code>/target&lt;/code> for mounting our installed system:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># mount /dev/mapper/ubuntu--vg-root /target
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># mount /dev/sda2 /target/boot
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># for n in proc sys dev etc/resolv.conf; do mount --rbind /$n /target/$n; done
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Before jumping into it, we need to figure out the UUID (not PARTUUID) of the encrypted partition (/dev/sda3). This can be found by running:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># blkid /dev/sda3
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Save this for later.&lt;/p>
+&lt;p>Since &lt;code>/target&lt;/code> is now a usable environment, we can chroot to it:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># chroot /target
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># mount -a
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Now create and edit &lt;code>/etc/crypttab&lt;/code> which likely does not exist and add the name for the device, the device itself (by UUID, no quotes) and some options:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">root UUID=your_uuid_here none luks,discard
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Save the file, then apply your changes by running:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># update-initramfs -k all -c
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>This will re-generate your initrd images, and when done you&amp;rsquo;re ready to reboot. After the reboot, you should be greeted with a prompt asking you for the passphrase to decrypt &amp;ldquo;root&amp;rdquo;, and that&amp;rsquo;s it!&lt;/p></content></item><item><title>Encrypted LUKS file container</title><link>https://agren.cc/p/luks-file/</link><pubDate>Fri, 28 Oct 2022 15:59:51 +0200</pubDate><guid>https://agren.cc/p/luks-file/</guid><description>While Linux Unified Key Setup — LUKS — is mostly used to encrypt entire disks under Linux, it can also be used to easily create an encrypted file container.</description><content>&lt;p>While &lt;a href="https://en.wikipedia.org/wiki/Linux_Unified_Key_Setup">Linux Unified Key Setup&lt;/a> — &lt;code>LUKS&lt;/code> — is mostly used to encrypt entire disks under Linux, it can also be used to easily create an encrypted file container. This can be used as an alternative to encrypting something like a &lt;code>.tar.gz&lt;/code> file directly, and will be easier to mount and read, without having to write decrypted data to disk.&lt;/p>
 &lt;h3 id="creating-a-container">Creating a container&lt;/h3>
 &lt;p>The first step is to quite simply reserve disk space for the container by creating an empty file:&lt;/p>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">$ dd if=/dev/zero of=container.luks bs=1 count=0 seek=2G
