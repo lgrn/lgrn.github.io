@@ -1,21 +1,90 @@
-<!doctype html><html lang=en><head><title>fail2ban on EL8 :: agren.cc</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="fail2ban is commonly used to take a certain action, such as automatically blocking an IP, after repeated authentication failures or other generally bad behavior against applications, as detected by regex matching against log output."><meta name=keywords content><meta name=robots content="noodp"><link rel=canonical href=https://agren.cc/p/fail2ban-on-el8/><link rel=stylesheet href=/style.css><link rel="shortcut icon" href=https://agren.cc/img/theme-colors/green.png><link rel=apple-touch-icon href=https://agren.cc/img/theme-colors/green.png><meta name=twitter:card content="summary"><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="og:title" content="fail2ban on EL8"><meta property="og:description" content="fail2ban is commonly used to take a certain action, such as automatically blocking an IP, after repeated authentication failures or other generally bad behavior against applications, as detected by regex matching against log output."><meta property="og:url" content="https://agren.cc/p/fail2ban-on-el8/"><meta property="og:site_name" content="agren.cc"><meta property="og:image" content="https://agren.cc/img/favicon/green.png"><meta property="og:image:width" content="2048"><meta property="og:image:height" content="1024"><meta property="article:published_time" content="2021-10-08 15:30:51 +0200 CEST"></head><body class=green><div class="container center headings--one-size"><header class=header><div class=header__inner><div class=header__logo><a href=/><div class=logo>agren.cc</div></a></div><div class=menu-trigger>menu</div></div><nav class="menu hidden-on-mobile"><ul class="menu__inner menu__inner--desktop"><li><a href=/about/index.html>About/Contact</a></li></ul><ul class="menu__inner menu__inner--mobile"><li><a href=/about/index.html>About/Contact</a></li></ul></nav></header><div class=content><article class=post><h1 class=post-title><a href=https://agren.cc/p/fail2ban-on-el8/>fail2ban on EL8</a></h1><div class=post-meta><time class=post-date>2021-10-08 ::</time></div><span class=post-tags>#<a href=https://agren.cc/tags/fail2ban/>fail2ban</a>&nbsp;
+<!doctype html><html lang=en>
+<head>
+<title>fail2ban on EL8 :: agren.cc</title>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=description content="fail2ban is commonly used to take a certain action, such as automatically blocking an IP, after repeated authentication failures or other generally bad behavior against applications, as detected by regex matching against log output.">
+<meta name=keywords content>
+<meta name=robots content="noodp">
+<link rel=canonical href=https://agren.cc/p/fail2ban-on-el8/>
+<link rel=stylesheet href=/style.css>
+<link rel="shortcut icon" href=https://agren.cc/img/theme-colors/green.png>
+<link rel=apple-touch-icon href=https://agren.cc/img/theme-colors/green.png>
+<meta name=twitter:card content="summary">
+<meta property="og:locale" content="en">
+<meta property="og:type" content="article">
+<meta property="og:title" content="fail2ban on EL8">
+<meta property="og:description" content="fail2ban is commonly used to take a certain action, such as automatically blocking an IP, after repeated authentication failures or other generally bad behavior against applications, as detected by regex matching against log output.">
+<meta property="og:url" content="https://agren.cc/p/fail2ban-on-el8/">
+<meta property="og:site_name" content="agren.cc">
+<meta property="og:image" content="https://agren.cc/img/favicon/green.png">
+<meta property="og:image:width" content="2048">
+<meta property="og:image:height" content="1024">
+<meta property="article:published_time" content="2021-10-08 15:30:51 +0200 CEST">
+</head>
+<body class=green>
+<div class="container center headings--one-size">
+<header class=header>
+<div class=header__inner>
+<div class=header__logo>
+<a href=/>
+<div class=logo>
+agren.cc
+</div>
+</a>
+</div>
+<div class=menu-trigger>menu</div>
+</div>
+<nav class="menu hidden-on-mobile">
+<ul class="menu__inner menu__inner--desktop">
+<li><a href=/about/index.html>About/Contact</a></li>
+</ul>
+<ul class="menu__inner menu__inner--mobile">
+<li><a href=/about/index.html>About/Contact</a></li>
+</ul>
+</nav>
+</header>
+<div class=content>
+<article class=post>
+<h1 class=post-title>
+<a href=https://agren.cc/p/fail2ban-on-el8/>fail2ban on EL8</a>
+</h1>
+<div class=post-meta>
+<time class=post-date>
+2021-10-08 ::
+</time>
+</div>
+<span class=post-tags>
+#<a href=https://agren.cc/tags/fail2ban/>fail2ban</a>&nbsp;
 #<a href=https://agren.cc/tags/el8/>EL8</a>&nbsp;
-#<a href=https://agren.cc/tags/sysadmin/>sysadmin</a>&nbsp;</span><div class=post-content><div><p>fail2ban is commonly used to take a certain action, such as automatically blocking an IP, after repeated authentication failures or other generally bad behavior against applications, as detected by regex matching against log output.</p><p>This example will show how to install and configure fail2ban on EL8 (Rocky Linux 8.4), and to configure it to block an IP after multiple failed login attempts.</p><h4 id=installing-fail2ban-via-epel>Installing fail2ban via EPEL<a href=#installing-fail2ban-via-epel class=hanchor arialabel=Anchor>&#8983;</a></h4><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl># yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
-</span></span><span class=line><span class=cl># yum install fail2ban
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl># fail2ban-client --version
-</span></span><span class=line><span class=cl>Fail2Ban v0.11.2
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl># systemctl enable fail2ban --now
-</span></span><span class=line><span class=cl># fail2ban-client status
-</span></span><span class=line><span class=cl>Status
-</span></span><span class=line><span class=cl>|- Number of jail:      0
-</span></span><span class=line><span class=cl>`- Jail list:
-</span></span></code></pre></div><p>At this point, fail2ban is installed and running, but does not have any active jails. The first step is therefore to enable the jails we want, which is done by copying the default file in <code>/etc/fail2ban</code> called <code>jail.conf</code> to <code>jail.local</code>, which is the fail2ban syntax for a user-defined override file.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl># cp jail.conf jail.local &amp;&amp; vim jail.local
-</span></span></code></pre></div><p>Since all the commented help text is still available in <code>jail.conf</code>, we can make our override file short and sweet. The options should be pretty self-explanatory:<div class=collapsable-code><input id=1 type=checkbox>
-<label for=1><span class=collapsable-code__language>cfg</span>
+#<a href=https://agren.cc/tags/sysadmin/>sysadmin</a>&nbsp;
+</span>
+<div class=post-content><div>
+<p>fail2ban is commonly used to take a certain action, such as automatically blocking an IP, after repeated authentication failures or other generally bad behavior against applications, as detected by regex matching against log output.</p>
+<p>This example will show how to install and configure fail2ban on EL8 (Rocky Linux 8.4), and to configure it to block an IP after multiple failed login attempts.</p>
+<h4 id=installing-fail2ban-via-epel>Installing fail2ban via EPEL<a href=#installing-fail2ban-via-epel class=hanchor arialabel=Anchor>&#8983;</a> </h4>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback># yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+# yum install fail2ban
+
+# fail2ban-client --version
+Fail2Ban v0.11.2
+
+# systemctl enable fail2ban --now
+# fail2ban-client status
+Status
+|- Number of jail:      0
+`- Jail list:
+</code></pre></div><p>At this point, fail2ban is installed and running, but does not have any active jails. The first step is therefore to enable the jails we want, which is done by copying the default file in <code>/etc/fail2ban</code> called <code>jail.conf</code> to <code>jail.local</code>, which is the fail2ban syntax for a user-defined override file.</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback># cp jail.conf jail.local &amp;&amp; vim jail.local
+</code></pre></div><p>Since all the commented help text is still available in <code>jail.conf</code>, we can make our override file short and sweet. The options should be pretty self-explanatory:
+<div class=collapsable-code>
+<input id=1 type=checkbox>
+<label for=1>
+<span class=collapsable-code__language>cfg</span>
 <span class=collapsable-code__title>jail.local</span>
-<span class=collapsable-code__toggle data-label-expand=Show data-label-collapse=Hide></span></label><pre class=language-cfg><code>
+<span class=collapsable-code__toggle data-label-expand=Show data-label-collapse=Hide></span>
+</label>
+<pre class=language-cfg><code>
 [DEFAULT]
 bantime = 24h
 maxretry = 3
@@ -25,27 +94,73 @@ banaction = nftables[type=allports]
 
 [sshd]
 enabled = true
-</code></pre></div>This will ban an IP for <code>24h</code> if <code>3</code> failed attempts happen within <code>60m</code>. The IP will be banned on all ports and is actioned through <code>nftables</code>.</p><p>When the file is saved, let&rsquo;s restart fail2ban and verify that the jail is active:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl># systemctl restart fail2ban
-</span></span><span class=line><span class=cl># fail2ban-client status
-</span></span><span class=line><span class=cl>Status
-</span></span><span class=line><span class=cl>|- Number of jail:      1
-</span></span><span class=line><span class=cl>`- Jail list:   sshd
-</span></span></code></pre></div><h4 id=trust-but-verify>Trust, but verify<a href=#trust-but-verify class=hanchor arialabel=Anchor>&#8983;</a></h4><p>Now let&rsquo;s do something dumb and enable passwords for SSH authentication, then attempt to get ourselves banned when failing to login from <code>127.0.0.1</code>. First, ensure password authentication is enabled in <code>/etc/ssh/sshd_config</code>:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>PasswordAuthentication yes
-</span></span></code></pre></div><p>Restart the SSH daemon:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl># systemctl restart sshd
-</span></span></code></pre></div><p>Attempt an SSH login with an incorrect password:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl># ssh localhost -P
-</span></span><span class=line><span class=cl>root@localhost&#39;s password:
-</span></span><span class=line><span class=cl>Permission denied, please try again.
-</span></span></code></pre></div><p>This failed attempt should now be visible in <code>/var/log/secure</code>:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>unix_chkpwd[1373]: password check failed for user (root)
-</span></span><span class=line><span class=cl>sshd[1371]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 .0.1  user=root
-</span></span><span class=line><span class=cl>sshd[1371]: Failed password for root from 127.0.0.1 port 37780 ssh2
-</span></span><span class=line><span class=cl>sshd[1371]: Connection closed by authenticating user root 127.0.0.1 port 37780 [preauth]
-</span></span></code></pre></div><p>This very serious breach attempt was naively ignored by fail2ban though, as visible in <code>/var/log/fail2ban.log</code>:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>fail2ban.filter [1305]: INFO [sshd] Ignore 127.0.0.1 by ignoreself rule
-</span></span></code></pre></div><p>Luckily, this is something we can override in our <code>jail.local</code> file by setting <code>ignoreself = false</code> under <code>[DEFAULT]</code>. After restarting fail2ban, repeated attempts gives us this in <code>fail2ban.log</code>:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>fail2ban.filter  [1451]: INFO    [sshd] Found 127.0.0.1 - 2021-10-08 14:38:01
-</span></span><span class=line><span class=cl>fail2ban.filter  [1451]: INFO    [sshd] Found 127.0.0.1 - 2021-10-08 14:38:49
-</span></span><span class=line><span class=cl>fail2ban.filter  [1451]: INFO    [sshd] Found 127.0.0.1 - 2021-10-08 14:38:51
-</span></span><span class=line><span class=cl>fail2ban.actions [1451]: NOTICE  [sshd] Ban 127.0.0.1
-</span></span></code></pre></div><p>Congratulations, you&rsquo;ve banned yourself:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl># fail2ban-client banned
-</span></span><span class=line><span class=cl>[{&#39;sshd&#39;: [&#39;127.0.0.1&#39;]}]
-</span></span></code></pre></div><p>Clearing all bans:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl># fail2ban-client unban --all
-</span></span></code></pre></div><h4 id=summary>Summary<a href=#summary class=hanchor arialabel=Anchor>&#8983;</a></h4><p>What we&rsquo;ve done:</p><ul><li>We created a <code>jail.local</code> override file with our own settings.</li><li>We enabled the <code>sshd</code> jail, and there are of course others ready to use for other services.</li><li>We verified that repeatedly failing to log in did add the firewall rule correctly, and that fail2ban could clear it.</li></ul></div></div><div class=pagination><div class=pagination__title><span class=pagination__title-h>Read other posts</span><hr></div><div class=pagination__buttons><span class="button previous"><a href=https://agren.cc/p/scratchpad/><span class=button__icon>←</span>
-<span class=button__text>Linux Sysadmin Scratchpad</span></a></span></div></div></article></div><footer class=footer><div class=footer__inner><div class=copyright><span>All content on this site is licensed under <a href=https://creativecommons.org/licenses/by-sa/4.0/ target=_blank>CC-BY-SA 4.0</a>, attribute "agren.cc". Powered by <a href=http://gohugo.io>hugo</a> and the <a href=https://github.com/panr/hugo-theme-terminal target=_blank>terminal</a> theme.</span></div></div></footer><script type=text/javascript src=/bundle.min.js></script></div></body></html>
+</code></pre>
+</div>
+This will ban an IP for <code>24h</code> if <code>3</code> failed attempts happen within <code>60m</code>. The IP will be banned on all ports and is actioned through <code>nftables</code>.</p>
+<p>When the file is saved, let&rsquo;s restart fail2ban and verify that the jail is active:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback># systemctl restart fail2ban
+# fail2ban-client status
+Status
+|- Number of jail:      1
+`- Jail list:   sshd
+</code></pre></div><h4 id=trust-but-verify>Trust, but verify<a href=#trust-but-verify class=hanchor arialabel=Anchor>&#8983;</a> </h4>
+<p>Now let&rsquo;s do something dumb and enable passwords for SSH authentication, then attempt to get ourselves banned when failing to login from <code>127.0.0.1</code>. First, ensure password authentication is enabled in <code>/etc/ssh/sshd_config</code>:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>PasswordAuthentication yes
+</code></pre></div><p>Restart the SSH daemon:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback># systemctl restart sshd
+</code></pre></div><p>Attempt an SSH login with an incorrect password:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback># ssh localhost -P
+root@localhost&#39;s password:
+Permission denied, please try again.
+</code></pre></div><p>This failed attempt should now be visible in <code>/var/log/secure</code>:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>unix_chkpwd[1373]: password check failed for user (root)
+sshd[1371]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 .0.1  user=root
+sshd[1371]: Failed password for root from 127.0.0.1 port 37780 ssh2
+sshd[1371]: Connection closed by authenticating user root 127.0.0.1 port 37780 [preauth]
+</code></pre></div><p>This very serious breach attempt was naively ignored by fail2ban though, as visible in <code>/var/log/fail2ban.log</code>:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>fail2ban.filter [1305]: INFO [sshd] Ignore 127.0.0.1 by ignoreself rule
+</code></pre></div><p>Luckily, this is something we can override in our <code>jail.local</code> file by setting <code>ignoreself = false</code> under <code>[DEFAULT]</code>. After restarting fail2ban, repeated attempts gives us this in <code>fail2ban.log</code>:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>fail2ban.filter  [1451]: INFO    [sshd] Found 127.0.0.1 - 2021-10-08 14:38:01
+fail2ban.filter  [1451]: INFO    [sshd] Found 127.0.0.1 - 2021-10-08 14:38:49
+fail2ban.filter  [1451]: INFO    [sshd] Found 127.0.0.1 - 2021-10-08 14:38:51
+fail2ban.actions [1451]: NOTICE  [sshd] Ban 127.0.0.1
+</code></pre></div><p>Congratulations, you&rsquo;ve banned yourself:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback># fail2ban-client banned
+[{&#39;sshd&#39;: [&#39;127.0.0.1&#39;]}]
+</code></pre></div><p>Clearing all bans:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback># fail2ban-client unban --all
+</code></pre></div><h4 id=summary>Summary<a href=#summary class=hanchor arialabel=Anchor>&#8983;</a> </h4>
+<p>What we&rsquo;ve done:</p>
+<ul>
+<li>We created a <code>jail.local</code> override file with our own settings.</li>
+<li>We enabled the <code>sshd</code> jail, and there are of course others ready to use for other services.</li>
+<li>We verified that repeatedly failing to log in did add the firewall rule correctly, and that fail2ban could clear it.</li>
+</ul>
+</div></div>
+<div class=pagination>
+<div class=pagination__title>
+<span class=pagination__title-h>Read other posts</span>
+<hr>
+</div>
+<div class=pagination__buttons>
+<span class="button previous">
+<a href=https://agren.cc/p/scratchpad/>
+<span class=button__icon>←</span>
+<span class=button__text>Linux Sysadmin Scratchpad</span>
+</a>
+</span>
+</div>
+</div>
+</article>
+</div>
+<footer class=footer>
+<div class=footer__inner>
+<div class=copyright>
+<span>All content on this site is licensed under <a href=https://creativecommons.org/licenses/by-sa/4.0/ target=_blank>CC-BY-SA 4.0</a>, attribute "agren.cc". Powered by <a href=http://gohugo.io>hugo</a> and the <a href=https://github.com/panr/hugo-theme-terminal target=_blank>terminal</a> theme.</span>
+</div>
+</div>
+</footer>
+<script type=text/javascript src=/bundle.min.js></script>
+</div>
+</body>
+</html>

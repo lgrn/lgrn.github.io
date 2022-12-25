@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>EL8 on agren.cc</title><link>https://agren.cc/tags/el8/</link><description>Recent content in EL8 on agren.cc</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Fri, 08 Oct 2021 15:30:51 +0200</lastBuildDate><atom:link href="https://agren.cc/tags/el8/index.xml" rel="self" type="application/rss+xml"/><item><title>fail2ban on EL8</title><link>https://agren.cc/p/fail2ban-on-el8/</link><pubDate>Fri, 08 Oct 2021 15:30:51 +0200</pubDate><guid>https://agren.cc/p/fail2ban-on-el8/</guid><description>fail2ban is commonly used to take a certain action, such as automatically blocking an IP, after repeated authentication failures or other generally bad behavior against applications, as detected by regex matching against log output.</description><content>&lt;p>fail2ban is commonly used to take a certain action, such as automatically blocking an IP, after repeated authentication failures or other generally bad behavior against applications, as detected by regex matching against log output.&lt;/p>
 &lt;p>This example will show how to install and configure fail2ban on EL8 (Rocky Linux 8.4), and to configure it to block an IP after multiple failed login attempts.&lt;/p>
 &lt;h4 id="installing-fail2ban-via-epel">Installing fail2ban via EPEL&lt;/h4>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># yum install fail2ban
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># fail2ban-client --version
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Fail2Ban v0.11.2
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># systemctl enable fail2ban --now
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># fail2ban-client status
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Status
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">|- Number of jail: 0
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">`- Jail list:
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>At this point, fail2ban is installed and running, but does not have any active jails. The first step is therefore to enable the jails we want, which is done by copying the default file in &lt;code>/etc/fail2ban&lt;/code> called &lt;code>jail.conf&lt;/code> to &lt;code>jail.local&lt;/code>, which is the fail2ban syntax for a user-defined override file.&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># cp jail.conf jail.local &amp;amp;&amp;amp; vim jail.local
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Since all the commented help text is still available in &lt;code>jail.conf&lt;/code>, we can make our override file short and sweet. The options should be pretty self-explanatory:
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback"># yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+# yum install fail2ban
+# fail2ban-client --version
+Fail2Ban v0.11.2
+# systemctl enable fail2ban --now
+# fail2ban-client status
+Status
+|- Number of jail: 0
+`- Jail list:
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>At this point, fail2ban is installed and running, but does not have any active jails. The first step is therefore to enable the jails we want, which is done by copying the default file in &lt;code>/etc/fail2ban&lt;/code> called &lt;code>jail.conf&lt;/code> to &lt;code>jail.local&lt;/code>, which is the fail2ban syntax for a user-defined override file.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback"># cp jail.conf jail.local &amp;amp;&amp;amp; vim jail.local
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>Since all the commented help text is still available in &lt;code>jail.conf&lt;/code>, we can make our override file short and sweet. The options should be pretty self-explanatory:
 &lt;div class="collapsable-code">
 &lt;input id="1" type="checkbox" />
 &lt;label for="1">
@@ -35,38 +33,38 @@ enabled = true
 &lt;/div>
 This will ban an IP for &lt;code>24h&lt;/code> if &lt;code>3&lt;/code> failed attempts happen within &lt;code>60m&lt;/code>. The IP will be banned on all ports and is actioned through &lt;code>nftables&lt;/code>.&lt;/p>
 &lt;p>When the file is saved, let&amp;rsquo;s restart fail2ban and verify that the jail is active:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># systemctl restart fail2ban
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># fail2ban-client status
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Status
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">|- Number of jail: 1
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">`- Jail list: sshd
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="trust-but-verify">Trust, but verify&lt;/h4>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback"># systemctl restart fail2ban
+# fail2ban-client status
+Status
+|- Number of jail: 1
+`- Jail list: sshd
+&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="trust-but-verify">Trust, but verify&lt;/h4>
 &lt;p>Now let&amp;rsquo;s do something dumb and enable passwords for SSH authentication, then attempt to get ourselves banned when failing to login from &lt;code>127.0.0.1&lt;/code>. First, ensure password authentication is enabled in &lt;code>/etc/ssh/sshd_config&lt;/code>:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">PasswordAuthentication yes
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Restart the SSH daemon:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># systemctl restart sshd
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Attempt an SSH login with an incorrect password:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># ssh localhost -P
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">root@localhost&amp;#39;s password:
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Permission denied, please try again.
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>This failed attempt should now be visible in &lt;code>/var/log/secure&lt;/code>:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">unix_chkpwd[1373]: password check failed for user (root)
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sshd[1371]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 .0.1 user=root
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sshd[1371]: Failed password for root from 127.0.0.1 port 37780 ssh2
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sshd[1371]: Connection closed by authenticating user root 127.0.0.1 port 37780 [preauth]
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>This very serious breach attempt was naively ignored by fail2ban though, as visible in &lt;code>/var/log/fail2ban.log&lt;/code>:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">fail2ban.filter [1305]: INFO [sshd] Ignore 127.0.0.1 by ignoreself rule
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Luckily, this is something we can override in our &lt;code>jail.local&lt;/code> file by setting &lt;code>ignoreself = false&lt;/code> under &lt;code>[DEFAULT]&lt;/code>. After restarting fail2ban, repeated attempts gives us this in &lt;code>fail2ban.log&lt;/code>:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">fail2ban.filter [1451]: INFO [sshd] Found 127.0.0.1 - 2021-10-08 14:38:01
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">fail2ban.filter [1451]: INFO [sshd] Found 127.0.0.1 - 2021-10-08 14:38:49
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">fail2ban.filter [1451]: INFO [sshd] Found 127.0.0.1 - 2021-10-08 14:38:51
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">fail2ban.actions [1451]: NOTICE [sshd] Ban 127.0.0.1
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Congratulations, you&amp;rsquo;ve banned yourself:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># fail2ban-client banned
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">[{&amp;#39;sshd&amp;#39;: [&amp;#39;127.0.0.1&amp;#39;]}]
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Clearing all bans:&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># fail2ban-client unban --all
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="summary">Summary&lt;/h4>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">PasswordAuthentication yes
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>Restart the SSH daemon:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback"># systemctl restart sshd
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>Attempt an SSH login with an incorrect password:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback"># ssh localhost -P
+root@localhost&amp;#39;s password:
+Permission denied, please try again.
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>This failed attempt should now be visible in &lt;code>/var/log/secure&lt;/code>:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">unix_chkpwd[1373]: password check failed for user (root)
+sshd[1371]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 .0.1 user=root
+sshd[1371]: Failed password for root from 127.0.0.1 port 37780 ssh2
+sshd[1371]: Connection closed by authenticating user root 127.0.0.1 port 37780 [preauth]
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>This very serious breach attempt was naively ignored by fail2ban though, as visible in &lt;code>/var/log/fail2ban.log&lt;/code>:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">fail2ban.filter [1305]: INFO [sshd] Ignore 127.0.0.1 by ignoreself rule
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>Luckily, this is something we can override in our &lt;code>jail.local&lt;/code> file by setting &lt;code>ignoreself = false&lt;/code> under &lt;code>[DEFAULT]&lt;/code>. After restarting fail2ban, repeated attempts gives us this in &lt;code>fail2ban.log&lt;/code>:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">fail2ban.filter [1451]: INFO [sshd] Found 127.0.0.1 - 2021-10-08 14:38:01
+fail2ban.filter [1451]: INFO [sshd] Found 127.0.0.1 - 2021-10-08 14:38:49
+fail2ban.filter [1451]: INFO [sshd] Found 127.0.0.1 - 2021-10-08 14:38:51
+fail2ban.actions [1451]: NOTICE [sshd] Ban 127.0.0.1
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>Congratulations, you&amp;rsquo;ve banned yourself:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback"># fail2ban-client banned
+[{&amp;#39;sshd&amp;#39;: [&amp;#39;127.0.0.1&amp;#39;]}]
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>Clearing all bans:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback"># fail2ban-client unban --all
+&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="summary">Summary&lt;/h4>
 &lt;p>What we&amp;rsquo;ve done:&lt;/p>
 &lt;ul>
 &lt;li>We created a &lt;code>jail.local&lt;/code> override file with our own settings.&lt;/li>

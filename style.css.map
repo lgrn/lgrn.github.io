@@ -1,7 +1,7 @@
 {
 	"version": 3,
 	"file": "style.css",
-	"sourceRoot": "/home/leif/git/lgrn.github.io",
+	"sourceRoot": "/home/linusa/git/lgrn.github.io",
 	"sources": [
 		"css/base.scss",
 		"themes/terminal/assets/css/variables.scss",
