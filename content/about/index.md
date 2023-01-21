@@ -1,6 +1,69 @@
 # About this site
 
-This is where I collect mostly technical information that 
-I found useful, so maybe you will too.
+This is where I collect mostly technical information that I found useful, so maybe you will too.
 
-For feedback of any kind, feel free to contact hello [at] agren dot cc
+If you wish to contact me, you can email me at linus at agren cc. If you prefer encrypted communication, see below for instructions on how to get my public key.
+
+## OpenPGP key
+
+My key is published on [keys.openpgp.org](https://keys.openpgp.org/), search for my e-mail (linus at agren cc) either through the web interface or via your favorite e-mail client if supported.
+
+It **should** match the following:
+
+{{< code language="text" title="PGP PUBLIC KEY BLOCK (click to show)" id="1" expand="Show" collapse="Hide" isCollapsed="true" >}}
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+(...)
+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
+=luIw
+-----END PGP PUBLIC KEY BLOCK-----
+{{< /code >}}
+
+## Mastodon
+
+https://telegrafverket.cc/@linus
