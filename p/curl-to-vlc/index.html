@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <title>Using curl to pass videos to VLC on Apple TV :: agren.cc</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="VLC has always been a great piece of software, but one place where is really shines is on iOS/tvOS since it allows you to play pretty much any video file, and you can send that file over curl." />
+<meta name="keywords" content="" />
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="https://agren.cc/p/curl-to-vlc/" />
+
+
+
+
+
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/style.css">
+
+
+
+
+
+
+
+  <link rel="shortcut icon" href="https://agren.cc/img/theme-colors/blue.png">
+  <link rel="apple-touch-icon" href="https://agren.cc/img/theme-colors/blue.png">
+
+
+
+<meta name="twitter:card" content="summary" />
+
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Using curl to pass videos to VLC on Apple TV">
+<meta property="og:description" content="VLC has always been a great piece of software, but one place where is really shines is on iOS/tvOS since it allows you to play pretty much any video file, and you can send that file over curl." />
+<meta property="og:url" content="https://agren.cc/p/curl-to-vlc/" />
+<meta property="og:site_name" content="agren.cc" />
+
+  
+    <meta property="og:image" content="https://agren.cc/img/favicon/blue.png">
+  
+
+<meta property="og:image:width" content="2048">
+<meta property="og:image:height" content="1024">
+
+
+  <meta property="article:published_time" content="2023-09-13 19:08:00 &#43;0200 CEST" />
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body class="blue">
+
+
+<div class="container center headings--one-size">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="/">
+  <div class="logo">
+    agren.cc
+  </div>
+</a>
+
+    </div>
+    
+      <div class="menu-trigger">menu</div>
+    
+  </div>
+  
+    <nav class="menu hidden-on-mobile">
+  <ul class="menu__inner menu__inner--desktop">
+    
+      
+        
+          <li><a href="/about/index.html">About/Contact</a></li>
+        
+      
+    
+
+    
+  </ul>
+
+  <ul class="menu__inner menu__inner--mobile">
+    
+      
+        <li><a href="/about/index.html">About/Contact</a></li>
+      
+    
+    
+  </ul>
+</nav>
+
+  
+</header>
+
+
+  <div class="content">
+    
+<article class="post">
+  <h1 class="post-title">
+    <a href="https://agren.cc/p/curl-to-vlc/">Using curl to pass videos to VLC on Apple TV</a>
+  </h1>
+  <div class="post-meta">
+    
+      <time class="post-date">
+        2023-09-13 ::
+        
+      </time>
+    
+    
+    
+  </div>
+
+  
+    <span class="post-tags">
+      
+      #<a href="https://agren.cc/tags/linux/">linux</a>&nbsp;
+      
+    </span>
+  
+  
+
+
+  
+
+  <div class="post-content"><div>
+        <p>VLC has always been a great piece of software, but one place where is
+really shines is on iOS/tvOS since it allows you to play pretty much any
+video file, and you can send that file over curl.</p>
+<p>While this probably also works for iOS, this example will focus on the
+use case of downloading a YouTube video, stripping it of sponsored
+content and passing it on to VLC on an Apple TV. It&rsquo;s not that difficult, but you do
+need <a href="https://github.com/yt-dlp/yt-dlp"><code>yt-dlp</code></a>, <code>ffmpeg</code> and <code>curl</code>:</p>
+
+
+
+  <div class="collapsable-code">
+    <input id="1" type="checkbox"  />
+    <label for="1">
+      <span class="collapsable-code__language">bash</span>
+      <span class="collapsable-code__title">tovlc.sh</span>
+      <span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide"></span>
+    </label>
+    <pre class="language-bash" ><code>#!/bin/bash
+/usr/bin/yt-dlp $1 -o output.mkv \
+--sponsorblock-remove all \
+--force-overwrites \
+--merge-output-format mkv \
+--embed-subs \
+&amp;&amp; /usr/bin/curl -i \
+-X POST &#39;http://appletv.local/upload.json&#39; \
+--form file=&#39;@output.mkv&#39;
+</code></pre>
+  </div>
+
+
+<p>This will:</p>
+<ul>
+<li>
+<p>Run <code>yt-dlp</code> to download the video at the url passed as the argument
+to the script (<code>$1</code>)</p>
+<ul>
+<li>Remove any sponsored content</li>
+<li>Overwrite the output.mkv file if it already exists</li>
+<li>Change the container to <code>mkv</code></li>
+<li>Embed any subtitles found</li>
+</ul>
+</li>
+<li>
+<p>Send a <code>POST</code> request to VLC using
+<a href="https://curl.se/docs/manpage.html#-F"><code>--form</code></a> to send the binary
+contents of the file as <code>file</code>.</p>
+<p>Having this script executable as <code>tovlc</code> in <code>/usr/bin</code> for example
+will allow you to then run things like:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ tovlc https://www.youtube.com/watch?v=foeov6Ahi4Y
+</span></span></code></pre></div><p>Note: I tried having <code>yt-dlp</code> passing the output to stdout with <code>-o -</code>
+followed by a pipe to curl with <code>--form file='@-'</code>, while this should
+work in theory I couldn&rsquo;t get it to work, so the above will require
+enough disk space to store the file before sending it to VLC.</p>
+<h2 id="additional-reading">Additional reading<a href="#additional-reading" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<ul>
+<li><a href="https://github.com/yt-dlp/yt-dlp#usage-and-options">yt-dlp usage and options</a></li>
+</ul>
+</li>
+</ul>
+
+      </div></div>
+
+  
+    
+<div class="pagination">
+    <div class="pagination__title">
+        <span class="pagination__title-h">Read other posts</span>
+        <hr />
+    </div>
+    <div class="pagination__buttons">
+        
+        
+        <span class="button next">
+            <a href="https://agren.cc/p/any-device-captive-wifi/">
+                <span class="button__text">Using any device on Wi-Fi with captive portals</span>
+                <span class="button__icon">→</span>
+            </a>
+        </span>
+        
+    </div>
+</div>
+
+  
+
+  
+    
+
+  
+</article>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright">
+        <span>All content on this site is licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_BLANK">CC-BY-SA 4.0</a>, attribute "agren.cc". Powered by <a href="http://gohugo.io">hugo</a> and the <a href="https://github.com/panr/hugo-theme-terminal" target="_BLANK">terminal</a> theme. Find me on <a rel="me" href="https://telegrafverket.cc/@linus">mastodon</a>.</span>
+    
+      </div>
+  </div>
+</footer>
+
+
+
+
+
+
+
+<script type="text/javascript" src="/bundle.min.js"></script>
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>
