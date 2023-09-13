@@ -4,6 +4,7 @@ date: 2022-12-03T15:00:00+02:00
 draft: false
 tags:
     - sysadmin
+    - linux
 ---
 
 Ubuntu makes it very easy to set up full disk encryption, but it requires you to wipe the entire disk if you want the wizard to do it for you, so this is how you can set it up manually.

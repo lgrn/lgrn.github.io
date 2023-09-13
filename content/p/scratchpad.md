@@ -4,6 +4,7 @@ date: 2022-09-24T12:51:00+02:00
 draft: false
 tags:
     - sysadmin
+    - linux
 ---
 
 This page is a collection of useful commands or one-liners collected through the years. They are sorted in general categories, but I've attempted to describe them as well as I can so hopefully CTRL+F will work decently if you know what you're looking for.
