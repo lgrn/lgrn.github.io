@@ -6,7 +6,95 @@
     <description>Recent content on agren.cc</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 13 Sep 2023 19:08:00 +0200</lastBuildDate><atom:link href="https://agren.cc/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 12 Mar 2024 12:00:00 +0200</lastBuildDate><atom:link href="https://agren.cc/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>LetsEncrypt DNS wildcard certificates with HAProxy</title>
+      <link>https://agren.cc/p/certbot-with-haproxy/</link>
+      <pubDate>Tue, 12 Mar 2024 12:00:00 +0200</pubDate>
+      
+      <guid>https://agren.cc/p/certbot-with-haproxy/</guid>
+      <description>Wildcard certificates are really useful, especially in cases where you are using a load balancer like HAProxy that targets multiple backends serving separate subdomains.</description>
+      <content>&lt;p&gt;Wildcard certificates are really useful, especially in cases where you
+are using a load balancer like HAProxy that targets multiple backends
+serving separate subdomains.&lt;/p&gt;
+&lt;p&gt;This article will describe:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;How to install certbot (correctly) and run it in manual &lt;code&gt;certonly&lt;/code&gt;
+mode to only get a certificate without any additional config magic.&lt;/li&gt;
+&lt;li&gt;Receive a wildcard DNS certificate with Subject Alt Names, allowing
+multiple domains in the same certificate.&lt;/li&gt;
+&lt;li&gt;Smash it together in a way so that HAProxy can use it.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Reservations:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Installing certbot correctly requires snap, which is gross. In the
+future I&amp;rsquo;ll explore using
+&lt;a href=&#34;https://github.com/acmesh-official/acme.sh&#34;&gt;acme.sh&lt;/a&gt; instead.&lt;/li&gt;
+&lt;li&gt;There might be better ways to prep the certificate for HAProxy than
+smashing it together manually or via a script, I don&amp;rsquo;t know.&lt;/li&gt;
+&lt;li&gt;In order to receive wildcard certificates, authentication &lt;em&gt;must&lt;/em&gt; be
+done over DNS records (not HTTP).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;step-1-install-certbot&#34;&gt;Step 1: Install certbot&lt;/h2&gt;
+&lt;p&gt;In order to get the latest version of certbot and any plugins required,
+you &lt;em&gt;must&lt;/em&gt; install via snap. Regardless of what you think about snap,
+this is important because the version differences to, for example, the
+Ubuntu 22 repos, is immense.&lt;/p&gt;
+&lt;p&gt;First, if you already have apt packages or similar system packages
+installed providing certbot or any certbot plugins, remove them. Ensure
+you have snap installed and running, then do:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;snap install certbot
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;In this case, we will be DNS authenticating against Cloudflare, so we
+also need the plugin for that:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;snap &lt;span class=&#34;nb&#34;&gt;set&lt;/span&gt; certbot trust-plugin-with-root&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;ok &lt;span class=&#34;c1&#34;&gt;# required&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;snap install certbot-dns-cloudflare
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Create a symlink to /usr/bin:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;ln -s /snap/bin/certbot /usr/bin/certbot
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Verify with &lt;code&gt;certbot --version&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;step-2-set-up-configuration&#34;&gt;Step 2: Set up configuration&lt;/h2&gt;
+&lt;p&gt;Ensure you have a file like &lt;code&gt;/root/.secrets/cloudflare.ini&lt;/code&gt; that is
+only readable by root and contains something like:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-ini&#34; data-lang=&#34;ini&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;na&#34;&gt;dns_cloudflare_email&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;your@email.tld&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;na&#34;&gt;dns_cloudflare_api_key&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;786sdf6f87fs87ssdffd&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;You can set up an API key via the Cloudflare web GUI (google it).&lt;/p&gt;
+&lt;h2 id=&#34;step-3-request-certificate&#34;&gt;Step 3: Request certificate&lt;/h2&gt;
+&lt;p&gt;Now that certbot has access to modifying your DNS records, you can run
+something like:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;certbot certonly --dry-run --dns-cloudflare &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;--dns-cloudflare-credentials /root/.secrets/cloudflare.ini &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;-d &lt;span class=&#34;s2&#34;&gt;&amp;#34;my.domain,*.my.domain&amp;#34;&lt;/span&gt; &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;--agree-tos --email foo@my.domain --preferred-challenges dns-01 -v
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This will use your Cloudflare credentials and the &lt;code&gt;--dns-cloudflare&lt;/code&gt;
+plugin to make DNS changes on your behalf, validating your ownership of
+the domain. The certificate will be issued to both &lt;code&gt;my.domain&lt;/code&gt; and
+&lt;code&gt;*.my.domain&lt;/code&gt;, meaning that it will also work for any subdomains.&lt;/p&gt;
+&lt;p&gt;In order to actually receive a certificate, you must remove
+&lt;code&gt;--dry-run&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id=&#34;step-4-smash-certificate&#34;&gt;Step 4: Smash certificate&lt;/h2&gt;
+&lt;p&gt;Once you have successfully gotten a certificate, you&amp;rsquo;ll see something
+like:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-plain&#34; data-lang=&#34;plain&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Successfully received certificate.
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Certificate is saved at: /etc/letsencrypt/live/my.domain/fullchain.pem
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Key is saved at:         /etc/letsencrypt/live/my.domain/privkey.pem
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;This certificate expires on 2024-06-01.
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;In order for HAProxy to use this certificate, both the full chain and
+the private key must be contained in one single PEM file. This is
+easily achieved by doing:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;cat /etc/letsencrypt/live/my.domain/fullchain.pem &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;/etc/letsencrypt/live/my.domain/privkey.pem &amp;gt; &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;/etc/ssl/haproxy/my_cert.pem
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;step-5-configure-haproxy&#34;&gt;Step 5: Configure HAProxy&lt;/h2&gt;
+&lt;p&gt;You&amp;rsquo;ll only need to do this once, if you keep using the same path for
+the certificate:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-plain&#34; data-lang=&#34;plain&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;bind *:443 ssl crt /etc/ssl/haproxy/
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;HAProxy is smart enough to figure out which certificate to use, so that
+should be enough. For general TLS configuration, see the
+&lt;a href=&#34;https://www.haproxy.com/documentation/haproxy-configuration-tutorials/ssl-tls/&#34;&gt;HAProxy SSL/TLS configuration tutorial&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Whenever the certificate has changed on disk, you&amp;rsquo;ll want to do:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-gdscript3&#34; data-lang=&#34;gdscript3&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;systemctl&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;reload&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;haproxy&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content>
+    </item>
+    
     <item>
       <title>Using curl to pass videos to VLC on Apple TV</title>
       <link>https://agren.cc/p/curl-to-vlc/</link>
@@ -272,17 +360,17 @@ enough disk space to store the file before sending it to VLC.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;grep -vE &amp;#39;^[[:space:]]*#|^$&amp;#39; file
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;poor-mans-jq&#34;&gt;Poor man&amp;rsquo;s jq&lt;/h2&gt;
 &lt;p&gt;If you&amp;rsquo;re on a system without jq but you&amp;rsquo;re just looking to make a json blob readable, you can use python&amp;rsquo;s json.tool instead:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;$ echo &amp;#39;{&amp;#34;bax&amp;#34;:{&amp;#34;foo&amp;#34;:&amp;#34;bar&amp;#34;,&amp;#34;baz&amp;#34;:[&amp;#34;ba&amp;#34;,&amp;#34;ba&amp;#34;,&amp;#34;ba&amp;#34;]}}&amp;#39; | python -m json.tool
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;{
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &amp;#34;bax&amp;#34;: {
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &amp;#34;foo&amp;#34;: &amp;#34;bar&amp;#34;,
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &amp;#34;baz&amp;#34;: [
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &amp;#34;ba&amp;#34;,
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &amp;#34;ba&amp;#34;,
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &amp;#34;ba&amp;#34;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        ]
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;}
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-gdscript3&#34; data-lang=&#34;gdscript3&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;$&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;{&amp;#34;bax&amp;#34;:{&amp;#34;foo&amp;#34;:&amp;#34;bar&amp;#34;,&amp;#34;baz&amp;#34;:[&amp;#34;ba&amp;#34;,&amp;#34;ba&amp;#34;,&amp;#34;ba&amp;#34;]}}&amp;#39;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;|&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;python&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;m&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;json&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;tool&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;s2&#34;&gt;&amp;#34;bax&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;s2&#34;&gt;&amp;#34;foo&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;bar&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;s2&#34;&gt;&amp;#34;baz&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;s2&#34;&gt;&amp;#34;ba&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;s2&#34;&gt;&amp;#34;ba&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;s2&#34;&gt;&amp;#34;ba&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;replace-every-instance-of-x-in-a-file&#34;&gt;Replace every instance of x in a file&lt;/h2&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sed -i &amp;#39;s/val=foo/val=bar/g&amp;#39; /etc/file
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;show-frequently-recurring-lines-in-a-log-file&#34;&gt;Show frequently recurring lines in a log file&lt;/h2&gt;

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>fail2ban on agren.cc</title>
+    <title>Fail2ban on agren.cc</title>
     <link>https://agren.cc/tags/fail2ban/</link>
-    <description>Recent content in fail2ban on agren.cc</description>
+    <description>Recent content in Fail2ban on agren.cc</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Fri, 08 Oct 2021 15:30:51 +0200</lastBuildDate><atom:link href="https://agren.cc/tags/fail2ban/index.xml" rel="self" type="application/rss+xml" />

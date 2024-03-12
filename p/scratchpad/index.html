@@ -162,17 +162,17 @@
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">grep -vE &#39;^[[:space:]]*#|^$&#39; file
 </span></span></code></pre></div><h2 id="poor-mans-jq">Poor man&rsquo;s jq<a href="#poor-mans-jq" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
 <p>If you&rsquo;re on a system without jq but you&rsquo;re just looking to make a json blob readable, you can use python&rsquo;s json.tool instead:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ echo &#39;{&#34;bax&#34;:{&#34;foo&#34;:&#34;bar&#34;,&#34;baz&#34;:[&#34;ba&#34;,&#34;ba&#34;,&#34;ba&#34;]}}&#39; | python -m json.tool
-</span></span><span class="line"><span class="cl">{
-</span></span><span class="line"><span class="cl">    &#34;bax&#34;: {
-</span></span><span class="line"><span class="cl">        &#34;foo&#34;: &#34;bar&#34;,
-</span></span><span class="line"><span class="cl">        &#34;baz&#34;: [
-</span></span><span class="line"><span class="cl">            &#34;ba&#34;,
-</span></span><span class="line"><span class="cl">            &#34;ba&#34;,
-</span></span><span class="line"><span class="cl">            &#34;ba&#34;
-</span></span><span class="line"><span class="cl">        ]
-</span></span><span class="line"><span class="cl">    }
-</span></span><span class="line"><span class="cl">}
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="o">$</span> <span class="n">echo</span> <span class="s1">&#39;{&#34;bax&#34;:{&#34;foo&#34;:&#34;bar&#34;,&#34;baz&#34;:[&#34;ba&#34;,&#34;ba&#34;,&#34;ba&#34;]}}&#39;</span> <span class="o">|</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">json</span><span class="o">.</span><span class="k">tool</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;bax&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;foo&#34;</span><span class="p">:</span> <span class="s2">&#34;bar&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;baz&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">            <span class="s2">&#34;ba&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="s2">&#34;ba&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="s2">&#34;ba&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></div><h2 id="replace-every-instance-of-x-in-a-file">Replace every instance of x in a file<a href="#replace-every-instance-of-x-in-a-file" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sed -i &#39;s/val=foo/val=bar/g&#39; /etc/file
 </span></span></code></pre></div><h2 id="show-frequently-recurring-lines-in-a-log-file">Show frequently recurring lines in a log file<a href="#show-frequently-recurring-lines-in-a-log-file" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>

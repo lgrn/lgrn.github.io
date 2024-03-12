@@ -7,3 +7,4 @@ To render:
 * Grab the Hugo (extended) binary from
   [releases](https://github.com/gohugoio/hugo/releases/)
 * Render by running `./hugo`
+* Inspect live with `./hugo serve`
