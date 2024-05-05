@@ -1,7 +1,7 @@
 ---
-title: "Using signed-by in repository configuration"
-date: 2023-09-19T10:22:00+02:00
-draft: true
+title: "Using signed-by in Debian repository configuration"
+date: 2024-05-05T17:45:00+02:00
+draft: false
 tags:
     - linux
     - debian
@@ -28,9 +28,9 @@ will be considered valid when signed by the specified key.
 deb https://my.repository.com/debian distribution component
 ```
 
-When adding a new repository, you would typically curl and pipe the a
-keyfile to `apt-key add`, which would add it to `trusted.gpg`, making it
-a trusted key for every configured repo.
+When adding a new repository the "old" way, you would typically curl and
+pipe the a keyfile to `apt-key add`, which would add it to
+`trusted.gpg`, making it a trusted key for every configured repo.
 
 ```
 # NEW WAY
@@ -74,7 +74,7 @@ a `keyid-format` of `long` matching the error message. Notice how this
 is actually the four last parts of the entire fingerprint (and `short`
 would only give us the last two: `90FDDD2E`).
 
-Tangent: using the `short` format is [violently
+**Note**: using the `short` format is [violently
 insecure](https://security.stackexchange.com/questions/84280/short-openpgp-key-ids-are-insecure-how-to-configure-gnupg-to-use-long-key-ids-i),
 as it only "takes 4 seconds to generate a colliding 32bit key id on a
 GPU" (2020).
@@ -170,6 +170,12 @@ In order to dearmor and place this key somewhere, we can run:
 This binary representation of the key can now be used when specifying
 `signed-by` for a repo.
 
+**Note**: As I later found out, de-armoring the key (converting to
+binary) isn't strictly necessary, you can also use the plaintext
+(armored) key directly, but I'll keep the above instructions anyway
+since the alternative of using an armored key is as simple as just
+pointing to it without conversion.
+
 In summary:
 
 - Packages in repos should be `signed-by` specific keys, not just any
@@ -182,7 +188,7 @@ In summary:
 
 Final notes:
 
-- Remember that any repo can still update any package. To avoid this,
+- Remember that any repo can still publish updates for **any package**. To avoid this,
   see: 
   "[Prevent/selective installation from a third-party
   repository](https://wiki.debian.org/AptConfiguration#Prevent.2Fselective_installation_from_a_third-party_repository)"

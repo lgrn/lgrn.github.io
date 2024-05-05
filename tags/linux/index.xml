@@ -6,7 +6,140 @@
     <description>Recent content in Linux on agren.cc</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 13 Sep 2023 19:08:00 +0200</lastBuildDate><atom:link href="https://agren.cc/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 05 May 2024 17:45:00 +0200</lastBuildDate><atom:link href="https://agren.cc/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Using signed-by in Debian repository configuration</title>
+      <link>https://agren.cc/p/trusted-gpg/</link>
+      <pubDate>Sun, 05 May 2024 17:45:00 +0200</pubDate>
+      
+      <guid>https://agren.cc/p/trusted-gpg/</guid>
+      <description>On newer versions of Debian and Ubuntu, the way repos are authenticated through public keys has changed somewhat.</description>
+      <content>&lt;p&gt;On newer versions of Debian and Ubuntu, the way repos are authenticated
+through public keys has changed somewhat. Here&amp;rsquo;s what I&amp;rsquo;ve found.&lt;/p&gt;
+&lt;p&gt;You may recognize the command &lt;code&gt;apt-key&lt;/code&gt;: this is a now deprecated
+command that was previously used to add a trusted key to the keyring at
+&lt;code&gt;/etc/apt/trusted.gpg&lt;/code&gt;. This is not great, as the same keys are
+considered valid for any repo you add.&lt;/p&gt;
+&lt;p&gt;This can (and on newer versions, must be) resolved by using &lt;code&gt;signed-by&lt;/code&gt;
+when configuring a repo. That way, only packages from that repository
+will be considered valid when signed by the specified key.&lt;/p&gt;
+&lt;h3 id=&#34;configuration-examples&#34;&gt;Configuration examples&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;# OLD WAY
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;deb https://my.repository.com/debian distribution component
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;When adding a new repository the &amp;ldquo;old&amp;rdquo; way, you would typically curl and
+pipe the a keyfile to &lt;code&gt;apt-key add&lt;/code&gt;, which would add it to
+&lt;code&gt;trusted.gpg&lt;/code&gt;, making it a trusted key for every configured repo.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;# NEW WAY
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;deb [signed-by=/path/to/key.gpg] https://my.repository.com/debian distribution component
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;In this example, keys in &lt;code&gt;key.gpg&lt;/code&gt; are only considered valid for that
+specific repository.&lt;/p&gt;
+&lt;h3 id=&#34;when-it-might-cause-issues&#34;&gt;When it might cause issues&lt;/h3&gt;
+&lt;p&gt;This will normally not cause problems, as both the keys and the correct
+configuration (hopefully) comes as part of your default installation.
+However, when migrating between major versions, or when adding new
+repositories, you may encounter warnings with the &amp;ldquo;old&amp;rdquo; configuration.&lt;/p&gt;
+&lt;p&gt;A short demonstration: if you run &lt;code&gt;apt-get update&lt;/code&gt; with no pubkeys
+available at all, a situation you could provoke by for example gzipping
+&lt;code&gt;trusted.gpg&lt;/code&gt;, you will get an error similar to the following:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;The following signatures couldn&amp;#39;t be verified because the public key is not available: NO_PUBKEY 9165938D90FDDD2E
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;It&amp;rsquo;s pretty obvious from the error that &lt;code&gt;9165938D90FDDD2E&lt;/code&gt; is a public
+key, but we don&amp;rsquo;t have it so we can&amp;rsquo;t proceed.&lt;/p&gt;
+&lt;p&gt;First of all, what is this string? The answer is that it&amp;rsquo;s an
+abbreviated &lt;em&gt;fingerprint&lt;/em&gt; of a public key. You can get these from &lt;code&gt;gpg&lt;/code&gt;.
+For now, let&amp;rsquo;s ignore how we know which file it&amp;rsquo;s in:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;# gpg --show-keys --with-fingerprint --keyid-format long raspbian-archive-keyring.gpg | grep 9165938D90FDDD2E -A1
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;pub   rsa2048/9165938D90FDDD2E 2012-04-01 [SC]
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      Key fingerprint = A0DA 38D0 D76E 8B5D 6388  7281 9165 938D 90FD DD2E
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;On the first line of the output you can see the pubkey fingerprint, with
+a &lt;code&gt;keyid-format&lt;/code&gt; of &lt;code&gt;long&lt;/code&gt; matching the error message. Notice how this
+is actually the four last parts of the entire fingerprint (and &lt;code&gt;short&lt;/code&gt;
+would only give us the last two: &lt;code&gt;90FDDD2E&lt;/code&gt;).&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;: using the &lt;code&gt;short&lt;/code&gt; format is &lt;a href=&#34;https://security.stackexchange.com/questions/84280/short-openpgp-key-ids-are-insecure-how-to-configure-gnupg-to-use-long-key-ids-i&#34;&gt;violently
+insecure&lt;/a&gt;,
+as it only &amp;ldquo;takes 4 seconds to generate a colliding 32bit key id on a
+GPU&amp;rdquo; (2020).&lt;/p&gt;
+&lt;p&gt;Ok, so now that we know what this string represents, the next question
+might be how we know that this is the right key. If the repository is
+accessed over HTTPS at least we know it&amp;rsquo;s what the repo gave us, because
+a man-in-the-middle attack is pretty unlikely.&lt;/p&gt;
+&lt;p&gt;How do we know that the repo key hasn&amp;rsquo;t been compromised? We could look
+for the key in other places, for example by searching for it online. In
+this case, the repo itself has the key listed on a web page with
+instructions on how to add the repo, as well as a link to where you can
+find the key.&lt;/p&gt;
+&lt;p&gt;Finding the key isn&amp;rsquo;t usually the issue, it&amp;rsquo;s even registered at this
+public key server:&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://keys.openpgp.org/search?q=9165938D90FDDD2E&#34;&gt;https://keys.openpgp.org/search?q=9165938D90FDDD2E&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;It&amp;rsquo;s more important to ensure that this key is legit, and for now we&amp;rsquo;ll
+assume that a guide that has been around for years served over HTTPS
+from the official repository page is proof enough.&lt;/p&gt;
+&lt;p&gt;On Debian, keys are provided through the &lt;code&gt;debian-keyring&lt;/code&gt; package,
+which will put them in &lt;code&gt;/usr/share/keyrings&lt;/code&gt;. On Raspberry Pi OS, there
+are two packages available: &lt;code&gt;raspbian-archive-keyring&lt;/code&gt; and
+&lt;code&gt;raspberrypi-archive-keyring&lt;/code&gt;, which will put keys in the same folder.&lt;/p&gt;
+&lt;p&gt;The first &lt;code&gt;raspbian&lt;/code&gt; package is what provides the file we inspected previously:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;# dpkg-query -L raspbian-archive-keyring | grep &amp;#34;\.gpg&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;/usr/share/keyrings/raspbian-archive-keyring.gpg
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;So if we already have this file on disk, we can use that for our repo,
+since we now feel pretty confident that is the key that we expect
+packages from there to be signed with:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;deb [signed-by=/usr/share/keyrings/raspbian-archive-keyring.gpg] https://archive.raspbian.org/raspbian bookworm main contrib non-free rpi
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;But for the sake of learning, let&amp;rsquo;s pretend we did not have this key
+available locally, how do we get it from the Internet and use it?&lt;/p&gt;
+&lt;p&gt;The instructions from raspbian illustrate perfectly the &amp;ldquo;old&amp;rdquo; way of
+doing things:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;# OLD REPO SYNTAX
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;deb http://archive.raspbian.org/raspbian wheezy main contrib non-free
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Adding the key&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;# DEPRECATED
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;wget https://archive.raspbian.org/raspbian.public.key -O - | sudo apt-key add -
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;What we really want is to grab that file, make it into a &lt;code&gt;.gpg&lt;/code&gt; file and
+use it with the new syntax.&lt;/p&gt;
+&lt;p&gt;First, let&amp;rsquo;s just inspect it and make sure it&amp;rsquo;s the key we&amp;rsquo;re looking
+for:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;$ curl --silent https://archive.raspbian.org/raspbian.public.key | gpg --show-keys --fingerprint --keyid-format long
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;pub   rsa2048/9165938D90FDDD2E 2012-04-01 [SC]
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      Key fingerprint = A0DA 38D0 D76E 8B5D 6388  7281 9165 938D 90FD DD2E
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;(...)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Since this looks fine, we can now grab it and perform &amp;ldquo;dearmoring&amp;rdquo;, which really
+only means to convert it from ASCII to binary (the inverse is called
+&amp;ldquo;enarmoring&amp;rdquo;). The ASCII form of a key is probably familiar to you:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;$ curl --silent https://archive.raspbian.org/raspbian.public.key | head -n5
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;-----BEGIN PGP PUBLIC KEY BLOCK-----
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Version: GnuPG v1.4.12 (GNU/Linux)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;mQENBE94wmkBCADPW5ga8ZyIsW0pym3c+o7l/N1ipRfs2+9HaEWeyPZS6wdTdSp3
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Wo0OOv3rGQDGclbvsrMZoJFzxfsADoMfPkToWg+pY4w3xkjZt4Mh7gO/kDsaOMDz
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;In order to dearmor and place this key somewhere, we can run:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;# curl --silent https://archive.raspbian.org/raspbian.public.key | gpg --dearmor &amp;gt; /usr/share/keyrings/raspbian.public.gpg
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This binary representation of the key can now be used when specifying
+&lt;code&gt;signed-by&lt;/code&gt; for a repo.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;: As I later found out, de-armoring the key (converting to
+binary) isn&amp;rsquo;t strictly necessary, you can also use the plaintext
+(armored) key directly, but I&amp;rsquo;ll keep the above instructions anyway
+since the alternative of using an armored key is as simple as just
+pointing to it without conversion.&lt;/p&gt;
+&lt;p&gt;In summary:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Packages in repos should be &lt;code&gt;signed-by&lt;/code&gt; specific keys, not just any
+key that&amp;rsquo;s ever been added.&lt;/li&gt;
+&lt;li&gt;If a repo does not have the &lt;code&gt;signed-by&lt;/code&gt; attribute, you may get
+warnings. It&amp;rsquo;s a good idea to fix your configuration.&lt;/li&gt;
+&lt;li&gt;If you lack public keys completely, it breaks &lt;code&gt;apt-get&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;What public keys are trusted is completely up to you, so exercise
+caution.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Final notes:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Remember that any repo can still publish updates for &lt;strong&gt;any package&lt;/strong&gt;. To avoid this,
+see:
+&amp;ldquo;&lt;a href=&#34;https://wiki.debian.org/AptConfiguration#Prevent.2Fselective_installation_from_a_third-party_repository&#34;&gt;Prevent/selective installation from a third-party
+repository&lt;/a&gt;&amp;rdquo;&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+    </item>
+    
     <item>
       <title>Using curl to pass videos to VLC on Apple TV</title>
       <link>https://agren.cc/p/curl-to-vlc/</link>
