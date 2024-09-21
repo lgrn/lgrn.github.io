@@ -2,62 +2,62 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://agren.cc/</loc>
+    <loc>http://localhost:1313/</loc>
     <lastmod>2024-05-05T17:45:00+02:00</lastmod>
   </url><url>
-    <loc>https://agren.cc/tags/debian/</loc>
+    <loc>http://localhost:1313/tags/debian/</loc>
     <lastmod>2024-05-05T17:45:00+02:00</lastmod>
   </url><url>
-    <loc>https://agren.cc/tags/linux/</loc>
+    <loc>http://localhost:1313/tags/linux/</loc>
     <lastmod>2024-05-05T17:45:00+02:00</lastmod>
   </url><url>
-    <loc>https://agren.cc/p/</loc>
+    <loc>http://localhost:1313/p/</loc>
     <lastmod>2024-05-05T17:45:00+02:00</lastmod>
   </url><url>
-    <loc>https://agren.cc/tags/sysadmin/</loc>
+    <loc>http://localhost:1313/tags/sysadmin/</loc>
     <lastmod>2024-05-05T17:45:00+02:00</lastmod>
   </url><url>
-    <loc>https://agren.cc/tags/</loc>
+    <loc>http://localhost:1313/tags/</loc>
     <lastmod>2024-05-05T17:45:00+02:00</lastmod>
   </url><url>
-    <loc>https://agren.cc/tags/ubuntu/</loc>
+    <loc>http://localhost:1313/tags/ubuntu/</loc>
     <lastmod>2024-05-05T17:45:00+02:00</lastmod>
   </url><url>
-    <loc>https://agren.cc/p/trusted-gpg/</loc>
+    <loc>http://localhost:1313/p/trusted-gpg/</loc>
     <lastmod>2024-05-05T17:45:00+02:00</lastmod>
   </url><url>
-    <loc>https://agren.cc/p/certbot-with-haproxy/</loc>
+    <loc>http://localhost:1313/p/certbot-with-haproxy/</loc>
     <lastmod>2024-03-12T12:00:00+02:00</lastmod>
   </url><url>
-    <loc>https://agren.cc/p/curl-to-vlc/</loc>
+    <loc>http://localhost:1313/p/curl-to-vlc/</loc>
     <lastmod>2023-09-13T19:08:00+02:00</lastmod>
   </url><url>
-    <loc>https://agren.cc/p/any-device-captive-wifi/</loc>
+    <loc>http://localhost:1313/p/any-device-captive-wifi/</loc>
     <lastmod>2022-12-25T14:00:00+02:00</lastmod>
   </url><url>
-    <loc>https://agren.cc/tags/wifi/</loc>
+    <loc>http://localhost:1313/tags/wifi/</loc>
     <lastmod>2022-12-25T14:00:00+02:00</lastmod>
   </url><url>
-    <loc>https://agren.cc/p/manual-disk-encryption/</loc>
+    <loc>http://localhost:1313/p/manual-disk-encryption/</loc>
     <lastmod>2022-12-03T15:00:00+02:00</lastmod>
   </url><url>
-    <loc>https://agren.cc/p/luks-file/</loc>
+    <loc>http://localhost:1313/p/luks-file/</loc>
     <lastmod>2022-10-28T15:59:51+02:00</lastmod>
   </url><url>
-    <loc>https://agren.cc/p/scratchpad/</loc>
+    <loc>http://localhost:1313/p/scratchpad/</loc>
     <lastmod>2022-09-24T12:51:00+02:00</lastmod>
   </url><url>
-    <loc>https://agren.cc/tags/el8/</loc>
+    <loc>http://localhost:1313/tags/el8/</loc>
     <lastmod>2021-10-08T15:30:51+02:00</lastmod>
   </url><url>
-    <loc>https://agren.cc/tags/fail2ban/</loc>
+    <loc>http://localhost:1313/tags/fail2ban/</loc>
     <lastmod>2021-10-08T15:30:51+02:00</lastmod>
   </url><url>
-    <loc>https://agren.cc/p/fail2ban-on-el8/</loc>
+    <loc>http://localhost:1313/p/fail2ban-on-el8/</loc>
     <lastmod>2021-10-08T15:30:51+02:00</lastmod>
   </url><url>
-    <loc>https://agren.cc/about/</loc>
+    <loc>http://localhost:1313/about/</loc>
   </url><url>
-    <loc>https://agren.cc/categories/</loc>
+    <loc>http://localhost:1313/categories/</loc>
   </url>
 </urlset>

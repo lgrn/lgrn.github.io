@@ -2,18 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Sysadmin on agren.cc</title>
-    <link>https://agren.cc/tags/sysadmin/</link>
+    <link>http://localhost:1313/tags/sysadmin/</link>
     <description>Recent content in Sysadmin on agren.cc</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 05 May 2024 17:45:00 +0200</lastBuildDate><atom:link href="https://agren.cc/tags/sysadmin/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 05 May 2024 17:45:00 +0200</lastBuildDate><atom:link href="http://localhost:1313/tags/sysadmin/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Using signed-by in Debian repository configuration</title>
-      <link>https://agren.cc/p/trusted-gpg/</link>
+      <link>http://localhost:1313/p/trusted-gpg/</link>
       <pubDate>Sun, 05 May 2024 17:45:00 +0200</pubDate>
       
-      <guid>https://agren.cc/p/trusted-gpg/</guid>
-      <description>On newer versions of Debian and Ubuntu, the way repos are authenticated through public keys has changed somewhat.</description>
+      <guid>http://localhost:1313/p/trusted-gpg/</guid>
+      <description>&lt;p&gt;On newer versions of Debian and Ubuntu, the way repos are authenticated
+through public keys has changed somewhat. Here&amp;rsquo;s what I&amp;rsquo;ve found.&lt;/p&gt;</description>
       <content>&lt;p&gt;On newer versions of Debian and Ubuntu, the way repos are authenticated
 through public keys has changed somewhat. Here&amp;rsquo;s what I&amp;rsquo;ve found.&lt;/p&gt;
 &lt;p&gt;You may recognize the command &lt;code&gt;apt-key&lt;/code&gt;: this is a now deprecated
@@ -24,13 +25,13 @@ considered valid for any repo you add.&lt;/p&gt;
 when configuring a repo. That way, only packages from that repository
 will be considered valid when signed by the specified key.&lt;/p&gt;
 &lt;h3 id=&#34;configuration-examples&#34;&gt;Configuration examples&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;# OLD WAY
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# DO NOT:&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;deb https://my.repository.com/debian distribution component
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;When adding a new repository the &amp;ldquo;old&amp;rdquo; way, you would typically curl and
 pipe the a keyfile to &lt;code&gt;apt-key add&lt;/code&gt;, which would add it to
 &lt;code&gt;trusted.gpg&lt;/code&gt;, making it a trusted key for every configured repo.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;# NEW WAY
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;deb [signed-by=/path/to/key.gpg] https://my.repository.com/debian distribution component
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# DO:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;deb &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;signed-by&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;/path/to/key.gpg&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; https://my.repository.com/debian distribution component
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;In this example, keys in &lt;code&gt;key.gpg&lt;/code&gt; are only considered valid for that
 specific repository.&lt;/p&gt;
 &lt;h3 id=&#34;when-it-might-cause-issues&#34;&gt;When it might cause issues&lt;/h3&gt;
@@ -142,11 +143,13 @@ repository&lt;/a&gt;&amp;rdquo;&lt;/li&gt;
     
     <item>
       <title>LetsEncrypt DNS wildcard certificates with HAProxy</title>
-      <link>https://agren.cc/p/certbot-with-haproxy/</link>
+      <link>http://localhost:1313/p/certbot-with-haproxy/</link>
       <pubDate>Tue, 12 Mar 2024 12:00:00 +0200</pubDate>
       
-      <guid>https://agren.cc/p/certbot-with-haproxy/</guid>
-      <description>Wildcard certificates are really useful, especially in cases where you are using a load balancer like HAProxy that targets multiple backends serving separate subdomains.</description>
+      <guid>http://localhost:1313/p/certbot-with-haproxy/</guid>
+      <description>&lt;p&gt;Wildcard certificates are really useful, especially in cases where you
+are using a load balancer like HAProxy that targets multiple backends
+serving separate subdomains.&lt;/p&gt;</description>
       <content>&lt;p&gt;Wildcard certificates are really useful, especially in cases where you
 are using a load balancer like HAProxy that targets multiple backends
 serving separate subdomains.&lt;/p&gt;
@@ -230,11 +233,11 @@ should be enough. For general TLS configuration, see the
     
     <item>
       <title>Using any device on Wi-Fi with captive portals</title>
-      <link>https://agren.cc/p/any-device-captive-wifi/</link>
+      <link>http://localhost:1313/p/any-device-captive-wifi/</link>
       <pubDate>Sun, 25 Dec 2022 14:00:00 +0200</pubDate>
       
-      <guid>https://agren.cc/p/any-device-captive-wifi/</guid>
-      <description>Maybe you&amp;rsquo;re at a hotel, an airport, a conference, or somewhere else where whoever set up the Wi-Fi thought it was a good idea to use so-called captive portals.</description>
+      <guid>http://localhost:1313/p/any-device-captive-wifi/</guid>
+      <description>&lt;p&gt;Maybe you&amp;rsquo;re at a hotel, an airport, a conference, or somewhere else where whoever set up the Wi-Fi thought it was a good idea to use so-called &lt;a href=&#34;https://en.wikipedia.org/wiki/Captive_portal&#34;&gt;captive portals&lt;/a&gt;.&lt;/p&gt;</description>
       <content>&lt;p&gt;Maybe you&amp;rsquo;re at a hotel, an airport, a conference, or somewhere else where whoever set up the Wi-Fi thought it was a good idea to use so-called &lt;a href=&#34;https://en.wikipedia.org/wiki/Captive_portal&#34;&gt;captive portals&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;Regardless of their purpose, whether it&amp;rsquo;s to limit connection for a specific time, or force end-users to accept some kind of agreement, they usually work the same way: they force you through some kind of web UI, and in the end it will validate your device based on the MAC address only.&lt;/p&gt;
 &lt;p&gt;A MAC address can be changed, which means that if you have a device that cannot access the portal, you can still get that device onto the network by doing the following:&lt;/p&gt;
@@ -272,11 +275,11 @@ should be enough. For general TLS configuration, see the
     
     <item>
       <title>Manual disk encryption on Ubuntu</title>
-      <link>https://agren.cc/p/manual-disk-encryption/</link>
+      <link>http://localhost:1313/p/manual-disk-encryption/</link>
       <pubDate>Sat, 03 Dec 2022 15:00:00 +0200</pubDate>
       
-      <guid>https://agren.cc/p/manual-disk-encryption/</guid>
-      <description>Ubuntu makes it very easy to set up full disk encryption, but it requires you to wipe the entire disk if you want the wizard to do it for you, so this is how you can set it up manually.</description>
+      <guid>http://localhost:1313/p/manual-disk-encryption/</guid>
+      <description>&lt;p&gt;Ubuntu makes it very easy to set up full disk encryption, but it requires you to wipe the entire disk if you want the wizard to do it for you, so this is how you can set it up manually.&lt;/p&gt;</description>
       <content>&lt;p&gt;Ubuntu makes it very easy to set up full disk encryption, but it requires you to wipe the entire disk if you want the wizard to do it for you, so this is how you can set it up manually.&lt;/p&gt;
 &lt;p&gt;One common reason you may want to do this is in a dual boot scenario, where one or several leading partitions are already taken &amp;ndash; or maybe you simply want to keep whatever is there.&lt;/p&gt;
 &lt;p&gt;The option in the Ubuntu installer to &lt;em&gt;&amp;ldquo;Encrypt the new Ubuntu installation for security&amp;rdquo;&lt;/em&gt; is only available when choosing &lt;em&gt;&amp;ldquo;Erase disk and install Ubuntu&amp;rdquo;&lt;/em&gt;. So, if you don&amp;rsquo;t want to wipe the entire disk, but you still want to boot an encrypted root partition, it needs some preparation.&lt;/p&gt;
@@ -354,11 +357,11 @@ should be enough. For general TLS configuration, see the
     
     <item>
       <title>Encrypted LUKS file container</title>
-      <link>https://agren.cc/p/luks-file/</link>
+      <link>http://localhost:1313/p/luks-file/</link>
       <pubDate>Fri, 28 Oct 2022 15:59:51 +0200</pubDate>
       
-      <guid>https://agren.cc/p/luks-file/</guid>
-      <description>While Linux Unified Key Setup — LUKS — is mostly used to encrypt entire disks under Linux, it can also be used to easily create an encrypted file container.</description>
+      <guid>http://localhost:1313/p/luks-file/</guid>
+      <description>&lt;p&gt;While &lt;a href=&#34;https://en.wikipedia.org/wiki/Linux_Unified_Key_Setup&#34;&gt;Linux Unified Key Setup&lt;/a&gt; — &lt;code&gt;LUKS&lt;/code&gt; — is mostly used to encrypt entire disks under Linux, it can also be used to easily create an encrypted file container. This can be used as an alternative to encrypting something like a &lt;code&gt;.tar.gz&lt;/code&gt; file directly, and will be easier to mount and read, without having to write decrypted data to disk.&lt;/p&gt;</description>
       <content>&lt;p&gt;While &lt;a href=&#34;https://en.wikipedia.org/wiki/Linux_Unified_Key_Setup&#34;&gt;Linux Unified Key Setup&lt;/a&gt; — &lt;code&gt;LUKS&lt;/code&gt; — is mostly used to encrypt entire disks under Linux, it can also be used to easily create an encrypted file container. This can be used as an alternative to encrypting something like a &lt;code&gt;.tar.gz&lt;/code&gt; file directly, and will be easier to mount and read, without having to write decrypted data to disk.&lt;/p&gt;
 &lt;h3 id=&#34;creating-a-container&#34;&gt;Creating a container&lt;/h3&gt;
 &lt;p&gt;The first step is to quite simply reserve disk space for the container by creating an empty file:&lt;/p&gt;
@@ -403,11 +406,11 @@ should be enough. For general TLS configuration, see the
     
     <item>
       <title>Linux Sysadmin Scratchpad</title>
-      <link>https://agren.cc/p/scratchpad/</link>
+      <link>http://localhost:1313/p/scratchpad/</link>
       <pubDate>Sat, 24 Sep 2022 12:51:00 +0200</pubDate>
       
-      <guid>https://agren.cc/p/scratchpad/</guid>
-      <description>This page is a collection of useful commands or one-liners collected through the years.</description>
+      <guid>http://localhost:1313/p/scratchpad/</guid>
+      <description>&lt;p&gt;This page is a collection of useful commands or one-liners collected through the years. They are sorted in general categories, but I&amp;rsquo;ve attempted to describe them as well as I can so hopefully CTRL+F will work decently if you know what you&amp;rsquo;re looking for.&lt;/p&gt;</description>
       <content>&lt;p&gt;This page is a collection of useful commands or one-liners collected through the years. They are sorted in general categories, but I&amp;rsquo;ve attempted to describe them as well as I can so hopefully CTRL+F will work decently if you know what you&amp;rsquo;re looking for.&lt;/p&gt;
 &lt;p&gt;This post will be updated in-place, refer to the date above.&lt;/p&gt;
 &lt;h2 id=&#34;converting-unix-epoch-time&#34;&gt;Converting Unix epoch time&lt;/h2&gt;
@@ -551,11 +554,11 @@ should be enough. For general TLS configuration, see the
     
     <item>
       <title>fail2ban on EL8</title>
-      <link>https://agren.cc/p/fail2ban-on-el8/</link>
+      <link>http://localhost:1313/p/fail2ban-on-el8/</link>
       <pubDate>Fri, 08 Oct 2021 15:30:51 +0200</pubDate>
       
-      <guid>https://agren.cc/p/fail2ban-on-el8/</guid>
-      <description>fail2ban is commonly used to take a certain action, such as automatically blocking an IP, after repeated authentication failures or other generally bad behavior against applications, as detected by regex matching against log output.</description>
+      <guid>http://localhost:1313/p/fail2ban-on-el8/</guid>
+      <description>&lt;p&gt;fail2ban is commonly used to  take a certain action, such as automatically blocking an IP, after repeated authentication failures or other generally bad behavior against applications, as detected by regex matching against log output.&lt;/p&gt;</description>
       <content>&lt;p&gt;fail2ban is commonly used to  take a certain action, such as automatically blocking an IP, after repeated authentication failures or other generally bad behavior against applications, as detected by regex matching against log output.&lt;/p&gt;
 &lt;p&gt;This example will show how to install and configure fail2ban on EL8 (Rocky Linux 8.4), and to configure it to block an IP after multiple failed login attempts.&lt;/p&gt;
 &lt;h4 id=&#34;installing-fail2ban-via-epel&#34;&gt;Installing fail2ban via EPEL&lt;/h4&gt;

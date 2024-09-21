@@ -1,30 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
   
     <title>Linux Sysadmin Scratchpad :: agren.cc</title>
   
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="This page is a collection of useful commands or one-liners collected through the years." />
+<meta name="description" content="This page is a collection of useful commands or one-liners collected through the years. They are sorted in general categories, but I&rsquo;ve attempted to describe them as well as I can so hopefully CTRL&#43;F will work decently if you know what you&rsquo;re looking for.
+" />
 <meta name="keywords" content="" />
-<meta name="robots" content="noodp" />
-<link rel="canonical" href="https://agren.cc/p/scratchpad/" />
 
+  <meta name="robots" content="noodp" />
 
-  
-
+<link rel="canonical" href="http://localhost:1313/p/scratchpad/" />
 
 
 
 
 
   
+  <link rel="stylesheet" href="http://localhost:1313/css/fonts.min.e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.css">
+
   
+  <link rel="stylesheet" href="http://localhost:1313/css/main.min.f45962ce6ffdd2247db17a705d0190d5ca08e6b0757015b1061b0594e50b535b.css">
+
   
+  <link rel="stylesheet" href="http://localhost:1313/css/prism.min.3080cbc8607b8ded79eec60a46295119aef4486a3a2d88c9ddc57ee285ca19ca.css">
+
   
+  <link rel="stylesheet" href="http://localhost:1313/css/terminal.min.795e2bed278f30aabee20511815271033ceb14e4a8348f8501a71429808fa574.css">
+
   
-  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="http://localhost:1313/css/buttons.min.2bc533403a27dfe0e93105a92502b42ce4587e2e4a87d9f7d349e51e16e09478.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/code.min.00125962708925857e7b66dbc58391d55be1191a3d0ce2034de8c9cd2c481c36.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/footer.min.2e3eb191baee58dd05a9f0104ac1fab0827bca7c64dafe0b2579f934c33a1d69.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/gist.min.a751e8b0abe1ba8bc53ced52a38b19d8950fe78ca29454ea8c2595cf26aad5c0.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/header.min.b6fb4423cf82a9f9d7abc9cd010223fa3d70a6526a3f28f8e17d814c06e18f9e.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/menu.min.83637a90d903026bc280d3f82f96ceb06c5fc72b7c1a8d686afb5bbf818a29f7.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/pagination.min.82f6400eae7c7c6dc3c866733c2ec0579e4089608fea69400ff85b3880aa0d3c.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/post.min.fc74ca360273c1d828da3c02b8174eba435607b369d98418ccc6f2243cd4e75d.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/syntax.min.cc789ed9377260d7949ea4c18781fc58959a89287210fe4edbff44ebfc1511b6.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/terms.min.b81791663c3790e738e571cdbf802312390d30e4b1d8dc9d814a5b5454d0ac11.css">
 
 
 
@@ -32,9 +66,8 @@
 
 
 
-  <link rel="shortcut icon" href="https://agren.cc/img/theme-colors/blue.png">
-  <link rel="apple-touch-icon" href="https://agren.cc/img/theme-colors/blue.png">
-
+<link rel="shortcut icon" href="http://localhost:1313/favicon.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
 
 
 <meta name="twitter:card" content="summary" />
@@ -44,16 +77,15 @@
 <meta property="og:locale" content="en" />
 <meta property="og:type" content="article" />
 <meta property="og:title" content="Linux Sysadmin Scratchpad">
-<meta property="og:description" content="This page is a collection of useful commands or one-liners collected through the years." />
-<meta property="og:url" content="https://agren.cc/p/scratchpad/" />
+<meta property="og:description" content="This page is a collection of useful commands or one-liners collected through the years. They are sorted in general categories, but I&rsquo;ve attempted to describe them as well as I can so hopefully CTRL&#43;F will work decently if you know what you&rsquo;re looking for.
+" />
+<meta property="og:url" content="http://localhost:1313/p/scratchpad/" />
 <meta property="og:site_name" content="agren.cc" />
 
-  
-    <meta property="og:image" content="https://agren.cc/img/favicon/blue.png">
-  
+  <meta property="og:image" content="http://localhost:1313/og-image.png">
 
-<meta property="og:image:width" content="2048">
-<meta property="og:image:height" content="1024">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
 
 
   <meta property="article:published_time" content="2022-09-24 12:51:00 &#43;0200 CEST" />
@@ -70,10 +102,10 @@
 
 
 </head>
-<body class="blue">
+<body>
 
 
-<div class="container center headings--one-size">
+<div class="container center">
 
   <header class="header">
   <div class="header__inner">
@@ -86,29 +118,40 @@
 
     </div>
     
-      <div class="menu-trigger">menu</div>
+      <ul class="menu menu--mobile">
+  <li class="menu__trigger">Menu&nbsp;▾</li>
+  <li>
+    <ul class="menu__dropdown">
+      
+        
+          <li><a href="/about/index.html">about</a></li>
+        
+      
+        
+          <li><a href="https://telegrafverket.cc/@linus">mastodon</a></li>
+        
+      
+      
+    </ul>
+  </li>
+</ul>
+
+    
     
   </div>
   
-    <nav class="menu hidden-on-mobile">
-  <ul class="menu__inner menu__inner--desktop">
+    <nav class="navigation-menu">
+  <ul class="navigation-menu__inner menu--desktop">
     
       
         
-          <li><a href="/about/index.html">About/Contact</a></li>
+          <li><a href="/about/index.html" >about</a></li>
         
       
-    
-
-    
-  </ul>
-
-  <ul class="menu__inner menu__inner--mobile">
-    
+        
+          <li><a href="https://telegrafverket.cc/@linus" >mastodon</a></li>
+        
       
-        <li><a href="/about/index.html">About/Contact</a></li>
-      
-    
     
   </ul>
 </nav>
@@ -121,25 +164,16 @@
     
 <article class="post">
   <h1 class="post-title">
-    <a href="https://agren.cc/p/scratchpad/">Linux Sysadmin Scratchpad</a>
+    <a href="http://localhost:1313/p/scratchpad/">Linux Sysadmin Scratchpad</a>
   </h1>
-  <div class="post-meta">
-    
-      <time class="post-date">
-        2022-09-24 ::
-        
-      </time>
-    
-    
-    
-  </div>
+  <div class="post-meta"><time class="post-date">2022-09-24</time></div>
 
   
     <span class="post-tags">
       
-      #<a href="https://agren.cc/tags/sysadmin/">sysadmin</a>&nbsp;
+      #<a href="http://localhost:1313/tags/sysadmin/">sysadmin</a>&nbsp;
       
-      #<a href="https://agren.cc/tags/linux/">linux</a>&nbsp;
+      #<a href="http://localhost:1313/tags/linux/">linux</a>&nbsp;
       
     </span>
   
@@ -151,7 +185,7 @@
   <div class="post-content"><div>
         <p>This page is a collection of useful commands or one-liners collected through the years. They are sorted in general categories, but I&rsquo;ve attempted to describe them as well as I can so hopefully CTRL+F will work decently if you know what you&rsquo;re looking for.</p>
 <p>This post will be updated in-place, refer to the date above.</p>
-<h2 id="converting-unix-epoch-time">Converting Unix epoch time<a href="#converting-unix-epoch-time" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<h2 id="converting-unix-epoch-time">Converting Unix epoch time<a href="#converting-unix-epoch-time" class="hanchor" ariaLabel="Anchor">#</a> </h2>
 <p>If <code>1660000000</code> doesn&rsquo;t tell you much, here&rsquo;s a few conversion examples:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ echo 1660000000 | perl -pe &#39;use POSIX qw/strftime/; \
 </span></span><span class="line"><span class="cl">s/(\d{10})/strftime(&#34;%Y-%m-%d %H:%M:%S&#34;,localtime($1))/e&#39;
@@ -161,9 +195,9 @@
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ echo &#34;[1660000000] foo&#34; | perl -pe &#39;s/\[(\d{10})]/localtime($1)/e&#39;
 </span></span><span class="line"><span class="cl">Tue Aug  9 01:06:40 2022 foo
 </span></span></code></pre></div><p>You can combine it with the above to get ISO-timestamps instead.</p>
-<h2 id="print-a-config-file-but-remove-all-comments--and-empty-rows">Print a config file, but remove all comments (#) and empty rows<a href="#print-a-config-file-but-remove-all-comments--and-empty-rows" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<h2 id="print-a-config-file-but-remove-all-comments--and-empty-rows">Print a config file, but remove all comments (#) and empty rows<a href="#print-a-config-file-but-remove-all-comments--and-empty-rows" class="hanchor" ariaLabel="Anchor">#</a> </h2>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">grep -vE &#39;^[[:space:]]*#|^$&#39; file
-</span></span></code></pre></div><h2 id="poor-mans-jq">Poor man&rsquo;s jq<a href="#poor-mans-jq" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+</span></span></code></pre></div><h2 id="poor-mans-jq">Poor man&rsquo;s jq<a href="#poor-mans-jq" class="hanchor" ariaLabel="Anchor">#</a> </h2>
 <p>If you&rsquo;re on a system without jq but you&rsquo;re just looking to make a json blob readable, you can use python&rsquo;s json.tool instead:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="o">$</span> <span class="n">echo</span> <span class="s1">&#39;{&#34;bax&#34;:{&#34;foo&#34;:&#34;bar&#34;,&#34;baz&#34;:[&#34;ba&#34;,&#34;ba&#34;,&#34;ba&#34;]}}&#39;</span> <span class="o">|</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">json</span><span class="o">.</span><span class="k">tool</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
@@ -176,16 +210,16 @@
 </span></span><span class="line"><span class="cl">        <span class="p">]</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><h2 id="replace-every-instance-of-x-in-a-file">Replace every instance of x in a file<a href="#replace-every-instance-of-x-in-a-file" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+</span></span></code></pre></div><h2 id="replace-every-instance-of-x-in-a-file">Replace every instance of x in a file<a href="#replace-every-instance-of-x-in-a-file" class="hanchor" ariaLabel="Anchor">#</a> </h2>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sed -i &#39;s/val=foo/val=bar/g&#39; /etc/file
-</span></span></code></pre></div><h2 id="show-frequently-recurring-lines-in-a-log-file">Show frequently recurring lines in a log file<a href="#show-frequently-recurring-lines-in-a-log-file" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+</span></span></code></pre></div><h2 id="show-frequently-recurring-lines-in-a-log-file">Show frequently recurring lines in a log file<a href="#show-frequently-recurring-lines-in-a-log-file" class="hanchor" ariaLabel="Anchor">#</a> </h2>
 <p>If you know that the timestamp is 14 characters long, this will cut out the timestamp and show you a count of the worst offenders:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">cat file.log | cut -c14- | sort | uniq -c | sort | tail
-</span></span></code></pre></div><h2 id="test-outbound-connectivity-on-a-specific-port">Test outbound connectivity on a specific port<a href="#test-outbound-connectivity-on-a-specific-port" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+</span></span></code></pre></div><h2 id="test-outbound-connectivity-on-a-specific-port">Test outbound connectivity on a specific port<a href="#test-outbound-connectivity-on-a-specific-port" class="hanchor" ariaLabel="Anchor">#</a> </h2>
 <p>Single port, or range of:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">nc -zv host 80
 </span></span><span class="line"><span class="cl">nc -zv host 20-30
-</span></span></code></pre></div><h2 id="time-travel">Time travel<a href="#time-travel" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+</span></span></code></pre></div><h2 id="time-travel">Time travel<a href="#time-travel" class="hanchor" ariaLabel="Anchor">#</a> </h2>
 <p>If your testing depends on the system clock being wrong, you can disable NTP and set it to whatever like this:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># timedatectl set-ntp 0
 </span></span><span class="line"><span class="cl"># timedatectl set-time &#39;2016-12-13 13:45&#39;
@@ -193,7 +227,7 @@
 </span></span><span class="line"><span class="cl">Tue Dec 13 13:45:01 WST 2016
 </span></span></code></pre></div><p>To re-enable NTP:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">timedatectl set-ntp 1 &amp;&amp; timedatectl --adjust-system-clock
-</span></span></code></pre></div><h2 id="push-a-thousand-things-to-an-apiconfig-file">Push a thousand things to an API/config file<a href="#push-a-thousand-things-to-an-apiconfig-file" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+</span></span></code></pre></div><h2 id="push-a-thousand-things-to-an-apiconfig-file">Push a thousand things to an API/config file<a href="#push-a-thousand-things-to-an-apiconfig-file" class="hanchor" ariaLabel="Anchor">#</a> </h2>
 <p>Useful for load testing, or just filling up a bunch of garbage.</p>
 <ul>
 <li><code>JSON_DATA_OBJECT</code>: What you want to send to the API, in this case assumed JSON. If you need certain fields to be random, you could fill them with <code>$(cat /proc/sys/kernel/random/uuid)</code> for example.</li>
@@ -206,7 +240,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="se"></span>   -u <span class="s1">&#39;user:password&#39;</span> <span class="p">|</span> python -m json.tool
 </span></span><span class="line"><span class="cl"><span class="k">done</span>
 </span></span></code></pre></div><p>If you need to do a <code>POST</code> or some other type of request with no data to apply the change, just pass <code>-X POST</code> instead of <code>-d</code>ata.</p>
-<h4 id="config-file">Config file<a href="#config-file" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h4>
+<h4 id="config-file">Config file<a href="#config-file" class="hanchor" ariaLabel="Anchor">#</a> </h4>
 <p>To create a bunch of blocks with the expected syntax (here it&rsquo;s nagios), you can do:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
 </span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="nb">cd</span> /somewhere
@@ -220,7 +254,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="s2">    register                       1
 </span></span></span><span class="line"><span class="cl"><span class="s2">    }&#34;</span> &gt;&gt; hosts.cfg
 </span></span><span class="line"><span class="cl"><span class="k">done</span>
-</span></span></code></pre></div><h2 id="sort-a-file-alphabetically-by-object-name-not-by-line">Sort a file alphabetically by object name, not by line<a href="#sort-a-file-alphabetically-by-object-name-not-by-line" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+</span></span></code></pre></div><h2 id="sort-a-file-alphabetically-by-object-name-not-by-line">Sort a file alphabetically by object name, not by line<a href="#sort-a-file-alphabetically-by-object-name-not-by-line" class="hanchor" ariaLabel="Anchor">#</a> </h2>
 <p>Assume you have this:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">gamma {
 </span></span><span class="line"><span class="cl">    banana
@@ -239,7 +273,7 @@
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">:%sort
 </span></span></code></pre></div><p>When it&rsquo;s all sorted, restore the newlines by replacing the <code>§</code> characters:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">:g/.*{/s/§/\r/g
-</span></span></code></pre></div><h2 id="create-tar-on-a-remote-system-but-compress-it-locally">Create TAR on a remote system, but compress it locally<a href="#create-tar-on-a-remote-system-but-compress-it-locally" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+</span></span></code></pre></div><h2 id="create-tar-on-a-remote-system-but-compress-it-locally">Create TAR on a remote system, but compress it locally<a href="#create-tar-on-a-remote-system-but-compress-it-locally" class="hanchor" ariaLabel="Anchor">#</a> </h2>
 <p>When bandwidth isn&rsquo;t the issue and you don&rsquo;t want to use up any space on the remote system, you may want to do the compression yourself locally and stream the tarball. If <code>sudo</code> is required, you can put it in a variable, but note that it will show up in the process list as long as the command is running.</p>
 <p><code>2&gt;/dev/null</code> will hide the sudo prompt.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ read -s sudopass
@@ -253,7 +287,7 @@
 </span></span><span class="line"><span class="cl">sudo -S find &#39;/dir&#39; -name &#39;*.log&#39; | \
 </span></span><span class="line"><span class="cl">sudo tar -cf- -T-&#34; | \
 </span></span><span class="line"><span class="cl">XZ_OPT=&#39;-9 -T0 -v&#39; xz &gt; logs.txz
-</span></span></code></pre></div><h2 id="encrypt-a-file-with-openssl">Encrypt a file with OpenSSL<a href="#encrypt-a-file-with-openssl" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+</span></span></code></pre></div><h2 id="encrypt-a-file-with-openssl">Encrypt a file with OpenSSL<a href="#encrypt-a-file-with-openssl" class="hanchor" ariaLabel="Anchor">#</a> </h2>
 <p>If you&rsquo;re going to be throwing logs across the internet, it&rsquo;s probably a good idea to encrypt the file. One way to do this is:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ openssl enc -e -aes-256-cbc -md sha512 -pbkdf2 \
 </span></span><span class="line"><span class="cl">-iter 10000 -in [PLAIN_FILE] -out [ENCRYPTED_FILE]
@@ -261,7 +295,7 @@
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ openssl enc -d -aes-256-cbc -md sha512 -pbkdf2 \
 </span></span><span class="line"><span class="cl">-iter 10000 -in [ENCRYPTED_FILE] -out [PLAIN_FILE]
 </span></span></code></pre></div><p>Enter your passphrase and you&rsquo;ll have the decrypted file ready for decompression.</p>
-<h2 id="bash">Bash<a href="#bash" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<h2 id="bash">Bash<a href="#bash" class="hanchor" ariaLabel="Anchor">#</a> </h2>
 <p>Since <code>!!</code> refers to the previous command, you can re-run a failed command as root with:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ sudo !!
 </span></span></code></pre></div><p>So-called <em>brace expansion</em> is commonly used to move or copy one or many files as backups:</p>
@@ -274,11 +308,11 @@
 </span></span><span class="line"><span class="cl">$ find . -type f -name &#39;*.log&#39; -exec mv -v {} {}.bak \;
 </span></span></code></pre></div><p><strong>Final advice</strong> for everything bash:</p>
 <p>Use <a href="https://github.com/koalaman/shellcheck">shellcheck</a> when writing scripts, available as an extension in most editors. The <a href="https://google.github.io/styleguide/shellguide.html">Google Shell Style Guide</a> isn&rsquo;t bad either.</p>
-<h2 id="product-specific-salt-stack">Product-specific: Salt-stack<a href="#product-specific-salt-stack" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<h2 id="product-specific-salt-stack">Product-specific: Salt-stack<a href="#product-specific-salt-stack" class="hanchor" ariaLabel="Anchor">#</a> </h2>
 <p>If you don&rsquo;t use <a href="https://saltproject.io/whats-saltstack/">salt</a>, you can disregard this section.</p>
-<h4 id="filtering-by-grains-and-listing-grains">Filtering by grains, and listing grains<a href="#filtering-by-grains-and-listing-grains" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h4>
+<h4 id="filtering-by-grains-and-listing-grains">Filtering by grains, and listing grains<a href="#filtering-by-grains-and-listing-grains" class="hanchor" ariaLabel="Anchor">#</a> </h4>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># salt -C &#39;prefix-* and G@osmajorrelease:14&#39; grains.get &#39;osrelease&#39;
-</span></span></code></pre></div><h4 id="apply-a-state-only-to-nodes-that-have-it">Apply a state only to nodes that have it<a href="#apply-a-state-only-to-nodes-that-have-it" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h4>
+</span></span></code></pre></div><h4 id="apply-a-state-only-to-nodes-that-have-it">Apply a state only to nodes that have it<a href="#apply-a-state-only-to-nodes-that-have-it" class="hanchor" ariaLabel="Anchor">#</a> </h4>
 <p>Get all states for a specific group of nodes:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># salt &#39;prefix-*&#39; state.show_lowstate --out=json &gt; out.json
 </span></span></code></pre></div><p>Use <code>jq</code> to only return nodes that have a specific <code>state</code>:</p>
@@ -293,29 +327,27 @@
   
     
 <div class="pagination">
-    <div class="pagination__title">
-        <span class="pagination__title-h">Read other posts</span>
-        <hr />
-    </div>
-    <div class="pagination__buttons">
-        
-        <span class="button previous">
-            <a href="https://agren.cc/p/luks-file/">
-                <span class="button__icon">←</span>
-                <span class="button__text">Encrypted LUKS file container</span>
-            </a>
-        </span>
-        
-        
-        <span class="button next">
-            <a href="https://agren.cc/p/fail2ban-on-el8/">
-                <span class="button__text">fail2ban on EL8</span>
-                <span class="button__icon">→</span>
-            </a>
-        </span>
-        
-    </div>
+  <div class="pagination__title">
+    <span class="pagination__title-h">Read other posts</span>
+    <hr />
+  </div>
+  <div class="pagination__buttons">
+    
+      <a href="http://localhost:1313/p/luks-file/" class="button inline prev">
+        Encrypted LUKS file container
+      </a>
+    
+    
+      ::
+    
+    
+      <a href="http://localhost:1313/p/fail2ban-on-el8/" class="button inline next">
+        fail2ban on EL8
+      </a>
+    
+  </div>
 </div>
+
 
   
 
@@ -332,12 +364,12 @@
   <div class="footer__inner">
     
       <div class="copyright">
-        <span>All content on this site is licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_BLANK">CC-BY-SA 4.0</a>, attribute "agren.cc". Powered by <a href="http://gohugo.io">hugo</a> and the <a href="https://github.com/panr/hugo-theme-terminal" target="_BLANK">terminal</a> theme. Find me on <a rel="me" href="https://telegrafverket.cc/@linus">mastodon</a>.</span>
+        <span>© 2024 Powered by <a href="https://gohugo.io">Hugo</a></span>
     
+      <span>:: <a href="https://github.com/panr/hugo-theme-terminal" target="_blank">Theme</a> made by <a href="https://github.com/panr" target="_blank">panr</a></span>
       </div>
   </div>
 </footer>
-
 
 
 
