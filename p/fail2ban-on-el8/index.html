@@ -1,30 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
   
     <title>fail2ban on EL8 :: agren.cc</title>
   
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="fail2ban is commonly used to take a certain action, such as automatically blocking an IP, after repeated authentication failures or other generally bad behavior against applications, as detected by regex matching against log output." />
+<meta name="description" content="fail2ban is commonly used to take a certain action, such as automatically blocking an IP, after repeated authentication failures or other generally bad behavior against applications, as detected by regex matching against log output.
+" />
 <meta name="keywords" content="" />
-<meta name="robots" content="noodp" />
-<link rel="canonical" href="https://agren.cc/p/fail2ban-on-el8/" />
 
+  <meta name="robots" content="noodp" />
 
-  
-
+<link rel="canonical" href="http://localhost:1313/p/fail2ban-on-el8/" />
 
 
 
 
 
   
+  <link rel="stylesheet" href="http://localhost:1313/css/fonts.min.e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.css">
+
   
+  <link rel="stylesheet" href="http://localhost:1313/css/main.min.f45962ce6ffdd2247db17a705d0190d5ca08e6b0757015b1061b0594e50b535b.css">
+
   
+  <link rel="stylesheet" href="http://localhost:1313/css/prism.min.3080cbc8607b8ded79eec60a46295119aef4486a3a2d88c9ddc57ee285ca19ca.css">
+
   
+  <link rel="stylesheet" href="http://localhost:1313/css/terminal.min.795e2bed278f30aabee20511815271033ceb14e4a8348f8501a71429808fa574.css">
+
   
-  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="http://localhost:1313/css/buttons.min.2bc533403a27dfe0e93105a92502b42ce4587e2e4a87d9f7d349e51e16e09478.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/code.min.00125962708925857e7b66dbc58391d55be1191a3d0ce2034de8c9cd2c481c36.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/footer.min.2e3eb191baee58dd05a9f0104ac1fab0827bca7c64dafe0b2579f934c33a1d69.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/gist.min.a751e8b0abe1ba8bc53ced52a38b19d8950fe78ca29454ea8c2595cf26aad5c0.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/header.min.b6fb4423cf82a9f9d7abc9cd010223fa3d70a6526a3f28f8e17d814c06e18f9e.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/menu.min.83637a90d903026bc280d3f82f96ceb06c5fc72b7c1a8d686afb5bbf818a29f7.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/pagination.min.82f6400eae7c7c6dc3c866733c2ec0579e4089608fea69400ff85b3880aa0d3c.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/post.min.fc74ca360273c1d828da3c02b8174eba435607b369d98418ccc6f2243cd4e75d.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/syntax.min.cc789ed9377260d7949ea4c18781fc58959a89287210fe4edbff44ebfc1511b6.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/terms.min.b81791663c3790e738e571cdbf802312390d30e4b1d8dc9d814a5b5454d0ac11.css">
 
 
 
@@ -32,9 +66,8 @@
 
 
 
-  <link rel="shortcut icon" href="https://agren.cc/img/theme-colors/blue.png">
-  <link rel="apple-touch-icon" href="https://agren.cc/img/theme-colors/blue.png">
-
+<link rel="shortcut icon" href="http://localhost:1313/favicon.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
 
 
 <meta name="twitter:card" content="summary" />
@@ -44,16 +77,15 @@
 <meta property="og:locale" content="en" />
 <meta property="og:type" content="article" />
 <meta property="og:title" content="fail2ban on EL8">
-<meta property="og:description" content="fail2ban is commonly used to take a certain action, such as automatically blocking an IP, after repeated authentication failures or other generally bad behavior against applications, as detected by regex matching against log output." />
-<meta property="og:url" content="https://agren.cc/p/fail2ban-on-el8/" />
+<meta property="og:description" content="fail2ban is commonly used to take a certain action, such as automatically blocking an IP, after repeated authentication failures or other generally bad behavior against applications, as detected by regex matching against log output.
+" />
+<meta property="og:url" content="http://localhost:1313/p/fail2ban-on-el8/" />
 <meta property="og:site_name" content="agren.cc" />
 
-  
-    <meta property="og:image" content="https://agren.cc/img/favicon/blue.png">
-  
+  <meta property="og:image" content="http://localhost:1313/og-image.png">
 
-<meta property="og:image:width" content="2048">
-<meta property="og:image:height" content="1024">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
 
 
   <meta property="article:published_time" content="2021-10-08 15:30:51 &#43;0200 CEST" />
@@ -70,10 +102,10 @@
 
 
 </head>
-<body class="blue">
+<body>
 
 
-<div class="container center headings--one-size">
+<div class="container center">
 
   <header class="header">
   <div class="header__inner">
@@ -86,29 +118,40 @@
 
     </div>
     
-      <div class="menu-trigger">menu</div>
+      <ul class="menu menu--mobile">
+  <li class="menu__trigger">Menu&nbsp;▾</li>
+  <li>
+    <ul class="menu__dropdown">
+      
+        
+          <li><a href="/about/index.html">about</a></li>
+        
+      
+        
+          <li><a href="https://telegrafverket.cc/@linus">mastodon</a></li>
+        
+      
+      
+    </ul>
+  </li>
+</ul>
+
+    
     
   </div>
   
-    <nav class="menu hidden-on-mobile">
-  <ul class="menu__inner menu__inner--desktop">
+    <nav class="navigation-menu">
+  <ul class="navigation-menu__inner menu--desktop">
     
       
         
-          <li><a href="/about/index.html">About/Contact</a></li>
+          <li><a href="/about/index.html" >about</a></li>
         
       
-    
-
-    
-  </ul>
-
-  <ul class="menu__inner menu__inner--mobile">
-    
+        
+          <li><a href="https://telegrafverket.cc/@linus" >mastodon</a></li>
+        
       
-        <li><a href="/about/index.html">About/Contact</a></li>
-      
-    
     
   </ul>
 </nav>
@@ -121,27 +164,18 @@
     
 <article class="post">
   <h1 class="post-title">
-    <a href="https://agren.cc/p/fail2ban-on-el8/">fail2ban on EL8</a>
+    <a href="http://localhost:1313/p/fail2ban-on-el8/">fail2ban on EL8</a>
   </h1>
-  <div class="post-meta">
-    
-      <time class="post-date">
-        2021-10-08 ::
-        
-      </time>
-    
-    
-    
-  </div>
+  <div class="post-meta"><time class="post-date">2021-10-08</time></div>
 
   
     <span class="post-tags">
       
-      #<a href="https://agren.cc/tags/fail2ban/">fail2ban</a>&nbsp;
+      #<a href="http://localhost:1313/tags/fail2ban/">fail2ban</a>&nbsp;
       
-      #<a href="https://agren.cc/tags/el8/">EL8</a>&nbsp;
+      #<a href="http://localhost:1313/tags/el8/">EL8</a>&nbsp;
       
-      #<a href="https://agren.cc/tags/sysadmin/">sysadmin</a>&nbsp;
+      #<a href="http://localhost:1313/tags/sysadmin/">sysadmin</a>&nbsp;
       
     </span>
   
@@ -153,7 +187,7 @@
   <div class="post-content"><div>
         <p>fail2ban is commonly used to  take a certain action, such as automatically blocking an IP, after repeated authentication failures or other generally bad behavior against applications, as detected by regex matching against log output.</p>
 <p>This example will show how to install and configure fail2ban on EL8 (Rocky Linux 8.4), and to configure it to block an IP after multiple failed login attempts.</p>
-<h4 id="installing-fail2ban-via-epel">Installing fail2ban via EPEL<a href="#installing-fail2ban-via-epel" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h4>
+<h4 id="installing-fail2ban-via-epel">Installing fail2ban via EPEL<a href="#installing-fail2ban-via-epel" class="hanchor" ariaLabel="Anchor">#</a> </h4>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
 </span></span><span class="line"><span class="cl"># yum install fail2ban
 </span></span><span class="line"><span class="cl">
@@ -199,7 +233,7 @@ This will ban an IP for <code>24h</code> if <code>3</code> failed attempts happe
 </span></span><span class="line"><span class="cl">Status
 </span></span><span class="line"><span class="cl">|- Number of jail:      1
 </span></span><span class="line"><span class="cl">`- Jail list:   sshd
-</span></span></code></pre></div><h4 id="trust-but-verify">Trust, but verify<a href="#trust-but-verify" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h4>
+</span></span></code></pre></div><h4 id="trust-but-verify">Trust, but verify<a href="#trust-but-verify" class="hanchor" ariaLabel="Anchor">#</a> </h4>
 <p>Now let&rsquo;s do something dumb and enable passwords for SSH authentication, then attempt to get ourselves banned when failing to login from <code>127.0.0.1</code>. First, ensure password authentication is enabled in <code>/etc/ssh/sshd_config</code>:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">PasswordAuthentication yes
 </span></span></code></pre></div><p>Restart the SSH daemon:</p>
@@ -225,7 +259,7 @@ This will ban an IP for <code>24h</code> if <code>3</code> failed attempts happe
 </span></span><span class="line"><span class="cl">[{&#39;sshd&#39;: [&#39;127.0.0.1&#39;]}]
 </span></span></code></pre></div><p>Clearing all bans:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># fail2ban-client unban --all
-</span></span></code></pre></div><h4 id="summary">Summary<a href="#summary" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h4>
+</span></span></code></pre></div><h4 id="summary">Summary<a href="#summary" class="hanchor" ariaLabel="Anchor">#</a> </h4>
 <p>What we&rsquo;ve done:</p>
 <ul>
 <li>We created a <code>jail.local</code> override file with our own settings.</li>
@@ -238,22 +272,21 @@ This will ban an IP for <code>24h</code> if <code>3</code> failed attempts happe
   
     
 <div class="pagination">
-    <div class="pagination__title">
-        <span class="pagination__title-h">Read other posts</span>
-        <hr />
-    </div>
-    <div class="pagination__buttons">
-        
-        <span class="button previous">
-            <a href="https://agren.cc/p/scratchpad/">
-                <span class="button__icon">←</span>
-                <span class="button__text">Linux Sysadmin Scratchpad</span>
-            </a>
-        </span>
-        
-        
-    </div>
+  <div class="pagination__title">
+    <span class="pagination__title-h">Read other posts</span>
+    <hr />
+  </div>
+  <div class="pagination__buttons">
+    
+      <a href="http://localhost:1313/p/scratchpad/" class="button inline prev">
+        Linux Sysadmin Scratchpad
+      </a>
+    
+    
+    
+  </div>
 </div>
+
 
   
 
@@ -270,12 +303,12 @@ This will ban an IP for <code>24h</code> if <code>3</code> failed attempts happe
   <div class="footer__inner">
     
       <div class="copyright">
-        <span>All content on this site is licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_BLANK">CC-BY-SA 4.0</a>, attribute "agren.cc". Powered by <a href="http://gohugo.io">hugo</a> and the <a href="https://github.com/panr/hugo-theme-terminal" target="_BLANK">terminal</a> theme. Find me on <a rel="me" href="https://telegrafverket.cc/@linus">mastodon</a>.</span>
+        <span>© 2024 Powered by <a href="https://gohugo.io">Hugo</a></span>
     
+      <span>:: <a href="https://github.com/panr/hugo-theme-terminal" target="_blank">Theme</a> made by <a href="https://github.com/panr" target="_blank">panr</a></span>
       </div>
   </div>
 </footer>
-
 
 
 

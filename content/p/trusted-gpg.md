@@ -1,12 +1,12 @@
 ---
-title: "Using signed-by in Debian repository configuration"
+title: 'Using signed-by in Debian repository configuration'
 date: 2024-05-05T17:45:00+02:00
 draft: false
 tags:
-    - linux
-    - debian
-    - ubuntu
-    - sysadmin
+  - linux
+  - debian
+  - ubuntu
+  - sysadmin
 ---
 
 On newer versions of Debian and Ubuntu, the way repos are authenticated
@@ -23,8 +23,8 @@ will be considered valid when signed by the specified key.
 
 ### Configuration examples
 
-```
-# OLD WAY
+```sh
+# DO NOT:
 deb https://my.repository.com/debian distribution component
 ```
 
@@ -32,8 +32,8 @@ When adding a new repository the "old" way, you would typically curl and
 pipe the a keyfile to `apt-key add`, which would add it to
 `trusted.gpg`, making it a trusted key for every configured repo.
 
-```
-# NEW WAY
+```sh
+# DO:
 deb [signed-by=/path/to/key.gpg] https://my.repository.com/debian distribution component
 ```
 
@@ -59,7 +59,7 @@ It's pretty obvious from the error that `9165938D90FDDD2E` is a public
 key, but we don't have it so we can't proceed.
 
 First of all, what is this string? The answer is that it's an
-abbreviated *fingerprint* of a public key. You can get these from `gpg`.
+abbreviated _fingerprint_ of a public key. You can get these from `gpg`.
 For now, let's ignore how we know which file it's in:
 
 ```
@@ -93,7 +93,7 @@ find the key.
 Finding the key isn't usually the issue, it's even registered at this
 public key server:
 
-https://keys.openpgp.org/search?q=9165938D90FDDD2E
+<https://keys.openpgp.org/search?q=9165938D90FDDD2E>
 
 It's more important to ensure that this key is legit, and for now we'll
 assume that a guide that has been around for years served over HTTPS
@@ -129,7 +129,9 @@ doing things:
 # OLD REPO SYNTAX
 deb http://archive.raspbian.org/raspbian wheezy main contrib non-free
 ```
+
 Adding the key
+
 ```
 # DEPRECATED
 wget https://archive.raspbian.org/raspbian.public.key -O - | sudo apt-key add -
@@ -189,6 +191,6 @@ In summary:
 Final notes:
 
 - Remember that any repo can still publish updates for **any package**. To avoid this,
-  see: 
+  see:
   "[Prevent/selective installation from a third-party
   repository](https://wiki.debian.org/AptConfiguration#Prevent.2Fselective_installation_from_a_third-party_repository)"

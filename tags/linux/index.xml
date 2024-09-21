@@ -2,18 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Linux on agren.cc</title>
-    <link>https://agren.cc/tags/linux/</link>
+    <link>http://localhost:1313/tags/linux/</link>
     <description>Recent content in Linux on agren.cc</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 05 May 2024 17:45:00 +0200</lastBuildDate><atom:link href="https://agren.cc/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 05 May 2024 17:45:00 +0200</lastBuildDate><atom:link href="http://localhost:1313/tags/linux/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Using signed-by in Debian repository configuration</title>
-      <link>https://agren.cc/p/trusted-gpg/</link>
+      <link>http://localhost:1313/p/trusted-gpg/</link>
       <pubDate>Sun, 05 May 2024 17:45:00 +0200</pubDate>
       
-      <guid>https://agren.cc/p/trusted-gpg/</guid>
-      <description>On newer versions of Debian and Ubuntu, the way repos are authenticated through public keys has changed somewhat.</description>
+      <guid>http://localhost:1313/p/trusted-gpg/</guid>
+      <description>&lt;p&gt;On newer versions of Debian and Ubuntu, the way repos are authenticated
+through public keys has changed somewhat. Here&amp;rsquo;s what I&amp;rsquo;ve found.&lt;/p&gt;</description>
       <content>&lt;p&gt;On newer versions of Debian and Ubuntu, the way repos are authenticated
 through public keys has changed somewhat. Here&amp;rsquo;s what I&amp;rsquo;ve found.&lt;/p&gt;
 &lt;p&gt;You may recognize the command &lt;code&gt;apt-key&lt;/code&gt;: this is a now deprecated
@@ -24,13 +25,13 @@ considered valid for any repo you add.&lt;/p&gt;
 when configuring a repo. That way, only packages from that repository
 will be considered valid when signed by the specified key.&lt;/p&gt;
 &lt;h3 id=&#34;configuration-examples&#34;&gt;Configuration examples&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;# OLD WAY
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# DO NOT:&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;deb https://my.repository.com/debian distribution component
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;When adding a new repository the &amp;ldquo;old&amp;rdquo; way, you would typically curl and
 pipe the a keyfile to &lt;code&gt;apt-key add&lt;/code&gt;, which would add it to
 &lt;code&gt;trusted.gpg&lt;/code&gt;, making it a trusted key for every configured repo.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;# NEW WAY
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;deb [signed-by=/path/to/key.gpg] https://my.repository.com/debian distribution component
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# DO:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;deb &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;signed-by&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;/path/to/key.gpg&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; https://my.repository.com/debian distribution component
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;In this example, keys in &lt;code&gt;key.gpg&lt;/code&gt; are only considered valid for that
 specific repository.&lt;/p&gt;
 &lt;h3 id=&#34;when-it-might-cause-issues&#34;&gt;When it might cause issues&lt;/h3&gt;
@@ -142,11 +143,13 @@ repository&lt;/a&gt;&amp;rdquo;&lt;/li&gt;
     
     <item>
       <title>Using curl to pass videos to VLC on Apple TV</title>
-      <link>https://agren.cc/p/curl-to-vlc/</link>
+      <link>http://localhost:1313/p/curl-to-vlc/</link>
       <pubDate>Wed, 13 Sep 2023 19:08:00 +0200</pubDate>
       
-      <guid>https://agren.cc/p/curl-to-vlc/</guid>
-      <description>VLC has always been a great piece of software, but one place where is really shines is on iOS/tvOS since it allows you to play pretty much any video file, and you can send that file over curl.</description>
+      <guid>http://localhost:1313/p/curl-to-vlc/</guid>
+      <description>&lt;p&gt;VLC has always been a great piece of software, but one place where is
+really shines is on iOS/tvOS since it allows you to play pretty much any
+video file, and you can send that file over curl.&lt;/p&gt;</description>
       <content>&lt;p&gt;VLC has always been a great piece of software, but one place where is
 really shines is on iOS/tvOS since it allows you to play pretty much any
 video file, and you can send that file over curl.&lt;/p&gt;
@@ -211,11 +214,11 @@ enough disk space to store the file before sending it to VLC.&lt;/p&gt;
     
     <item>
       <title>Manual disk encryption on Ubuntu</title>
-      <link>https://agren.cc/p/manual-disk-encryption/</link>
+      <link>http://localhost:1313/p/manual-disk-encryption/</link>
       <pubDate>Sat, 03 Dec 2022 15:00:00 +0200</pubDate>
       
-      <guid>https://agren.cc/p/manual-disk-encryption/</guid>
-      <description>Ubuntu makes it very easy to set up full disk encryption, but it requires you to wipe the entire disk if you want the wizard to do it for you, so this is how you can set it up manually.</description>
+      <guid>http://localhost:1313/p/manual-disk-encryption/</guid>
+      <description>&lt;p&gt;Ubuntu makes it very easy to set up full disk encryption, but it requires you to wipe the entire disk if you want the wizard to do it for you, so this is how you can set it up manually.&lt;/p&gt;</description>
       <content>&lt;p&gt;Ubuntu makes it very easy to set up full disk encryption, but it requires you to wipe the entire disk if you want the wizard to do it for you, so this is how you can set it up manually.&lt;/p&gt;
 &lt;p&gt;One common reason you may want to do this is in a dual boot scenario, where one or several leading partitions are already taken &amp;ndash; or maybe you simply want to keep whatever is there.&lt;/p&gt;
 &lt;p&gt;The option in the Ubuntu installer to &lt;em&gt;&amp;ldquo;Encrypt the new Ubuntu installation for security&amp;rdquo;&lt;/em&gt; is only available when choosing &lt;em&gt;&amp;ldquo;Erase disk and install Ubuntu&amp;rdquo;&lt;/em&gt;. So, if you don&amp;rsquo;t want to wipe the entire disk, but you still want to boot an encrypted root partition, it needs some preparation.&lt;/p&gt;
@@ -293,11 +296,11 @@ enough disk space to store the file before sending it to VLC.&lt;/p&gt;
     
     <item>
       <title>Linux Sysadmin Scratchpad</title>
-      <link>https://agren.cc/p/scratchpad/</link>
+      <link>http://localhost:1313/p/scratchpad/</link>
       <pubDate>Sat, 24 Sep 2022 12:51:00 +0200</pubDate>
       
-      <guid>https://agren.cc/p/scratchpad/</guid>
-      <description>This page is a collection of useful commands or one-liners collected through the years.</description>
+      <guid>http://localhost:1313/p/scratchpad/</guid>
+      <description>&lt;p&gt;This page is a collection of useful commands or one-liners collected through the years. They are sorted in general categories, but I&amp;rsquo;ve attempted to describe them as well as I can so hopefully CTRL+F will work decently if you know what you&amp;rsquo;re looking for.&lt;/p&gt;</description>
       <content>&lt;p&gt;This page is a collection of useful commands or one-liners collected through the years. They are sorted in general categories, but I&amp;rsquo;ve attempted to describe them as well as I can so hopefully CTRL+F will work decently if you know what you&amp;rsquo;re looking for.&lt;/p&gt;
 &lt;p&gt;This post will be updated in-place, refer to the date above.&lt;/p&gt;
 &lt;h2 id=&#34;converting-unix-epoch-time&#34;&gt;Converting Unix epoch time&lt;/h2&gt;

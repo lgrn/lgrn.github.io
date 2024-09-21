@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Wifi on agren.cc</title>
-    <link>https://agren.cc/tags/wifi/</link>
+    <link>http://localhost:1313/tags/wifi/</link>
     <description>Recent content in Wifi on agren.cc</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 25 Dec 2022 14:00:00 +0200</lastBuildDate><atom:link href="https://agren.cc/tags/wifi/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 25 Dec 2022 14:00:00 +0200</lastBuildDate><atom:link href="http://localhost:1313/tags/wifi/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Using any device on Wi-Fi with captive portals</title>
-      <link>https://agren.cc/p/any-device-captive-wifi/</link>
+      <link>http://localhost:1313/p/any-device-captive-wifi/</link>
       <pubDate>Sun, 25 Dec 2022 14:00:00 +0200</pubDate>
       
-      <guid>https://agren.cc/p/any-device-captive-wifi/</guid>
-      <description>Maybe you&amp;rsquo;re at a hotel, an airport, a conference, or somewhere else where whoever set up the Wi-Fi thought it was a good idea to use so-called captive portals.</description>
+      <guid>http://localhost:1313/p/any-device-captive-wifi/</guid>
+      <description>&lt;p&gt;Maybe you&amp;rsquo;re at a hotel, an airport, a conference, or somewhere else where whoever set up the Wi-Fi thought it was a good idea to use so-called &lt;a href=&#34;https://en.wikipedia.org/wiki/Captive_portal&#34;&gt;captive portals&lt;/a&gt;.&lt;/p&gt;</description>
       <content>&lt;p&gt;Maybe you&amp;rsquo;re at a hotel, an airport, a conference, or somewhere else where whoever set up the Wi-Fi thought it was a good idea to use so-called &lt;a href=&#34;https://en.wikipedia.org/wiki/Captive_portal&#34;&gt;captive portals&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;Regardless of their purpose, whether it&amp;rsquo;s to limit connection for a specific time, or force end-users to accept some kind of agreement, they usually work the same way: they force you through some kind of web UI, and in the end it will validate your device based on the MAC address only.&lt;/p&gt;
 &lt;p&gt;A MAC address can be changed, which means that if you have a device that cannot access the portal, you can still get that device onto the network by doing the following:&lt;/p&gt;

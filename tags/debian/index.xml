@@ -2,18 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Debian on agren.cc</title>
-    <link>https://agren.cc/tags/debian/</link>
+    <link>http://localhost:1313/tags/debian/</link>
     <description>Recent content in Debian on agren.cc</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 05 May 2024 17:45:00 +0200</lastBuildDate><atom:link href="https://agren.cc/tags/debian/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 05 May 2024 17:45:00 +0200</lastBuildDate><atom:link href="http://localhost:1313/tags/debian/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Using signed-by in Debian repository configuration</title>
-      <link>https://agren.cc/p/trusted-gpg/</link>
+      <link>http://localhost:1313/p/trusted-gpg/</link>
       <pubDate>Sun, 05 May 2024 17:45:00 +0200</pubDate>
       
-      <guid>https://agren.cc/p/trusted-gpg/</guid>
-      <description>On newer versions of Debian and Ubuntu, the way repos are authenticated through public keys has changed somewhat.</description>
+      <guid>http://localhost:1313/p/trusted-gpg/</guid>
+      <description>&lt;p&gt;On newer versions of Debian and Ubuntu, the way repos are authenticated
+through public keys has changed somewhat. Here&amp;rsquo;s what I&amp;rsquo;ve found.&lt;/p&gt;</description>
       <content>&lt;p&gt;On newer versions of Debian and Ubuntu, the way repos are authenticated
 through public keys has changed somewhat. Here&amp;rsquo;s what I&amp;rsquo;ve found.&lt;/p&gt;
 &lt;p&gt;You may recognize the command &lt;code&gt;apt-key&lt;/code&gt;: this is a now deprecated
@@ -24,13 +25,13 @@ considered valid for any repo you add.&lt;/p&gt;
 when configuring a repo. That way, only packages from that repository
 will be considered valid when signed by the specified key.&lt;/p&gt;
 &lt;h3 id=&#34;configuration-examples&#34;&gt;Configuration examples&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;# OLD WAY
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# DO NOT:&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;deb https://my.repository.com/debian distribution component
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;When adding a new repository the &amp;ldquo;old&amp;rdquo; way, you would typically curl and
 pipe the a keyfile to &lt;code&gt;apt-key add&lt;/code&gt;, which would add it to
 &lt;code&gt;trusted.gpg&lt;/code&gt;, making it a trusted key for every configured repo.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;# NEW WAY
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;deb [signed-by=/path/to/key.gpg] https://my.repository.com/debian distribution component
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# DO:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;deb &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;signed-by&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;/path/to/key.gpg&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; https://my.repository.com/debian distribution component
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;In this example, keys in &lt;code&gt;key.gpg&lt;/code&gt; are only considered valid for that
 specific repository.&lt;/p&gt;
 &lt;h3 id=&#34;when-it-might-cause-issues&#34;&gt;When it might cause issues&lt;/h3&gt;
