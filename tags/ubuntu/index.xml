@@ -25,12 +25,12 @@ considered valid for any repo you add.&lt;/p&gt;
 when configuring a repo. That way, only packages from that repository
 will be considered valid when signed by the specified key.&lt;/p&gt;
 &lt;h3 id=&#34;configuration-examples&#34;&gt;Configuration examples&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# DO NOT:&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# BAD:&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;deb https://my.repository.com/debian distribution component
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;When adding a new repository the &amp;ldquo;old&amp;rdquo; way, you would typically curl and
 pipe the a keyfile to &lt;code&gt;apt-key add&lt;/code&gt;, which would add it to
 &lt;code&gt;trusted.gpg&lt;/code&gt;, making it a trusted key for every configured repo.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# DO:&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# GOOD:&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;deb &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;signed-by&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;/path/to/key.gpg&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; https://my.repository.com/debian distribution component
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;In this example, keys in &lt;code&gt;key.gpg&lt;/code&gt; are only considered valid for that
 specific repository.&lt;/p&gt;
@@ -42,16 +42,16 @@ repositories, you may encounter warnings with the &amp;ldquo;old&amp;rdquo; conf
 &lt;p&gt;A short demonstration: if you run &lt;code&gt;apt-get update&lt;/code&gt; with no pubkeys
 available at all, a situation you could provoke by for example gzipping
 &lt;code&gt;trusted.gpg&lt;/code&gt;, you will get an error similar to the following:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;The following signatures couldn&amp;#39;t be verified because the public key is not available: NO_PUBKEY 9165938D90FDDD2E
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-plain&#34; data-lang=&#34;plain&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;The following signatures couldn&amp;#39;t be verified because the public key is not available: NO_PUBKEY 9165938D90FDDD2E
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;It&amp;rsquo;s pretty obvious from the error that &lt;code&gt;9165938D90FDDD2E&lt;/code&gt; is a public
 key, but we don&amp;rsquo;t have it so we can&amp;rsquo;t proceed.&lt;/p&gt;
 &lt;p&gt;First of all, what is this string? The answer is that it&amp;rsquo;s an
 abbreviated &lt;em&gt;fingerprint&lt;/em&gt; of a public key. You can get these from &lt;code&gt;gpg&lt;/code&gt;.
 For now, let&amp;rsquo;s ignore how we know which file it&amp;rsquo;s in:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;# gpg --show-keys --with-fingerprint --keyid-format long raspbian-archive-keyring.gpg | grep 9165938D90FDDD2E -A1
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;gpg --show-keys --with-fingerprint --keyid-format long raspbian-archive-keyring.gpg &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; grep 9165938D90FDDD2E -A1
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;pub   rsa2048/9165938D90FDDD2E 2012-04-01 [SC]
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      Key fingerprint = A0DA 38D0 D76E 8B5D 6388  7281 9165 938D 90FD DD2E
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;pub   rsa2048/9165938D90FDDD2E 2012-04-01 &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;SC&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      Key &lt;span class=&#34;nv&#34;&gt;fingerprint&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; A0DA 38D0 D76E 8B5D &lt;span class=&#34;m&#34;&gt;6388&lt;/span&gt;  &lt;span class=&#34;m&#34;&gt;7281&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;9165&lt;/span&gt; 938D 90FD DD2E
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;On the first line of the output you can see the pubkey fingerprint, with
 a &lt;code&gt;keyid-format&lt;/code&gt; of &lt;code&gt;long&lt;/code&gt; matching the error message. Notice how this
 is actually the four last parts of the entire fingerprint (and &lt;code&gt;short&lt;/code&gt;
@@ -80,40 +80,40 @@ which will put them in &lt;code&gt;/usr/share/keyrings&lt;/code&gt;. On Raspberr
 are two packages available: &lt;code&gt;raspbian-archive-keyring&lt;/code&gt; and
 &lt;code&gt;raspberrypi-archive-keyring&lt;/code&gt;, which will put keys in the same folder.&lt;/p&gt;
 &lt;p&gt;The first &lt;code&gt;raspbian&lt;/code&gt; package is what provides the file we inspected previously:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;# dpkg-query -L raspbian-archive-keyring | grep &amp;#34;\.gpg&amp;#34;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;dpkg-query -L raspbian-archive-keyring &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; grep &lt;span class=&#34;s2&#34;&gt;&amp;#34;\.gpg&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;/usr/share/keyrings/raspbian-archive-keyring.gpg
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;So if we already have this file on disk, we can use that for our repo,
 since we now feel pretty confident that is the key that we expect
 packages from there to be signed with:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;deb [signed-by=/usr/share/keyrings/raspbian-archive-keyring.gpg] https://archive.raspbian.org/raspbian bookworm main contrib non-free rpi
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;deb &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;signed-by&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;/usr/share/keyrings/raspbian-archive-keyring.gpg&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; https://archive.raspbian.org/raspbian bookworm main contrib non-free rpi
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;But for the sake of learning, let&amp;rsquo;s pretend we did not have this key
 available locally, how do we get it from the Internet and use it?&lt;/p&gt;
 &lt;p&gt;The instructions from raspbian illustrate perfectly the &amp;ldquo;old&amp;rdquo; way of
 doing things:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;# OLD REPO SYNTAX
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# BAD:&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;deb http://archive.raspbian.org/raspbian wheezy main contrib non-free
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Adding the key&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;# DEPRECATED
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;wget https://archive.raspbian.org/raspbian.public.key -O - | sudo apt-key add -
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;They then suggest adding the key like this:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# BAD:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;wget https://archive.raspbian.org/raspbian.public.key -O - &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; sudo apt-key add -
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;What we really want is to grab that file, make it into a &lt;code&gt;.gpg&lt;/code&gt; file and
-use it with the new syntax.&lt;/p&gt;
+use it with the new syntax, we do not want to pipe it to &lt;code&gt;apt-key&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;First, let&amp;rsquo;s just inspect it and make sure it&amp;rsquo;s the key we&amp;rsquo;re looking
 for:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;$ curl --silent https://archive.raspbian.org/raspbian.public.key | gpg --show-keys --fingerprint --keyid-format long
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;pub   rsa2048/9165938D90FDDD2E 2012-04-01 [SC]
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      Key fingerprint = A0DA 38D0 D76E 8B5D 6388  7281 9165 938D 90FD DD2E
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;(...)
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;curl --silent https://archive.raspbian.org/raspbian.public.key &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; gpg --show-keys --fingerprint --keyid-format long
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;pub   rsa2048/9165938D90FDDD2E 2012-04-01 &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;SC&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      Key &lt;span class=&#34;nv&#34;&gt;fingerprint&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; A0DA 38D0 D76E 8B5D &lt;span class=&#34;m&#34;&gt;6388&lt;/span&gt;  &lt;span class=&#34;m&#34;&gt;7281&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;9165&lt;/span&gt; 938D 90FD DD2E
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;...&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Since this looks fine, we can now grab it and perform &amp;ldquo;dearmoring&amp;rdquo;, which really
 only means to convert it from ASCII to binary (the inverse is called
 &amp;ldquo;enarmoring&amp;rdquo;). The ASCII form of a key is probably familiar to you:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;$ curl --silent https://archive.raspbian.org/raspbian.public.key | head -n5
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;curl --silent https://archive.raspbian.org/raspbian.public.key &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; head -n5
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;-----BEGIN PGP PUBLIC KEY BLOCK-----
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Version: GnuPG v1.4.12 (GNU/Linux)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Version: GnuPG v1.4.12 &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;GNU/Linux&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;mQENBE94wmkBCADPW5ga8ZyIsW0pym3c+o7l/N1ipRfs2+9HaEWeyPZS6wdTdSp3
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Wo0OOv3rGQDGclbvsrMZoJFzxfsADoMfPkToWg+pY4w3xkjZt4Mh7gO/kDsaOMDz
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;In order to dearmor and place this key somewhere, we can run:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;# curl --silent https://archive.raspbian.org/raspbian.public.key | gpg --dearmor &amp;gt; /usr/share/keyrings/raspbian.public.gpg
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;curl --silent https://archive.raspbian.org/raspbian.public.key &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; gpg --dearmor &amp;gt; /usr/share/keyrings/raspbian.public.gpg
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This binary representation of the key can now be used when specifying
 &lt;code&gt;signed-by&lt;/code&gt; for a repo.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;: As I later found out, de-armoring the key (converting to

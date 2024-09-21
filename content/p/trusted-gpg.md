@@ -23,8 +23,8 @@ will be considered valid when signed by the specified key.
 
 ### Configuration examples
 
-```sh
-# DO NOT:
+```bash
+# BAD:
 deb https://my.repository.com/debian distribution component
 ```
 
@@ -32,8 +32,8 @@ When adding a new repository the "old" way, you would typically curl and
 pipe the a keyfile to `apt-key add`, which would add it to
 `trusted.gpg`, making it a trusted key for every configured repo.
 
-```sh
-# DO:
+```bash
+# GOOD:
 deb [signed-by=/path/to/key.gpg] https://my.repository.com/debian distribution component
 ```
 
@@ -51,7 +51,7 @@ A short demonstration: if you run `apt-get update` with no pubkeys
 available at all, a situation you could provoke by for example gzipping
 `trusted.gpg`, you will get an error similar to the following:
 
-```
+```plain
 The following signatures couldn't be verified because the public key is not available: NO_PUBKEY 9165938D90FDDD2E
 ```
 
@@ -62,8 +62,8 @@ First of all, what is this string? The answer is that it's an
 abbreviated _fingerprint_ of a public key. You can get these from `gpg`.
 For now, let's ignore how we know which file it's in:
 
-```
-# gpg --show-keys --with-fingerprint --keyid-format long raspbian-archive-keyring.gpg | grep 9165938D90FDDD2E -A1
+```bash
+gpg --show-keys --with-fingerprint --keyid-format long raspbian-archive-keyring.gpg | grep 9165938D90FDDD2E -A1
 
 pub   rsa2048/9165938D90FDDD2E 2012-04-01 [SC]
       Key fingerprint = A0DA 38D0 D76E 8B5D 6388  7281 9165 938D 90FD DD2E
@@ -106,8 +106,8 @@ are two packages available: `raspbian-archive-keyring` and
 
 The first `raspbian` package is what provides the file we inspected previously:
 
-```
-# dpkg-query -L raspbian-archive-keyring | grep "\.gpg"
+```bash
+dpkg-query -L raspbian-archive-keyring | grep "\.gpg"
 /usr/share/keyrings/raspbian-archive-keyring.gpg
 ```
 
@@ -115,7 +115,7 @@ So if we already have this file on disk, we can use that for our repo,
 since we now feel pretty confident that is the key that we expect
 packages from there to be signed with:
 
-```
+```bash
 deb [signed-by=/usr/share/keyrings/raspbian-archive-keyring.gpg] https://archive.raspbian.org/raspbian bookworm main contrib non-free rpi
 ```
 
@@ -125,26 +125,26 @@ available locally, how do we get it from the Internet and use it?
 The instructions from raspbian illustrate perfectly the "old" way of
 doing things:
 
-```
-# OLD REPO SYNTAX
+```bash
+# BAD:
 deb http://archive.raspbian.org/raspbian wheezy main contrib non-free
 ```
 
-Adding the key
+They then suggest adding the key like this:
 
-```
-# DEPRECATED
+```bash
+# BAD:
 wget https://archive.raspbian.org/raspbian.public.key -O - | sudo apt-key add -
 ```
 
 What we really want is to grab that file, make it into a `.gpg` file and
-use it with the new syntax.
+use it with the new syntax, we do not want to pipe it to `apt-key`.
 
 First, let's just inspect it and make sure it's the key we're looking
 for:
 
-```
-$ curl --silent https://archive.raspbian.org/raspbian.public.key | gpg --show-keys --fingerprint --keyid-format long
+```bash
+curl --silent https://archive.raspbian.org/raspbian.public.key | gpg --show-keys --fingerprint --keyid-format long
 pub   rsa2048/9165938D90FDDD2E 2012-04-01 [SC]
       Key fingerprint = A0DA 38D0 D76E 8B5D 6388  7281 9165 938D 90FD DD2E
 (...)
@@ -154,8 +154,8 @@ Since this looks fine, we can now grab it and perform "dearmoring", which really
 only means to convert it from ASCII to binary (the inverse is called
 "enarmoring"). The ASCII form of a key is probably familiar to you:
 
-```
-$ curl --silent https://archive.raspbian.org/raspbian.public.key | head -n5
+```bash
+curl --silent https://archive.raspbian.org/raspbian.public.key | head -n5
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: GnuPG v1.4.12 (GNU/Linux)
 
@@ -165,8 +165,8 @@ Wo0OOv3rGQDGclbvsrMZoJFzxfsADoMfPkToWg+pY4w3xkjZt4Mh7gO/kDsaOMDz
 
 In order to dearmor and place this key somewhere, we can run:
 
-```
-# curl --silent https://archive.raspbian.org/raspbian.public.key | gpg --dearmor > /usr/share/keyrings/raspbian.public.gpg
+```bash
+curl --silent https://archive.raspbian.org/raspbian.public.key | gpg --dearmor > /usr/share/keyrings/raspbian.public.gpg
 ```
 
 This binary representation of the key can now be used when specifying

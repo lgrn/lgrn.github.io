@@ -197,12 +197,12 @@ considered valid for any repo you add.</p>
 when configuring a repo. That way, only packages from that repository
 will be considered valid when signed by the specified key.</p>
 <h3 id="configuration-examples">Configuration examples<a href="#configuration-examples" class="hanchor" ariaLabel="Anchor">#</a> </h3>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># DO NOT:</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># BAD:</span>
 </span></span><span class="line"><span class="cl">deb https://my.repository.com/debian distribution component
 </span></span></code></pre></div><p>When adding a new repository the &ldquo;old&rdquo; way, you would typically curl and
 pipe the a keyfile to <code>apt-key add</code>, which would add it to
 <code>trusted.gpg</code>, making it a trusted key for every configured repo.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># DO:</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># GOOD:</span>
 </span></span><span class="line"><span class="cl">deb <span class="o">[</span>signed-by<span class="o">=</span>/path/to/key.gpg<span class="o">]</span> https://my.repository.com/debian distribution component
 </span></span></code></pre></div><p>In this example, keys in <code>key.gpg</code> are only considered valid for that
 specific repository.</p>
@@ -214,16 +214,16 @@ repositories, you may encounter warnings with the &ldquo;old&rdquo; configuratio
 <p>A short demonstration: if you run <code>apt-get update</code> with no pubkeys
 available at all, a situation you could provoke by for example gzipping
 <code>trusted.gpg</code>, you will get an error similar to the following:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">The following signatures couldn&#39;t be verified because the public key is not available: NO_PUBKEY 9165938D90FDDD2E
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-plain" data-lang="plain"><span class="line"><span class="cl">The following signatures couldn&#39;t be verified because the public key is not available: NO_PUBKEY 9165938D90FDDD2E
 </span></span></code></pre></div><p>It&rsquo;s pretty obvious from the error that <code>9165938D90FDDD2E</code> is a public
 key, but we don&rsquo;t have it so we can&rsquo;t proceed.</p>
 <p>First of all, what is this string? The answer is that it&rsquo;s an
 abbreviated <em>fingerprint</em> of a public key. You can get these from <code>gpg</code>.
 For now, let&rsquo;s ignore how we know which file it&rsquo;s in:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># gpg --show-keys --with-fingerprint --keyid-format long raspbian-archive-keyring.gpg | grep 9165938D90FDDD2E -A1
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">gpg --show-keys --with-fingerprint --keyid-format long raspbian-archive-keyring.gpg <span class="p">|</span> grep 9165938D90FDDD2E -A1
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">pub   rsa2048/9165938D90FDDD2E 2012-04-01 [SC]
-</span></span><span class="line"><span class="cl">      Key fingerprint = A0DA 38D0 D76E 8B5D 6388  7281 9165 938D 90FD DD2E
+</span></span><span class="line"><span class="cl">pub   rsa2048/9165938D90FDDD2E 2012-04-01 <span class="o">[</span>SC<span class="o">]</span>
+</span></span><span class="line"><span class="cl">      Key <span class="nv">fingerprint</span> <span class="o">=</span> A0DA 38D0 D76E 8B5D <span class="m">6388</span>  <span class="m">7281</span> <span class="m">9165</span> 938D 90FD DD2E
 </span></span></code></pre></div><p>On the first line of the output you can see the pubkey fingerprint, with
 a <code>keyid-format</code> of <code>long</code> matching the error message. Notice how this
 is actually the four last parts of the entire fingerprint (and <code>short</code>
@@ -252,40 +252,40 @@ which will put them in <code>/usr/share/keyrings</code>. On Raspberry Pi OS, the
 are two packages available: <code>raspbian-archive-keyring</code> and
 <code>raspberrypi-archive-keyring</code>, which will put keys in the same folder.</p>
 <p>The first <code>raspbian</code> package is what provides the file we inspected previously:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># dpkg-query -L raspbian-archive-keyring | grep &#34;\.gpg&#34;
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">dpkg-query -L raspbian-archive-keyring <span class="p">|</span> grep <span class="s2">&#34;\.gpg&#34;</span>
 </span></span><span class="line"><span class="cl">/usr/share/keyrings/raspbian-archive-keyring.gpg
 </span></span></code></pre></div><p>So if we already have this file on disk, we can use that for our repo,
 since we now feel pretty confident that is the key that we expect
 packages from there to be signed with:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">deb [signed-by=/usr/share/keyrings/raspbian-archive-keyring.gpg] https://archive.raspbian.org/raspbian bookworm main contrib non-free rpi
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">deb <span class="o">[</span>signed-by<span class="o">=</span>/usr/share/keyrings/raspbian-archive-keyring.gpg<span class="o">]</span> https://archive.raspbian.org/raspbian bookworm main contrib non-free rpi
 </span></span></code></pre></div><p>But for the sake of learning, let&rsquo;s pretend we did not have this key
 available locally, how do we get it from the Internet and use it?</p>
 <p>The instructions from raspbian illustrate perfectly the &ldquo;old&rdquo; way of
 doing things:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># OLD REPO SYNTAX
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># BAD:</span>
 </span></span><span class="line"><span class="cl">deb http://archive.raspbian.org/raspbian wheezy main contrib non-free
-</span></span></code></pre></div><p>Adding the key</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># DEPRECATED
-</span></span><span class="line"><span class="cl">wget https://archive.raspbian.org/raspbian.public.key -O - | sudo apt-key add -
+</span></span></code></pre></div><p>They then suggest adding the key like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># BAD:</span>
+</span></span><span class="line"><span class="cl">wget https://archive.raspbian.org/raspbian.public.key -O - <span class="p">|</span> sudo apt-key add -
 </span></span></code></pre></div><p>What we really want is to grab that file, make it into a <code>.gpg</code> file and
-use it with the new syntax.</p>
+use it with the new syntax, we do not want to pipe it to <code>apt-key</code>.</p>
 <p>First, let&rsquo;s just inspect it and make sure it&rsquo;s the key we&rsquo;re looking
 for:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ curl --silent https://archive.raspbian.org/raspbian.public.key | gpg --show-keys --fingerprint --keyid-format long
-</span></span><span class="line"><span class="cl">pub   rsa2048/9165938D90FDDD2E 2012-04-01 [SC]
-</span></span><span class="line"><span class="cl">      Key fingerprint = A0DA 38D0 D76E 8B5D 6388  7281 9165 938D 90FD DD2E
-</span></span><span class="line"><span class="cl">(...)
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">curl --silent https://archive.raspbian.org/raspbian.public.key <span class="p">|</span> gpg --show-keys --fingerprint --keyid-format long
+</span></span><span class="line"><span class="cl">pub   rsa2048/9165938D90FDDD2E 2012-04-01 <span class="o">[</span>SC<span class="o">]</span>
+</span></span><span class="line"><span class="cl">      Key <span class="nv">fingerprint</span> <span class="o">=</span> A0DA 38D0 D76E 8B5D <span class="m">6388</span>  <span class="m">7281</span> <span class="m">9165</span> 938D 90FD DD2E
+</span></span><span class="line"><span class="cl"><span class="o">(</span>...<span class="o">)</span>
 </span></span></code></pre></div><p>Since this looks fine, we can now grab it and perform &ldquo;dearmoring&rdquo;, which really
 only means to convert it from ASCII to binary (the inverse is called
 &ldquo;enarmoring&rdquo;). The ASCII form of a key is probably familiar to you:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ curl --silent https://archive.raspbian.org/raspbian.public.key | head -n5
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">curl --silent https://archive.raspbian.org/raspbian.public.key <span class="p">|</span> head -n5
 </span></span><span class="line"><span class="cl">-----BEGIN PGP PUBLIC KEY BLOCK-----
-</span></span><span class="line"><span class="cl">Version: GnuPG v1.4.12 (GNU/Linux)
+</span></span><span class="line"><span class="cl">Version: GnuPG v1.4.12 <span class="o">(</span>GNU/Linux<span class="o">)</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">mQENBE94wmkBCADPW5ga8ZyIsW0pym3c+o7l/N1ipRfs2+9HaEWeyPZS6wdTdSp3
 </span></span><span class="line"><span class="cl">Wo0OOv3rGQDGclbvsrMZoJFzxfsADoMfPkToWg+pY4w3xkjZt4Mh7gO/kDsaOMDz
 </span></span></code></pre></div><p>In order to dearmor and place this key somewhere, we can run:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># curl --silent https://archive.raspbian.org/raspbian.public.key | gpg --dearmor &gt; /usr/share/keyrings/raspbian.public.gpg
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">curl --silent https://archive.raspbian.org/raspbian.public.key <span class="p">|</span> gpg --dearmor &gt; /usr/share/keyrings/raspbian.public.gpg
 </span></span></code></pre></div><p>This binary representation of the key can now be used when specifying
 <code>signed-by</code> for a repo.</p>
 <p><strong>Note</strong>: As I later found out, de-armoring the key (converting to
