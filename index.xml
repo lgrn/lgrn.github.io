@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>agren.cc</title>
-    <link>http://localhost:1313/</link>
+    <link>https://agren.cc/</link>
     <description>Recent content on agren.cc</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 05 May 2024 17:45:00 +0200</lastBuildDate><atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 05 May 2024 17:45:00 +0200</lastBuildDate><atom:link href="https://agren.cc/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Using signed-by in Debian repository configuration</title>
-      <link>http://localhost:1313/p/trusted-gpg/</link>
+      <link>https://agren.cc/p/trusted-gpg/</link>
       <pubDate>Sun, 05 May 2024 17:45:00 +0200</pubDate>
       
-      <guid>http://localhost:1313/p/trusted-gpg/</guid>
+      <guid>https://agren.cc/p/trusted-gpg/</guid>
       <description>&lt;p&gt;On newer versions of Debian and Ubuntu, the way repos are authenticated
 through public keys has changed somewhat. Here&amp;rsquo;s what I&amp;rsquo;ve found.&lt;/p&gt;</description>
       <content>&lt;p&gt;On newer versions of Debian and Ubuntu, the way repos are authenticated
@@ -143,10 +143,10 @@ repository&lt;/a&gt;&amp;rdquo;&lt;/li&gt;
     
     <item>
       <title>LetsEncrypt DNS wildcard certificates with HAProxy</title>
-      <link>http://localhost:1313/p/certbot-with-haproxy/</link>
+      <link>https://agren.cc/p/certbot-with-haproxy/</link>
       <pubDate>Tue, 12 Mar 2024 12:00:00 +0200</pubDate>
       
-      <guid>http://localhost:1313/p/certbot-with-haproxy/</guid>
+      <guid>https://agren.cc/p/certbot-with-haproxy/</guid>
       <description>&lt;p&gt;Wildcard certificates are really useful, especially in cases where you
 are using a load balancer like HAProxy that targets multiple backends
 serving separate subdomains.&lt;/p&gt;</description>
@@ -233,10 +233,10 @@ should be enough. For general TLS configuration, see the
     
     <item>
       <title>Using curl to pass videos to VLC on Apple TV</title>
-      <link>http://localhost:1313/p/curl-to-vlc/</link>
+      <link>https://agren.cc/p/curl-to-vlc/</link>
       <pubDate>Wed, 13 Sep 2023 19:08:00 +0200</pubDate>
       
-      <guid>http://localhost:1313/p/curl-to-vlc/</guid>
+      <guid>https://agren.cc/p/curl-to-vlc/</guid>
       <description>&lt;p&gt;VLC has always been a great piece of software, but one place where is
 really shines is on iOS/tvOS since it allows you to play pretty much any
 video file, and you can send that file over curl.&lt;/p&gt;</description>
@@ -304,10 +304,10 @@ enough disk space to store the file before sending it to VLC.&lt;/p&gt;
     
     <item>
       <title>Using any device on Wi-Fi with captive portals</title>
-      <link>http://localhost:1313/p/any-device-captive-wifi/</link>
+      <link>https://agren.cc/p/any-device-captive-wifi/</link>
       <pubDate>Sun, 25 Dec 2022 14:00:00 +0200</pubDate>
       
-      <guid>http://localhost:1313/p/any-device-captive-wifi/</guid>
+      <guid>https://agren.cc/p/any-device-captive-wifi/</guid>
       <description>&lt;p&gt;Maybe you&amp;rsquo;re at a hotel, an airport, a conference, or somewhere else where whoever set up the Wi-Fi thought it was a good idea to use so-called &lt;a href=&#34;https://en.wikipedia.org/wiki/Captive_portal&#34;&gt;captive portals&lt;/a&gt;.&lt;/p&gt;</description>
       <content>&lt;p&gt;Maybe you&amp;rsquo;re at a hotel, an airport, a conference, or somewhere else where whoever set up the Wi-Fi thought it was a good idea to use so-called &lt;a href=&#34;https://en.wikipedia.org/wiki/Captive_portal&#34;&gt;captive portals&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;Regardless of their purpose, whether it&amp;rsquo;s to limit connection for a specific time, or force end-users to accept some kind of agreement, they usually work the same way: they force you through some kind of web UI, and in the end it will validate your device based on the MAC address only.&lt;/p&gt;
@@ -346,10 +346,10 @@ enough disk space to store the file before sending it to VLC.&lt;/p&gt;
     
     <item>
       <title>Manual disk encryption on Ubuntu</title>
-      <link>http://localhost:1313/p/manual-disk-encryption/</link>
+      <link>https://agren.cc/p/manual-disk-encryption/</link>
       <pubDate>Sat, 03 Dec 2022 15:00:00 +0200</pubDate>
       
-      <guid>http://localhost:1313/p/manual-disk-encryption/</guid>
+      <guid>https://agren.cc/p/manual-disk-encryption/</guid>
       <description>&lt;p&gt;Ubuntu makes it very easy to set up full disk encryption, but it requires you to wipe the entire disk if you want the wizard to do it for you, so this is how you can set it up manually.&lt;/p&gt;</description>
       <content>&lt;p&gt;Ubuntu makes it very easy to set up full disk encryption, but it requires you to wipe the entire disk if you want the wizard to do it for you, so this is how you can set it up manually.&lt;/p&gt;
 &lt;p&gt;One common reason you may want to do this is in a dual boot scenario, where one or several leading partitions are already taken &amp;ndash; or maybe you simply want to keep whatever is there.&lt;/p&gt;
@@ -428,10 +428,10 @@ enough disk space to store the file before sending it to VLC.&lt;/p&gt;
     
     <item>
       <title>Encrypted LUKS file container</title>
-      <link>http://localhost:1313/p/luks-file/</link>
+      <link>https://agren.cc/p/luks-file/</link>
       <pubDate>Fri, 28 Oct 2022 15:59:51 +0200</pubDate>
       
-      <guid>http://localhost:1313/p/luks-file/</guid>
+      <guid>https://agren.cc/p/luks-file/</guid>
       <description>&lt;p&gt;While &lt;a href=&#34;https://en.wikipedia.org/wiki/Linux_Unified_Key_Setup&#34;&gt;Linux Unified Key Setup&lt;/a&gt; — &lt;code&gt;LUKS&lt;/code&gt; — is mostly used to encrypt entire disks under Linux, it can also be used to easily create an encrypted file container. This can be used as an alternative to encrypting something like a &lt;code&gt;.tar.gz&lt;/code&gt; file directly, and will be easier to mount and read, without having to write decrypted data to disk.&lt;/p&gt;</description>
       <content>&lt;p&gt;While &lt;a href=&#34;https://en.wikipedia.org/wiki/Linux_Unified_Key_Setup&#34;&gt;Linux Unified Key Setup&lt;/a&gt; — &lt;code&gt;LUKS&lt;/code&gt; — is mostly used to encrypt entire disks under Linux, it can also be used to easily create an encrypted file container. This can be used as an alternative to encrypting something like a &lt;code&gt;.tar.gz&lt;/code&gt; file directly, and will be easier to mount and read, without having to write decrypted data to disk.&lt;/p&gt;
 &lt;h3 id=&#34;creating-a-container&#34;&gt;Creating a container&lt;/h3&gt;
@@ -477,10 +477,10 @@ enough disk space to store the file before sending it to VLC.&lt;/p&gt;
     
     <item>
       <title>Linux Sysadmin Scratchpad</title>
-      <link>http://localhost:1313/p/scratchpad/</link>
+      <link>https://agren.cc/p/scratchpad/</link>
       <pubDate>Sat, 24 Sep 2022 12:51:00 +0200</pubDate>
       
-      <guid>http://localhost:1313/p/scratchpad/</guid>
+      <guid>https://agren.cc/p/scratchpad/</guid>
       <description>&lt;p&gt;This page is a collection of useful commands or one-liners collected through the years. They are sorted in general categories, but I&amp;rsquo;ve attempted to describe them as well as I can so hopefully CTRL+F will work decently if you know what you&amp;rsquo;re looking for.&lt;/p&gt;</description>
       <content>&lt;p&gt;This page is a collection of useful commands or one-liners collected through the years. They are sorted in general categories, but I&amp;rsquo;ve attempted to describe them as well as I can so hopefully CTRL+F will work decently if you know what you&amp;rsquo;re looking for.&lt;/p&gt;
 &lt;p&gt;This post will be updated in-place, refer to the date above.&lt;/p&gt;
@@ -625,10 +625,10 @@ enough disk space to store the file before sending it to VLC.&lt;/p&gt;
     
     <item>
       <title>fail2ban on EL8</title>
-      <link>http://localhost:1313/p/fail2ban-on-el8/</link>
+      <link>https://agren.cc/p/fail2ban-on-el8/</link>
       <pubDate>Fri, 08 Oct 2021 15:30:51 +0200</pubDate>
       
-      <guid>http://localhost:1313/p/fail2ban-on-el8/</guid>
+      <guid>https://agren.cc/p/fail2ban-on-el8/</guid>
       <description>&lt;p&gt;fail2ban is commonly used to  take a certain action, such as automatically blocking an IP, after repeated authentication failures or other generally bad behavior against applications, as detected by regex matching against log output.&lt;/p&gt;</description>
       <content>&lt;p&gt;fail2ban is commonly used to  take a certain action, such as automatically blocking an IP, after repeated authentication failures or other generally bad behavior against applications, as detected by regex matching against log output.&lt;/p&gt;
 &lt;p&gt;This example will show how to install and configure fail2ban on EL8 (Rocky Linux 8.4), and to configure it to block an IP after multiple failed login attempts.&lt;/p&gt;
@@ -716,10 +716,10 @@ This will ban an IP for &lt;code&gt;24h&lt;/code&gt; if &lt;code&gt;3&lt;/code&g
     
     <item>
       <title></title>
-      <link>http://localhost:1313/about/</link>
+      <link>https://agren.cc/about/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>http://localhost:1313/about/</guid>
+      <guid>https://agren.cc/about/</guid>
       <description>&lt;h1 id=&#34;about-this-site&#34;&gt;About this site&lt;/h1&gt;
 &lt;p&gt;This is where I collect mostly technical information that I found
 useful, so maybe you will too.&lt;/p&gt;</description>

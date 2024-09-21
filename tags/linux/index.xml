@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Linux on agren.cc</title>
-    <link>http://localhost:1313/tags/linux/</link>
+    <link>https://agren.cc/tags/linux/</link>
     <description>Recent content in Linux on agren.cc</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 05 May 2024 17:45:00 +0200</lastBuildDate><atom:link href="http://localhost:1313/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 05 May 2024 17:45:00 +0200</lastBuildDate><atom:link href="https://agren.cc/tags/linux/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Using signed-by in Debian repository configuration</title>
-      <link>http://localhost:1313/p/trusted-gpg/</link>
+      <link>https://agren.cc/p/trusted-gpg/</link>
       <pubDate>Sun, 05 May 2024 17:45:00 +0200</pubDate>
       
-      <guid>http://localhost:1313/p/trusted-gpg/</guid>
+      <guid>https://agren.cc/p/trusted-gpg/</guid>
       <description>&lt;p&gt;On newer versions of Debian and Ubuntu, the way repos are authenticated
 through public keys has changed somewhat. Here&amp;rsquo;s what I&amp;rsquo;ve found.&lt;/p&gt;</description>
       <content>&lt;p&gt;On newer versions of Debian and Ubuntu, the way repos are authenticated
@@ -143,10 +143,10 @@ repository&lt;/a&gt;&amp;rdquo;&lt;/li&gt;
     
     <item>
       <title>Using curl to pass videos to VLC on Apple TV</title>
-      <link>http://localhost:1313/p/curl-to-vlc/</link>
+      <link>https://agren.cc/p/curl-to-vlc/</link>
       <pubDate>Wed, 13 Sep 2023 19:08:00 +0200</pubDate>
       
-      <guid>http://localhost:1313/p/curl-to-vlc/</guid>
+      <guid>https://agren.cc/p/curl-to-vlc/</guid>
       <description>&lt;p&gt;VLC has always been a great piece of software, but one place where is
 really shines is on iOS/tvOS since it allows you to play pretty much any
 video file, and you can send that file over curl.&lt;/p&gt;</description>
@@ -214,10 +214,10 @@ enough disk space to store the file before sending it to VLC.&lt;/p&gt;
     
     <item>
       <title>Manual disk encryption on Ubuntu</title>
-      <link>http://localhost:1313/p/manual-disk-encryption/</link>
+      <link>https://agren.cc/p/manual-disk-encryption/</link>
       <pubDate>Sat, 03 Dec 2022 15:00:00 +0200</pubDate>
       
-      <guid>http://localhost:1313/p/manual-disk-encryption/</guid>
+      <guid>https://agren.cc/p/manual-disk-encryption/</guid>
       <description>&lt;p&gt;Ubuntu makes it very easy to set up full disk encryption, but it requires you to wipe the entire disk if you want the wizard to do it for you, so this is how you can set it up manually.&lt;/p&gt;</description>
       <content>&lt;p&gt;Ubuntu makes it very easy to set up full disk encryption, but it requires you to wipe the entire disk if you want the wizard to do it for you, so this is how you can set it up manually.&lt;/p&gt;
 &lt;p&gt;One common reason you may want to do this is in a dual boot scenario, where one or several leading partitions are already taken &amp;ndash; or maybe you simply want to keep whatever is there.&lt;/p&gt;
@@ -296,10 +296,10 @@ enough disk space to store the file before sending it to VLC.&lt;/p&gt;
     
     <item>
       <title>Linux Sysadmin Scratchpad</title>
-      <link>http://localhost:1313/p/scratchpad/</link>
+      <link>https://agren.cc/p/scratchpad/</link>
       <pubDate>Sat, 24 Sep 2022 12:51:00 +0200</pubDate>
       
-      <guid>http://localhost:1313/p/scratchpad/</guid>
+      <guid>https://agren.cc/p/scratchpad/</guid>
       <description>&lt;p&gt;This page is a collection of useful commands or one-liners collected through the years. They are sorted in general categories, but I&amp;rsquo;ve attempted to describe them as well as I can so hopefully CTRL+F will work decently if you know what you&amp;rsquo;re looking for.&lt;/p&gt;</description>
       <content>&lt;p&gt;This page is a collection of useful commands or one-liners collected through the years. They are sorted in general categories, but I&amp;rsquo;ve attempted to describe them as well as I can so hopefully CTRL+F will work decently if you know what you&amp;rsquo;re looking for.&lt;/p&gt;
 &lt;p&gt;This post will be updated in-place, refer to the date above.&lt;/p&gt;

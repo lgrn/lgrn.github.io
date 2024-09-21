@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Debian on agren.cc</title>
-    <link>http://localhost:1313/tags/debian/</link>
+    <link>https://agren.cc/tags/debian/</link>
     <description>Recent content in Debian on agren.cc</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 05 May 2024 17:45:00 +0200</lastBuildDate><atom:link href="http://localhost:1313/tags/debian/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 05 May 2024 17:45:00 +0200</lastBuildDate><atom:link href="https://agren.cc/tags/debian/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Using signed-by in Debian repository configuration</title>
-      <link>http://localhost:1313/p/trusted-gpg/</link>
+      <link>https://agren.cc/p/trusted-gpg/</link>
       <pubDate>Sun, 05 May 2024 17:45:00 +0200</pubDate>
       
-      <guid>http://localhost:1313/p/trusted-gpg/</guid>
+      <guid>https://agren.cc/p/trusted-gpg/</guid>
       <description>&lt;p&gt;On newer versions of Debian and Ubuntu, the way repos are authenticated
 through public keys has changed somewhat. Here&amp;rsquo;s what I&amp;rsquo;ve found.&lt;/p&gt;</description>
       <content>&lt;p&gt;On newer versions of Debian and Ubuntu, the way repos are authenticated
