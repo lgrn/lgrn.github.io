@@ -227,7 +227,7 @@ the certificate:&lt;/p&gt;
 should be enough. For general TLS configuration, see the
 &lt;a href=&#34;https://www.haproxy.com/documentation/haproxy-configuration-tutorials/ssl-tls/&#34;&gt;HAProxy SSL/TLS configuration tutorial&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;Whenever the certificate has changed on disk, you&amp;rsquo;ll want to do:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-gdscript3&#34; data-lang=&#34;gdscript3&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;systemctl&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;reload&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;haproxy&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;systemctl reload haproxy
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content>
     </item>
     

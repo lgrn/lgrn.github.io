@@ -1,9 +1,9 @@
 ---
-title: "LetsEncrypt DNS wildcard certificates with HAProxy"
+title: 'LetsEncrypt DNS wildcard certificates with HAProxy'
 date: 2024-03-12T12:00:00+02:00
 draft: false
 tags:
-    - sysadmin
+  - sysadmin
 ---
 
 Wildcard certificates are really useful, especially in cases where you
@@ -25,13 +25,13 @@ Reservations:
   [acme.sh](https://github.com/acmesh-official/acme.sh) instead.
 - There might be better ways to prep the certificate for HAProxy than
   smashing it together manually or via a script, I don't know.
-- In order to receive wildcard certificates, authentication *must* be
+- In order to receive wildcard certificates, authentication _must_ be
   done over DNS records (not HTTP).
 
 ## Step 1: Install certbot
 
 In order to get the latest version of certbot and any plugins required,
-you *must* install via snap. Regardless of what you think about snap,
+you _must_ install via snap. Regardless of what you think about snap,
 this is important because the version differences to, for example, the
 Ubuntu 22 repos, is immense.
 
@@ -128,6 +128,6 @@ should be enough. For general TLS configuration, see the
 
 Whenever the certificate has changed on disk, you'll want to do:
 
-```
+```bash
 systemctl reload haproxy
 ```
