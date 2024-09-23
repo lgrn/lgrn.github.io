@@ -87,10 +87,10 @@ that the threshold for participation is a lot lower, which is pretty
 important when you want a system that many people should respect as your
 source of truth. If everyone involved knows git, maybe just start there.
 
-Let's talk about the Netbox API and how it can be a bit
-difficult for VM deployments. First of all, let's just look at the
-structure: if your API query to Netbox results in
-multiple hits, you will get a response that looks something like:
+Let's talk about the Netbox API and how it can be a bit difficult for VM
+deployments. First of all, let's just look at the structure: if your API
+query to Netbox results in multiple hits, you will get a response that
+looks something like:
 
 ```json
 {
@@ -113,8 +113,9 @@ multiple hits, you will get a response that looks something like:
 ```
 
 Meaning you will have to iterate over `results`, while using a more
-specific endpoint querying an "id" will give
-you just one result (since an id is unique). Let's have look at this example without the redactions:
+specific endpoint querying an "id" will give you just one result (since
+an id is unique). Let's have look at this example without the
+redactions:
 
 ```json
 {
@@ -183,10 +184,10 @@ So a VM is an object, an interface is an object (related to a vm), but
 only the interface has a relation to an ip, which is also an object.
 
 I won't go into this much more apart from saying that in my experience,
-to be able to deploy effectively from Netbox, you need to write
-your own code that either performs multiple API calls when deplying, or
-creates your own data structure that you can pass to whatever will
-handle the deployment.
+to be able to deploy effectively from Netbox, you need to write your own
+code that either performs multiple API calls when deplying, or creates
+your own data structure that you can pass to whatever will handle the
+deployment.
 
 At this point, it might strike the reader that spending time writing
 this probably does not make sense for smaller or individual use cases,
@@ -270,19 +271,20 @@ be as long as this entire post, so we'll skip that for now.
 ### OpenTofu (2)
 
 OpenTofu was forked from Terraform in 2023, when the latter stopped
-being free and open source software with a license change. Let's call
-it Tofu for short. It's a tool for "infrastructure as code", and if
-you've never used it, it may seem confusingly similar to "configuration
+being free and open source software with a license change. Let's call it
+Tofu for short. It's a tool for "infrastructure as code", and if you've
+never used it, it may seem confusingly similar to "configuration
 management" tools like Ansible or Salt.
 
 While it's true that they share some similarities (depending on how you
-use configuration management), in my experience Tofu is nicer to
-use for the "deployment", and if you wish the "state management" of
-those deployments, since that is essentially all it does, and it does it
-pretty well. Ideas that you'll find in "config management" like ensuring
-that your `sshd_config` files look the same across all servers are
-nowhere to be found here, it's all about writing general rules for
-things like VMs and virtual networks.
+use configuration management), in my experience Tofu is nicer to use for
+the "deployment", and if you wish the "state management" of those
+deployments, since that is essentially all it does, and it does it
+pretty well. Ideas that you'll find in "config management" like
+**repeatedly** ensuring that your `sshd_config` files look the same
+across all servers are nowhere to be found here, it's all about writing
+general rules and attributes for things like VMs and virtual networks
+from the perspective of the hypervisor.
 
 There won't be much handholding on how to use Tofu here (there's plenty
 of documentation and other resources available), but I'll give a general
@@ -357,8 +359,7 @@ data "vsphere_datacenter" "dc" {
 }
 ```
 
-You would then refer to this object as
-`data.vsphere_datacenter.dc`.
+You would then refer to this object as `data.vsphere_datacenter.dc`.
 
 You might be half asleep at this point, so let's look at a more exciting
 example:
@@ -375,10 +376,11 @@ The definition should be obvious enough, but the first line is more
 interesting: `for_each` starts a loop over whatever is found in
 `local.unique_cluster_list`, which is (as you may have already
 suspected) a list. It also says this cluster is in the datacenter
-specified by "id" in the `data.vsphere_datacenter.dc` object that we manually
-defined just before --- note that we did not specify the id, it was
-fetched from VMware based on the information we gave. Now, let's look at the definition of this "unique
-cluster list". In `main.tf` it could look something like this:
+specified by "id" in the `data.vsphere_datacenter.dc` object that we
+manually defined just before --- note that we did not specify the id, it
+was fetched from VMware based on the information we gave. Now, let's
+look at the definition of this "unique cluster list". In `main.tf` it
+could look something like this:
 
 ```hcl
 locals {
@@ -397,8 +399,8 @@ This might look intimidating, but it's not that complicated:
 - `fetched_vms` is defined as the result of calling `jsondecode()` on an
   object which has loaded a local JSON file with the help of
   `local_file` from the `local` provider.
-- `unique_cluster_list` begins with the `for _,v` (key, value where "key"
-  is discarded) loop over the parsed JSON, extracting the
+- `unique_cluster_list` begins with the `for _,v` (key, value where
+  "key" is discarded) loop over the parsed JSON, extracting the
   `v.provided_cluster_name` from every VM. You can see this value in the
   JSON above. `toset()` converts this to a set, which will remove any
   duplicate values.
@@ -410,9 +412,9 @@ each.key`, which should mean that we can safely refer to any cluster we
 expect to exist as object `data.vsphere_compute_cluster.cluster["name"]`
 
 This might seem overkill, but if you want your config to be generally
-useful rather than repetetive and hard-coded (which can be fine depending on
-the circumstance), loops are essential. If you don't need them, just
-create your objects manually and refer to them directly.
+useful rather than repetetive and hard-coded (which can be fine
+depending on the circumstance), loops are essential. If you don't need
+them, just create your objects manually and refer to them directly.
 
 There's a few more things we need to go through before looking at the VM
 definition itself, and one of them is "templates". This is an almost
@@ -442,12 +444,11 @@ to use by simply passing `server_os` as the index to this
 `vsphere_virtual_machine.templates` object --- as long as that value is
 one we have mapped, that is.
 
-Ok, this section is dragging on so let's jump into what defining a VM
-might look like. We still need to go through how it's initialized, but
-that will come later.
+Let's jump into what defining a VM might look like. We still need to go
+through how it's initialized, but that will come later.
 
-This section is quite long, so I'll use some inline comments to make a few
-short clarifications as we go.
+This section is quite long, so I'll use some inline comments to make a
+few short clarifications as we go.
 
 ```hcl
 resource "vsphere_virtual_machine" "vm" {
@@ -580,9 +581,9 @@ clear:
 - `unique_vswitch_list` ensures we have a list of every unique vswitch
   mentioned in the incoming JSON data (it's called `vmware_switch_name`
   there)
-- `iface_network_map` ensures we have a map where we, by id,
-  can look up the name of the vmware network and the associated switch
-  for any interface.
+- `iface_network_map` ensures we have a map where we, by id, can look up
+  the name of the vmware network and the associated switch for any
+  interface.
 
 A "network" on the vmware side is, and this may shock you, virtual. In a
 sense I guess all networks are virtual, but this is really very virtual,
@@ -617,12 +618,13 @@ confusing to me too, but really the only way to understand what is
 happening here is to attempt to configure it yourself and fail about a
 hundred times. Also, you don't have to use for loops, if you've never
 used Tofu before, just defining the objects statically without any
-looping is probably a better way to start --- and actually, this is the type
-of configuration you'll usually find in the documentation for the
+looping is probably a better way to start --- and actually, this is the
+type of configuration you'll usually find in the documentation for the
 providers themselves (which I highly recommend you read).
 
 All right, since we now know everything there is to know about virtual
-networks in VMware (to be clear, this is sarcasm), let's move on to cloud-init.
+networks in VMware (to be clear, this is sarcasm), let's move on to
+cloud-init.
 
 ### cloud-init (3)
 
@@ -639,25 +641,26 @@ According to their own documentation, cloud-init is:
 > cloud instance initialisation_
 
 Those are some pretty big words, but the worst part is that they're
-right. It's not only the most widely used, it's also several hundred megabytes
-to install, depends on python, only takes YAML, contains dozens of
-modules all enabled by default to be able to "platform independently"
-change your hostname, and about 60% of the
-time, it works every time.
+right. It's not only the most widely used, it's also several hundred
+megabytes to install, depends on python, only takes YAML, contains
+dozens of modules all enabled by default to be able to "platform
+independently" change your hostname, and about 60% of the time, it works
+every time.
 
 Regardless of the abusive relationship that cloud-init has forced me
 into over the years, it does the trick, and it is actually cross
-platform: if you learn it because you need it on VMware, you
-can, in fact, re-use that knowledge when you encounter OpenStack, AWS,
-or something else. Compared to [Microsoft answer
+platform: if you learn it because you need it on VMware, you can, in
+fact, re-use that knowledge when you encounter OpenStack, AWS, or
+something else. Compared to [Microsoft answer
 files](https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/update-windows-settings-and-scripts-create-your-own-answer-file-sxs?view=windows-11),
 it's probably like eating ice cream on a beach (don't click that link).
 
 So, I'm not going to show you basic examples of how to use cloud-init,
 those are everywhere on the Internet and for the purpose of this post,
-we're talking about deploying FreeBSD on VMware. I am also mindful of the fact that after more than 600 lines, this is the
-first time I'm mentioning FreeBSD, but we will have plenty of time to
-focus on that later when we talk about VM templates in the VMware section.
+we're talking about deploying FreeBSD on VMware. I am also mindful of
+the fact that after more than 600 lines, this is the first time I'm
+mentioning FreeBSD, but we will have plenty of time to focus on that
+later when we talk about VM templates in the VMware section.
 
 The first thing to understand is that Tofu has a templating language,
 similar but not identical to
@@ -671,8 +674,8 @@ In a very simplified sense, cloud-init works something like this:
   question fetches the "payload". In this scenario, we are using the
   [VMware](https://docs.cloud-init.io/en/latest/reference/datasources/vmware.html)
   datasource, which depends on `open-vm-tools`.
-- The "payload" can arrive in many different ways, anything from HTTP to a
-  mounted cdrom device, or as in this case, by simply looking up
+- The "payload" can arrive in many different ways, anything from HTTP to
+  a mounted cdrom device, or as in this case, by simply looking up
   key/value-stuff in VMware.
 - cloud-init runs through the modules it is configured to run, and "does
   stuff" depending on what instructions it finds in the payload.
@@ -787,15 +790,15 @@ In my opinion, if you want to "do stuff" in an automated fashion on
 pretty much any \*NIX system, you can do it with shell scripts --- and
 if you can't do it with shell scripts, maybe it's not worth doing.
 
-You might think to yourself that doing things like interface configuration or software
-updates in a shell script is stupid, because you should do it the "right
-way" through the tool you are using, and if I hadn't tried it myself I'd probably
-agree with you: instead I'd invite you to not contact me about this and
-move immediately to trying this out yourself by configuring interfaces,
-multiple conditional routes and package updates on Ubuntu,
-Rocky and FreeBSD using only YAML and then get back to me with
-what your new favorite black metal album and preferred form of nicotine
-is.
+You might think to yourself that doing things like interface
+configuration or software updates in a shell script is stupid, because
+you should do it the "right way" through the tool you are using, and if
+I hadn't tried it myself I'd probably agree with you: instead I'd invite
+you to not contact me about this and move immediately to trying this out
+yourself by configuring interfaces, multiple conditional routes and
+package updates on Ubuntu, Rocky and FreeBSD using only YAML and then
+get back to me with what your new favorite black metal album and
+preferred form of nicotine is.
 
 We're doing shell scripts. Here's an example of how
 `bootstrap.sh_freebsd14.tftpl` might look:
@@ -950,20 +953,19 @@ Hopefully, this illustrates some of the benefits of using shell scripts:
 - It breaks for the same reason
 
 At the end of the day, I'd rather troubleshoot **small** init scripts
-than trying to understand why one specific cloud-init module isn't working as
-expected on one specific OS. I'm not saying this is the best way to do it, only that in my
-experience you can only take so much of having to scrap all your work
-because it worked for A but breaks with B, and if you want to move on
-you need to patch a cloud-init module.
+than trying to understand why one specific cloud-init module isn't
+working as expected on one specific OS. I'm not saying this is the best
+way to do it, only that in my experience you can only take so much of
+having to scrap all your work because it worked for A but breaks with B,
+and if you want to move on you need to patch a cloud-init module.
 
 Of course, I understand shell scripts aren't for everyone or every
 situation, so until you experience the same frustration, which might be
-never, feel free to try out one of [the many
-modules available by default](https://cloudinit.readthedocs.io/en/latest/reference/modules.html).
+never, feel free to try out one of [the many modules available by
+default](https://cloudinit.readthedocs.io/en/latest/reference/modules.html).
 
-Ok, this has been dragging on for way too long, so saving the best for
-last, let's move on to the part that actually has a little do with
-FreeBSD: VMware and creating VM templates.
+Saving the best for last, let's move on to the part that actually has a
+little do with FreeBSD: VMware and creating VM templates.
 
 ### VMware (4)
 
@@ -1074,9 +1076,9 @@ though that for this to work, the vApp options need to be **disabled**
 before creating a VM template: this is extra important for something
 like Ubuntu OVA files where they are enabled and filled out by default.
 
-I won't go into this much more, but the values we set on deploy for
-things like "userdata" or "metadata" can be seen in the advanced
-configuration of the VM in vSphere.
+The values we set on deploy for things like "userdata" or "metadata" can
+be seen in the advanced configuration of the VM in vSphere, as mentioned
+in the comments in under the Tofu VM definition.
 
 Ok, so the machine is ready to go, but in our example it's in the wrong
 format, so we need to convert it to VMDK:
@@ -1111,18 +1113,19 @@ what happens on deploy:
 - Data about the deploy comes from somewhere and ends up in a JSON file.
 - This JSON file is parsed by Tofu, which creates and maps objects
   through the provider you configured.
-- Tofu renders cloud-init template data which contain metadata, some basic
-  instructions for what users to create or keys to add, as well as a
-  shell script which runs automatically.
+- Tofu renders cloud-init template data which contain metadata, some
+  basic instructions for what users to create or keys to add, as well as
+  a shell script which runs automatically.
 - Tofu tells VMware via the provider to create any objects that are
-  defined but missing, and passes the rendered VM init template as base64.
+  defined but missing, and passes the rendered VM init template as
+  base64.
 - The VM (hopefully) deploys from the template
 - cloud-init runs as it detects this is the first boot, with some help
   from open-vm-tools it finds the init payload that Tofu passed on and
   runs it.
 - The VM is now running and configured, with the correct interface
-  configurations, routes, packages installed, and whatever else was set up by
-  either cloud-init yaml configuration or the shell script.
+  configurations, routes, packages installed, and whatever else was set
+  up by either cloud-init yaml configuration or the shell script.
 
 All right, we're well past a thousand lines now so this will have to do.
 Hopefully this has been of some use, maybe you learned something or

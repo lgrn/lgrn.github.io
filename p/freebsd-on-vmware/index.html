@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <title>Deploying FreeBSD on VMware :: agren.cc</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Revision: 2024-09-23 (#1) &mdash; changelog at the end.
+This post is about multiple components involved in deploying FreeBSD to a VMware environment. Since there are many moving parts this may also be interesting in general to anyone doing &ldquo;infrastructure as code&rdquo; and cloud deployments, the process is quite similar for Linux.
+" />
+<meta name="keywords" content="" />
+
+  <meta name="robots" content="noodp" />
+
+<link rel="canonical" href="https://agren.cc/p/freebsd-on-vmware/" />
+
+
+
+
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/fonts.min.e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/main.min.f45962ce6ffdd2247db17a705d0190d5ca08e6b0757015b1061b0594e50b535b.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/prism.min.3080cbc8607b8ded79eec60a46295119aef4486a3a2d88c9ddc57ee285ca19ca.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/syntax.min.e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/terminal.min.795e2bed278f30aabee20511815271033ceb14e4a8348f8501a71429808fa574.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/buttons.min.2bc533403a27dfe0e93105a92502b42ce4587e2e4a87d9f7d349e51e16e09478.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/code.min.00125962708925857e7b66dbc58391d55be1191a3d0ce2034de8c9cd2c481c36.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/footer.min.2e3eb191baee58dd05a9f0104ac1fab0827bca7c64dafe0b2579f934c33a1d69.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/gist.min.a751e8b0abe1ba8bc53ced52a38b19d8950fe78ca29454ea8c2595cf26aad5c0.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/header.min.b6fb4423cf82a9f9d7abc9cd010223fa3d70a6526a3f28f8e17d814c06e18f9e.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/menu.min.83637a90d903026bc280d3f82f96ceb06c5fc72b7c1a8d686afb5bbf818a29f7.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/pagination.min.82f6400eae7c7c6dc3c866733c2ec0579e4089608fea69400ff85b3880aa0d3c.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/post.min.fc74ca360273c1d828da3c02b8174eba435607b369d98418ccc6f2243cd4e75d.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/terms.min.b81791663c3790e738e571cdbf802312390d30e4b1d8dc9d814a5b5454d0ac11.css">
+
+
+
+
+
+
+
+<link rel="shortcut icon" href="https://agren.cc/favicon.png">
+<link rel="apple-touch-icon" href="https://agren.cc/apple-touch-icon.png">
+
+
+<meta name="twitter:card" content="summary" />
+
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Deploying FreeBSD on VMware">
+<meta property="og:description" content="Revision: 2024-09-23 (#1) &mdash; changelog at the end.
+This post is about multiple components involved in deploying FreeBSD to a VMware environment. Since there are many moving parts this may also be interesting in general to anyone doing &ldquo;infrastructure as code&rdquo; and cloud deployments, the process is quite similar for Linux.
+" />
+<meta property="og:url" content="https://agren.cc/p/freebsd-on-vmware/" />
+<meta property="og:site_name" content="agren.cc" />
+
+  <meta property="og:image" content="https://agren.cc/og-image.png">
+
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+
+
+  <meta property="article:published_time" content="2024-09-23 11:45:00 &#43;0200 CEST" />
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+
+
+<div class="container center">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="/">
+  <div class="logo">
+    agren.cc
+  </div>
+</a>
+
+    </div>
+    
+      <ul class="menu menu--mobile">
+  <li class="menu__trigger">Menu&nbsp;▾</li>
+  <li>
+    <ul class="menu__dropdown">
+      
+        
+          <li><a href="/about/index.html">about</a></li>
+        
+      
+        
+          <li><a href="https://telegrafverket.cc/@linus">mastodon</a></li>
+        
+      
+      
+    </ul>
+  </li>
+</ul>
+
+    
+    
+  </div>
+  
+    <nav class="navigation-menu">
+  <ul class="navigation-menu__inner menu--desktop">
+    
+      
+        
+          <li><a href="/about/index.html" >about</a></li>
+        
+      
+        
+          <li><a href="https://telegrafverket.cc/@linus" >mastodon</a></li>
+        
+      
+    
+  </ul>
+</nav>
+
+  
+</header>
+
+
+  <div class="content">
+    
+<article class="post">
+  <h1 class="post-title">
+    <a href="https://agren.cc/p/freebsd-on-vmware/">Deploying FreeBSD on VMware</a>
+  </h1>
+  <div class="post-meta"><time class="post-date">2024-09-23</time></div>
+
+  
+    <span class="post-tags">
+      
+      #<a href="https://agren.cc/tags/freebsd/">freebsd</a>&nbsp;
+      
+      #<a href="https://agren.cc/tags/vmware/">vmware</a>&nbsp;
+      
+      #<a href="https://agren.cc/tags/sysadmin/">sysadmin</a>&nbsp;
+      
+    </span>
+  
+  
+
+
+  
+
+  <div class="post-content"><div>
+        <p><em>Revision: 2024-09-23 (#1)</em> &mdash; changelog at the end.</p>
+<p>This post is about multiple components involved in deploying FreeBSD to
+a VMware environment. Since there are many moving parts this may also be
+interesting in general to anyone doing &ldquo;infrastructure as code&rdquo; and
+cloud deployments, the process is quite similar for Linux.</p>
+<p>The components involved are separated into chapters by chronological
+order:</p>
+<ul>
+<li><a href="/p/freebsd-on-vmware/#netbox-1">Netbox (1)</a></li>
+<li><a href="/p/freebsd-on-vmware/#opentofu-2">OpenTofu (2)</a></li>
+<li><a href="/p/freebsd-on-vmware/#cloud-init-3">cloud-init (3)</a></li>
+<li><a href="/p/freebsd-on-vmware/#vmware-4">VMware (4)</a></li>
+</ul>
+<p>Since the entire process is pretty involved, this post aims to give a
+basic outline of how this can be done. If anything is unclear, or if you
+figure out a better way to do something, feel free to contact me on
+mastodon: <a href="https://telegrafverket.cc/@linus">@linus</a></p>
+<p>Feel free to read the sections out of order if you prefer, but there may
+be references to things in earlier sections that are left unexplained.</p>
+<h3 id="netbox-1">Netbox (1)<a href="#netbox-1" class="hanchor" ariaLabel="Anchor">#</a> </h3>
+<p>Netbox is a tool used for data center infrastructure management (DCIM),
+which can mean a lot, but in this case, it means acting as a source of
+truth for information regarding virtual machines: hostnames, interfaces
+with reserved IPs, OS versions etc.</p>
+<p>Netbox is pretty opinionated, so fitting the data <strong>you</strong> want into
+Netbox might require some &ldquo;creativity&rdquo;, but in the end this probably
+cannot be helped for any DCIM solution unless you want to write your own
+(please don&rsquo;t).</p>
+<p>All in all, Netbox is pretty good, but I believe it was originally
+created to keep track of network information (as the name might
+suggest), and it shows. Wrestling with the API when it comes to virtual
+machines is not a very enjoyable experience, but to my knowledge it&rsquo;s
+one of the most common solutions out there, and when it comes to
+<em>replacing</em> a DCIM solution, just know that whatever pros you may have
+found, embarking on that quest means most of your colleagues will
+probably hate you. To me, Netbox is &ldquo;good enough&rdquo;, which is often more
+than you can hope for.</p>
+<p>In my experience with using Netbox for VM deployments so far, there are
+two important types of data that are necessary to amend objects with
+extra information for deploys:</p>
+<ul>
+<li><a href="https://netboxlabs.com/docs/netbox/en/stable/customization/custom-fields/">Custom
+Fields</a></li>
+<li><a href="https://netboxlabs.com/docs/netbox/en/stable/models/extras/configcontext/">Config
+Context</a></li>
+</ul>
+<p>&ldquo;Custom Fields&rdquo; will be accessible through API calls and can be used to
+set extra attributes on VM objects that are not available in Netbox by
+default, such as <code>operating_system</code>, <code>team_responsible</code> and so on.
+Tangentially, since about 2022, you can also set up &ldquo;custom object
+fields&rdquo; to model relations between objects rather than just setting
+string values in a custom field, there&rsquo;s a <a href="https://youtu.be/Vo0c9qw2L7Y">YouTube video on that
+here</a>.</p>
+<p>&ldquo;Config Context&rdquo; is essentially a JSON blob in Netbox that you can fill
+with whatever you want, also accessible through the API, which can be
+really useful when the data you need to store is a bit more complicated
+than just one field of data related to a specific VM object (like
+<code>ticket_id: 1234</code>). You&rsquo;ll see some examples of this later.</p>
+<p>In simple terms, the main use of Netbox (or any DCIM) is that you can
+create consensus on what is &ldquo;true&rdquo; and then trust this when you deploy,
+avoiding the despair that comes with things like IP conflicts, &ldquo;ghost
+ship&rdquo; VMs that noone is responsible for, and so on.</p>
+<p>For simpler setups, just storing JSON data in git might be a better
+solution, but the main benefit of web based applications like Netbox is
+that the threshold for participation is a lot lower, which is pretty
+important when you want a system that many people should respect as your
+source of truth. If everyone involved knows git, maybe just start there.</p>
+<p>Let&rsquo;s talk about the Netbox API and how it can be a bit difficult for VM
+deployments. First of all, let&rsquo;s just look at the structure: if your API
+query to Netbox results in multiple hits, you will get a response that
+looks something like:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;count&#34;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;next&#34;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;previous&#34;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;results&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;id&#34;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;vm1&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="err">(...)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;id&#34;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;vm2&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="err">(...)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>Meaning you will have to iterate over <code>results</code>, while using a more
+specific endpoint querying an &ldquo;id&rdquo; will give you just one result (since
+an id is unique). Let&rsquo;s have look at this example without the
+redactions:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;id&#34;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;vm1&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;status&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;label&#34;</span><span class="p">:</span> <span class="s2">&#34;Active&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;value&#34;</span><span class="p">:</span> <span class="s2">&#34;active&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">},</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;cluster&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;id&#34;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;Cluster 1&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">},</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;interfaces&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;id&#34;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;eth0&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;mac_address&#34;</span><span class="p">:</span> <span class="s2">&#34;00:50:56:8a:00:01&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;mtu&#34;</span><span class="p">:</span> <span class="mi">1500</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;description&#34;</span><span class="p">:</span> <span class="s2">&#34;&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;mode&#34;</span><span class="p">:</span> <span class="kc">null</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;id&#34;</span><span class="p">:</span> <span class="mi">11</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;eth1&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;mac_address&#34;</span><span class="p">:</span> <span class="s2">&#34;00:50:56:8a:00:02&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;mtu&#34;</span><span class="p">:</span> <span class="mi">1500</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;description&#34;</span><span class="p">:</span> <span class="s2">&#34;&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;mode&#34;</span><span class="p">:</span> <span class="kc">null</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>Ok, so we&rsquo;re looking at a VM that is &ldquo;active&rdquo;, it&rsquo;s assigned to a
+cluster and has two interfaces. Is this enough to deploy? Probably not
+(and for VMware, definitely not). This leads to the first pain point if
+you are deploying VMs from Netbox: while querying a VM will return its
+interfaces, it will not return any IPs on those interfaces. To get them,
+you must perform additional API lookups targeting the IDs of any
+interfaces returned:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;id&#34;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;eth0&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;virtual_machine&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;id&#34;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;vm1&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">},</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;mac_address&#34;</span><span class="p">:</span> <span class="s2">&#34;00:50:56:8a:00:01&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;mtu&#34;</span><span class="p">:</span> <span class="mi">1500</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;description&#34;</span><span class="p">:</span> <span class="s2">&#34;&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;mode&#34;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;assigned_ips&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;id&#34;</span><span class="p">:</span> <span class="mi">101</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;address&#34;</span><span class="p">:</span> <span class="s2">&#34;192.168.1.100/24&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;family&#34;</span><span class="p">:</span> <span class="mi">4</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>So a VM is an object, an interface is an object (related to a vm), but
+only the interface has a relation to an ip, which is also an object.</p>
+<p>I won&rsquo;t go into this much more apart from saying that in my experience,
+to be able to deploy effectively from Netbox, you need to write your own
+code that either performs multiple API calls when deplying, or creates
+your own data structure that you can pass to whatever will handle the
+deployment.</p>
+<p>At this point, it might strike the reader that spending time writing
+this probably does not make sense for smaller or individual use cases,
+and you would be completely correct. For this reason, we will end the
+Netbox section on a sort of &ldquo;<a href="https://knowyourmeme.com/memes/how-to-draw-an-owl">how to draw an
+owl</a>&rdquo; note:</p>
+<p>After either creating it manually, or pain-stakingly writing code to
+generate it for you, below is the custom built data structure that will
+be used for the rest of this post; whether it&rsquo;s generated by some really
+cool code that performs multiple API calls and smashes it together, or
+just comes from a git repo, doesn&rsquo;t really matter:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;1234&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;hostname.fqdn&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;cluster_name&#34;</span><span class="p">:</span> <span class="s2">&#34;test-cluster&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;provided_cluster_name&#34;</span><span class="p">:</span> <span class="s2">&#34;testcluster12&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;status&#34;</span><span class="p">:</span> <span class="s2">&#34;staged&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;id&#34;</span><span class="p">:</span> <span class="mi">1234</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;cluster_id&#34;</span><span class="p">:</span> <span class="mi">29</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;tenant_id&#34;</span><span class="p">:</span> <span class="mi">277</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;platform_id&#34;</span><span class="p">:</span> <span class="mi">21</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;disk&#34;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;memory&#34;</span><span class="p">:</span> <span class="mi">1024</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;vcpus&#34;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;tags&#34;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&#34;test-tag&#34;</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;custom_fields&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;server_os&#34;</span><span class="p">:</span> <span class="s2">&#34;freebsd14&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;service_id&#34;</span><span class="p">:</span> <span class="mi">100200</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;config_context&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;my-context&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;interfaces&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&#34;vmx0&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;gateway&#34;</span><span class="p">:</span> <span class="s2">&#34;192.168.1.1&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;vmware_network&#34;</span><span class="p">:</span> <span class="s2">&#34;my-vmware-network&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;vmware_switch&#34;</span><span class="p">:</span> <span class="s2">&#34;my-vmware-switch&#34;</span>
+</span></span><span class="line"><span class="cl">          <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;vmware_datastore&#34;</span><span class="p">:</span> <span class="s2">&#34;my-datastore&#34;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;interfaces&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;1337&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;ip&#34;</span><span class="p">:</span> <span class="s2">&#34;192.168.1.100/24&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;ip_id&#34;</span><span class="p">:</span> <span class="mi">28984</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;virtualization.vminterface&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;vmx0&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;vmware_network_name&#34;</span><span class="p">:</span> <span class="s2">&#34;my-vmware-network&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;vmware_switch_name&#34;</span><span class="p">:</span> <span class="s2">&#34;my-vmware-switch&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;gateway&#34;</span><span class="p">:</span> <span class="s2">&#34;192.168.1.1&#34;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>This gives us everything we need to be able to deploy. Some of the
+values will become clearer as we go along, but here&rsquo;s a short summary:</p>
+<ul>
+<li><code>1234</code> is the VM object ID from netbox, used as a key.</li>
+<li>Most of the following fields like <code>name</code>, <code>memory</code> and so on are
+vanilla Netbox fields that are available on a VM.</li>
+<li>The <code>custom_fields</code> part will be provided to you by Netbox, and this
+is where you can specify your own data for VMs, but only in a sort of
+key/value fashion.</li>
+<li>The <code>config_context</code> is a JSON object that you yourself define in
+Netbox however you want. In this case it is being used to amend VMware
+specific information for every interface on the VM itself. There are
+probably other ways to do this, like custom fields on an interface.</li>
+<li>The <code>interfaces</code> part is completely synthetic, and simply generated
+from the information provided by the <code>config_context</code> matched with the
+interface information from the Netbox API.</li>
+</ul>
+<p>Examples of how this might be generated automatically from Netbox might
+be the subject of a future blog post, but I assure you it would probably
+be as long as this entire post, so we&rsquo;ll skip that for now.</p>
+<h3 id="opentofu-2">OpenTofu (2)<a href="#opentofu-2" class="hanchor" ariaLabel="Anchor">#</a> </h3>
+<p>OpenTofu was forked from Terraform in 2023, when the latter stopped
+being free and open source software with a license change. Let&rsquo;s call it
+Tofu for short. It&rsquo;s a tool for &ldquo;infrastructure as code&rdquo;, and if you&rsquo;ve
+never used it, it may seem confusingly similar to &ldquo;configuration
+management&rdquo; tools like Ansible or Salt.</p>
+<p>While it&rsquo;s true that they share some similarities (depending on how you
+use configuration management), in my experience Tofu is nicer to use for
+the &ldquo;deployment&rdquo;, and if you wish the &ldquo;state management&rdquo; of those
+deployments, since that is essentially all it does, and it does it
+pretty well. Ideas that you&rsquo;ll find in &ldquo;config management&rdquo; like
+<strong>repeatedly</strong> ensuring that your <code>sshd_config</code> files look the same
+across all servers are nowhere to be found here, it&rsquo;s all about writing
+general rules and attributes for things like VMs and virtual networks
+from the perspective of the hypervisor.</p>
+<p>There won&rsquo;t be much handholding on how to use Tofu here (there&rsquo;s plenty
+of documentation and other resources available), but I&rsquo;ll give a general
+overview on how configuration might look, and some neat functionality
+you can use.</p>
+<p>First of all, your <code>main.tf</code> file would look something like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-hcl" data-lang="hcl"><span class="line"><span class="cl"><span class="k">terraform</span> {
+</span></span><span class="line"><span class="cl"><span class="n">  required_version</span> <span class="o">=</span> <span class="s2">&#34;1.8.2&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">required_providers</span> {
+</span></span><span class="line"><span class="cl"><span class="n">    vsphere</span> <span class="o">=</span> {
+</span></span><span class="line"><span class="cl"><span class="n">      source</span>  <span class="o">=</span> <span class="s2">&#34;hashicorp/vsphere&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">      version</span> <span class="o">=</span> <span class="s2">&#34;~&gt; 2.9.1&#34;</span>
+</span></span><span class="line"><span class="cl">    }
+</span></span><span class="line"><span class="cl"><span class="n">    local</span> <span class="o">=</span> {
+</span></span><span class="line"><span class="cl"><span class="n">      source</span>  <span class="o">=</span> <span class="s2">&#34;hashicorp/local&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">      version</span> <span class="o">=</span> <span class="s2">&#34;~&gt; 2.5.1&#34;</span>
+</span></span><span class="line"><span class="cl">    }
+</span></span><span class="line"><span class="cl"><span class="n">    cloudinit</span> <span class="o">=</span> {
+</span></span><span class="line"><span class="cl"><span class="n">      source</span>  <span class="o">=</span> <span class="s2">&#34;hashicorp/cloudinit&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">      version</span> <span class="o">=</span> <span class="s2">&#34;~&gt; 2.3.4&#34;</span>
+</span></span><span class="line"><span class="cl">    }
+</span></span><span class="line"><span class="cl">  }
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></div><p>This lets you pin both the required Tofu version, as well as the
+required versions of the &ldquo;providers&rdquo; used when you initialize it for the
+first run. These providers do pretty much what they sound like,
+<code>vsphere</code> lets you deploy stuff to VMware, <code>local</code> lets you handle local
+files (like the JSON above), and <code>cloudinit</code> helps you put together
+templates into the obscure black magic that is base64 encoded, gzipped
+strings of init instructions (yes, I&rsquo;m serious).</p>
+<p>You would then configure the provider like so:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-hcl" data-lang="hcl"><span class="line"><span class="cl"><span class="k">provider</span> <span class="s2">&#34;vsphere&#34;</span> {
+</span></span><span class="line"><span class="cl"><span class="n">  user</span>                 <span class="o">=</span> <span class="k">var</span><span class="p">.</span><span class="k">vsphere_user</span>
+</span></span><span class="line"><span class="cl"><span class="n">  password</span>             <span class="o">=</span> <span class="k">var</span><span class="p">.</span><span class="k">vsphere_password</span>
+</span></span><span class="line"><span class="cl"><span class="n">  vsphere_server</span>       <span class="o">=</span> <span class="k">var</span><span class="p">.</span><span class="k">vsphere_server</span>
+</span></span><span class="line"><span class="cl"><span class="n">  allow_unverified_ssl</span> <span class="o">=</span> <span class="kt">true</span>
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></div><p>Where <code>var.</code> refer to variables you have set in <code>terraform.tfvars</code>.
+Providers are usually well documented, just have a look at the <a href="https://registry.terraform.io/providers/hashicorp/vsphere/2.9.1/docs">2.9.1
+docs
+here</a>
+for example.</p>
+<p>When using providers, you will quickly encounter two object types:
+<code>resource</code>, which refers to a &ldquo;thing&rdquo; that should be created (or exist)
+such as a server or a virtual network, and <code>data</code> which refers to
+existing information &ldquo;objectified&rdquo;.</p>
+<p>The syntax is pretty much:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-hcl" data-lang="hcl"><span class="line"><span class="cl"><span class="k">data</span> <span class="s2">&#34;provider_existing_thing&#34; &#34;your_name&#34;</span> {
+</span></span><span class="line"><span class="cl">  <span class="p">(...)</span>
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></div><p>Or as exemplified in the above documentation:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-hcl" data-lang="hcl"><span class="line"><span class="cl"><span class="k">data</span> <span class="s2">&#34;vsphere_datacenter&#34; &#34;dc&#34;</span> {
+</span></span><span class="line"><span class="cl"><span class="n">  name</span> <span class="o">=</span> <span class="s2">&#34;dc-01&#34;</span>
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></div><p>You would then refer to this object as <code>data.vsphere_datacenter.dc</code>.</p>
+<p>You might be half asleep at this point, so let&rsquo;s look at a more exciting
+example:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-hcl" data-lang="hcl"><span class="line"><span class="cl"><span class="k">data</span> <span class="s2">&#34;vsphere_compute_cluster&#34; &#34;cluster&#34;</span> {
+</span></span><span class="line"><span class="cl"><span class="n">  for_each</span>      <span class="o">=</span> <span class="k">local</span><span class="p">.</span><span class="k">unique_cluster_list</span>
+</span></span><span class="line"><span class="cl"><span class="n">  name</span>          <span class="o">=</span> <span class="k">each</span><span class="p">.</span><span class="k">key</span>
+</span></span><span class="line"><span class="cl"><span class="n">  datacenter_id</span> <span class="o">=</span> <span class="k">data</span><span class="p">.</span><span class="k">vsphere_datacenter</span><span class="p">.</span><span class="k">dc</span><span class="p">.</span><span class="k">id</span>
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></div><p>The definition should be obvious enough, but the first line is more
+interesting: <code>for_each</code> starts a loop over whatever is found in
+<code>local.unique_cluster_list</code>, which is (as you may have already
+suspected) a list. It also says this cluster is in the datacenter
+specified by &ldquo;id&rdquo; in the <code>data.vsphere_datacenter.dc</code> object that we
+manually defined just before &mdash; note that we did not specify the id, it
+was fetched from VMware based on the information we gave. Now, let&rsquo;s
+look at the definition of this &ldquo;unique cluster list&rdquo;. In <code>main.tf</code> it
+could look something like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-hcl" data-lang="hcl"><span class="line"><span class="cl"><span class="k">locals</span> {
+</span></span><span class="line"><span class="cl"><span class="n">  fetched_vms</span> <span class="o">=</span> <span class="k">jsondecode</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">  <span class="k">data</span><span class="p">.</span><span class="k">local_file</span><span class="p">.</span><span class="k">fetch_netbox</span><span class="p">.</span><span class="k">content</span>
+</span></span><span class="line"><span class="cl">  <span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">  unique_cluster_list</span> <span class="o">=</span> <span class="k">toset</span><span class="p">([</span>
+</span></span><span class="line"><span class="cl">  <span class="k">for</span> <span class="k">_</span><span class="p">,</span><span class="k">v</span> <span class="k">in</span> <span class="k">local</span><span class="p">.</span><span class="k">fetched_vms</span> <span class="err">:</span>
+</span></span><span class="line"><span class="cl">  <span class="k">v</span><span class="p">.</span><span class="k">provided_cluster_name</span>
+</span></span><span class="line"><span class="cl">  <span class="p">])</span>
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></div><p>This might look intimidating, but it&rsquo;s not that complicated:</p>
+<ul>
+<li><code>fetched_vms</code> is defined as the result of calling <code>jsondecode()</code> on an
+object which has loaded a local JSON file with the help of
+<code>local_file</code> from the <code>local</code> provider.</li>
+<li><code>unique_cluster_list</code> begins with the <code>for _,v</code> (key, value where
+&ldquo;key&rdquo; is discarded) loop over the parsed JSON, extracting the
+<code>v.provided_cluster_name</code> from every VM. You can see this value in the
+JSON above. <code>toset()</code> converts this to a set, which will remove any
+duplicate values.</li>
+</ul>
+<p>This means that one &ldquo;cluster object&rdquo; will be defined in Tofu for every
+unique string found in the <code>provided_cluster_name</code> values of the N
+virtual machines passed in by the JSON, with each having <code>name = each.key</code>, which should mean that we can safely refer to any cluster we
+expect to exist as object <code>data.vsphere_compute_cluster.cluster[&quot;name&quot;]</code></p>
+<p>This might seem overkill, but if you want your config to be generally
+useful rather than repetetive and hard-coded (which can be fine
+depending on the circumstance), loops are essential. If you don&rsquo;t need
+them, just create your objects manually and refer to them directly.</p>
+<p>There&rsquo;s a few more things we need to go through before looking at the VM
+definition itself, and one of them is &ldquo;templates&rdquo;. This is an almost
+criminally confusing word, but in this case we are speaking very
+specifically about <code>vsphere_virtual_machine.template</code> which refers to a
+<em>virtual machine template</em> on the VMware side of things. In simple
+terms, it&rsquo;s a VM that we&rsquo;ve prepared and turned read-only.</p>
+<p>When we create a new VM, we do so from a template, but if you have
+multiple templates you need to decide which one to use. One way to do
+this could be another <code>for_each</code> that uses the <code>server_os</code> custom field
+handily available from Netbox:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-hcl" data-lang="hcl"><span class="line"><span class="cl"><span class="k">data</span> <span class="s2">&#34;vsphere_virtual_machine&#34; &#34;templates&#34;</span> {
+</span></span><span class="line"><span class="cl"><span class="n">  for_each</span> <span class="o">=</span> {
+</span></span><span class="line"><span class="cl"><span class="n">    freebsd14</span>  <span class="o">=</span> <span class="s2">&#34;freebsd14_template&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">    freebsd13</span>  <span class="o">=</span> <span class="s2">&#34;freebsd13_template&#34;</span>
+</span></span><span class="line"><span class="cl">  }
+</span></span><span class="line"><span class="cl"><span class="n">  name</span>          <span class="o">=</span> <span class="k">each</span><span class="p">.</span><span class="k">value</span>
+</span></span><span class="line"><span class="cl"><span class="n">  datacenter_id</span> <span class="o">=</span> <span class="k">data</span><span class="p">.</span><span class="k">vsphere_datacenter</span><span class="p">.</span><span class="k">dc</span><span class="p">.</span><span class="k">id</span>
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></div><p>In a sense, this is a mapping, which helps us figure out what template
+to use by simply passing <code>server_os</code> as the index to this
+<code>vsphere_virtual_machine.templates</code> object &mdash; as long as that value is
+one we have mapped, that is.</p>
+<p>Let&rsquo;s jump into what defining a VM might look like. We still need to go
+through how it&rsquo;s initialized, but that will come later.</p>
+<p>This section is quite long, so I&rsquo;ll use some inline comments to make a
+few short clarifications as we go.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-hcl" data-lang="hcl"><span class="line"><span class="cl"><span class="k">resource</span> <span class="s2">&#34;vsphere_virtual_machine&#34; &#34;vm&#34;</span> {
+</span></span><span class="line"><span class="cl"><span class="n">  for_each</span> <span class="o">=</span> {
+</span></span><span class="line"><span class="cl">  <span class="k">for</span> <span class="k">k</span><span class="p">,</span> <span class="k">v</span> <span class="k">in</span> <span class="k">local</span><span class="p">.</span><span class="k">fetched_vms</span> <span class="err">:</span>
+</span></span><span class="line"><span class="cl"><span class="n">  k</span> <span class="o">=</span><span class="err">&gt;</span> <span class="k">v</span>
+</span></span><span class="line"><span class="cl"><span class="n">  if (v.platform_id</span> <span class="o">==</span><span class="n"> 20 || v.platform_id</span> <span class="o">==</span> <span class="m">21</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  }
+</span></span><span class="line"><span class="cl">  <span class="err">//</span> <span class="k">for_each</span> <span class="k">grabs</span> <span class="k">key</span><span class="p">,</span><span class="k">value</span> <span class="k">from</span> <span class="k">fetched_vms</span><span class="p">,</span> <span class="k">and</span> <span class="k">creates</span> <span class="k">a</span> <span class="k">new</span> <span class="k">map</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="err">//</span> <span class="k">in</span> <span class="k">practice</span> <span class="s2">&#34;passing&#34;</span><span class="p">,</span> <span class="k">if</span> <span class="k">the</span> <span class="k">platform_id</span> <span class="k">from</span> <span class="k">netbox</span> <span class="k">is</span> <span class="k">one</span> <span class="k">we</span> <span class="k">want</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl">  <span class="err">//</span> <span class="k">this</span> <span class="k">is</span> <span class="k">only</span> <span class="k">useful</span> <span class="k">if</span> <span class="k">they</span> <span class="k">might</span> <span class="k">differ</span><span class="p">,</span> <span class="k">like</span> <span class="k">linux</span> <span class="k">and</span> <span class="k">freebsd</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="n">  name</span>     <span class="o">=</span><span class="n"> &#34;${each.value.custom_fields.service_id</span> <span class="o">==</span> <span class="k">null</span> <span class="err">?</span> <span class="s2">&#34;XXX&#34; : each.value.custom_fields.service_id}-${each.value.name}&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="err">//</span> <span class="k">vm</span> <span class="k">name</span> <span class="k">is</span> <span class="k">set</span> <span class="k">by</span> <span class="k">combining</span> <span class="k">values</span> <span class="k">from</span> <span class="k">fetched_vms</span><span class="p">,</span> <span class="k">this</span> <span class="k">example</span> <span class="k">checks</span>
+</span></span><span class="line"><span class="cl">  <span class="err">//</span> <span class="k">if</span> <span class="k">service_id</span> <span class="k">is</span> <span class="k">missing</span><span class="p">,</span> <span class="k">and</span> <span class="k">if</span> <span class="k">so</span> <span class="k">replaces</span> <span class="k">it</span> <span class="k">with</span> <span class="s2">&#34;XXX&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="err">//</span> <span class="k">note</span> <span class="m">1</span><span class="err">:</span> <span class="k">at</span> <span class="k">least</span> <span class="k">in</span> <span class="k">vmware</span><span class="p">,</span> <span class="k">the</span> <span class="k">name</span> <span class="k">can</span> <span class="k">be</span> <span class="k">anything</span> <span class="k">and</span> <span class="k">is</span> <span class="k">not</span>
+</span></span><span class="line"><span class="cl">  <span class="err">//</span> <span class="k">tied</span> <span class="k">to</span> <span class="k">the</span> <span class="k">actual</span> <span class="k">hostname</span> <span class="k">of</span> <span class="k">the</span> <span class="k">server</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl">  <span class="err">//</span> <span class="k">note</span> <span class="m">2</span><span class="err">:</span> <span class="k">name</span> <span class="k">must</span> <span class="k">be</span> <span class="k">unique</span><span class="p">,</span> <span class="k">deploying</span> <span class="k">with</span> <span class="k">a</span> <span class="k">name</span> <span class="k">matching</span> <span class="k">an</span>
+</span></span><span class="line"><span class="cl">  <span class="err">//</span> <span class="k">existing</span> <span class="k">vm</span> <span class="k">will</span> <span class="k">fail</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="n">  guest_id</span> <span class="o">=</span> <span class="k">data</span><span class="p">.</span><span class="k">vsphere_virtual_machine</span><span class="p">.</span><span class="k">templates</span><span class="p">[</span><span class="k">each</span><span class="p">.</span><span class="k">value</span><span class="p">.</span><span class="k">custom_fields</span><span class="p">.</span><span class="k">server_os</span><span class="p">].</span><span class="k">guest_id</span>
+</span></span><span class="line"><span class="cl">  <span class="err">//</span> <span class="k">vmware</span> <span class="k">specific</span><span class="p">,</span> <span class="k">this</span> <span class="k">essentially</span> <span class="k">means</span> <span class="err">&#34;</span><span class="k">just</span> <span class="k">use</span> <span class="k">whatever</span>
+</span></span><span class="line"><span class="cl">  <span class="err">//</span> <span class="k">the</span> <span class="k">template</span> <span class="k">we</span><span class="err">&#39;</span><span class="k">re</span> <span class="k">basing</span> <span class="k">this</span> <span class="k">VM</span> <span class="k">on</span> <span class="k">has</span><span class="err">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">  datastore_id</span>               <span class="o">=</span> <span class="k">data</span><span class="p">.</span><span class="k">vsphere_datastore</span><span class="p">.</span><span class="k">datastore</span><span class="p">[</span><span class="k">each</span><span class="p">.</span><span class="k">value</span><span class="p">.</span><span class="k">vmware_datastore</span><span class="p">].</span><span class="k">id</span>
+</span></span><span class="line"><span class="cl"><span class="n">  resource_pool_id</span>           <span class="o">=</span> <span class="k">data</span><span class="p">.</span><span class="k">vsphere_compute_cluster</span><span class="p">.</span><span class="k">cluster</span><span class="p">[</span><span class="k">each</span><span class="p">.</span><span class="k">value</span><span class="p">.</span><span class="k">provided_cluster_name</span><span class="p">].</span><span class="k">resource_pool_id</span>
+</span></span><span class="line"><span class="cl"><span class="n">  num_cpus</span>                   <span class="o">=</span> <span class="k">each</span><span class="p">.</span><span class="k">value</span><span class="p">.</span><span class="k">vcpus</span>
+</span></span><span class="line"><span class="cl"><span class="n">  memory</span>                     <span class="o">=</span> <span class="k">each</span><span class="p">.</span><span class="k">value</span><span class="p">.</span><span class="k">memory</span>
+</span></span><span class="line"><span class="cl"><span class="n">  wait_for_guest_net_timeout</span> <span class="o">=</span> <span class="m">0</span>
+</span></span><span class="line"><span class="cl"><span class="n">  wait_for_guest_ip_timeout</span>  <span class="o">=</span> <span class="m">0</span>
+</span></span><span class="line"><span class="cl">  <span class="k">dynamic</span> <span class="s2">&#34;network_interface&#34;</span> {
+</span></span><span class="line"><span class="cl"><span class="n">    for_each</span> <span class="o">=</span> <span class="k">local</span><span class="p">.</span><span class="k">fetched_vms</span><span class="p">[</span><span class="k">each</span><span class="p">.</span><span class="k">key</span><span class="p">][</span><span class="s2">&#34;interfaces&#34;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="err">//</span> <span class="k">iterate</span> <span class="k">over</span> <span class="k">interfaces</span> <span class="k">in</span> <span class="k">this</span> <span class="k">VM</span> <span class="k">iteration</span>
+</span></span><span class="line"><span class="cl">    <span class="k">content</span> {
+</span></span><span class="line"><span class="cl"><span class="n">      network_id</span> <span class="o">=</span> <span class="k">data</span><span class="p">.</span><span class="k">vsphere_network</span><span class="p">.</span><span class="k">network</span><span class="p">[</span><span class="k">network_interface</span><span class="p">.</span><span class="k">key</span><span class="p">].</span><span class="k">id</span>
+</span></span><span class="line"><span class="cl">    }
+</span></span><span class="line"><span class="cl">  }
+</span></span><span class="line"><span class="cl">  <span class="k">disk</span> {
+</span></span><span class="line"><span class="cl"><span class="n">    label</span>        <span class="o">=</span> <span class="s2">&#34;tfd0&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">    size</span>         <span class="o">=</span> <span class="k">each</span><span class="p">.</span><span class="k">value</span><span class="p">.</span><span class="k">disk</span>
+</span></span><span class="line"><span class="cl"><span class="n">    datastore_id</span> <span class="o">=</span> <span class="k">data</span><span class="p">.</span><span class="k">vsphere_datastore</span><span class="p">.</span><span class="k">datastore</span><span class="p">[</span><span class="k">each</span><span class="p">.</span><span class="k">value</span><span class="p">.</span><span class="k">vmware_datastore</span><span class="p">].</span><span class="k">id</span>
+</span></span><span class="line"><span class="cl">  }
+</span></span><span class="line"><span class="cl">  <span class="k">clone</span> {
+</span></span><span class="line"><span class="cl"><span class="n">    template_uuid</span> <span class="o">=</span><span class="n"> (each.value.custom_fields.server_os !</span><span class="o">=</span> <span class="s2">&#34;&#34;</span> <span class="err">?</span> <span class="k">data</span><span class="p">.</span><span class="k">vsphere_virtual_machine</span><span class="p">.</span><span class="k">templates</span><span class="p">[</span><span class="k">each</span><span class="p">.</span><span class="k">value</span><span class="p">.</span><span class="k">custom_fields</span><span class="p">.</span><span class="k">server_os</span><span class="p">].</span><span class="k">id</span> <span class="err">:</span> <span class="k">null</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="err">//</span> <span class="k">make</span> <span class="k">sure</span> <span class="k">the</span> <span class="k">server_os</span> <span class="k">value</span> <span class="k">is</span> <span class="k">not</span> <span class="k">empty</span><span class="err">:</span> <span class="k">if</span> <span class="k">it</span><span class="err">&#39;</span><span class="k">s</span> <span class="k">not</span><span class="p">,</span> <span class="k">grab</span> <span class="k">the</span>
+</span></span><span class="line"><span class="cl">    <span class="err">//</span> <span class="k">template</span> <span class="k">that</span> <span class="k">matches</span> <span class="k">server_os</span>
+</span></span><span class="line"><span class="cl">  }
+</span></span><span class="line"><span class="cl"><span class="n">  extra_config</span> <span class="o">=</span> {
+</span></span><span class="line"><span class="cl">    <span class="err">//</span> <span class="k">these</span> <span class="err">&#39;</span><span class="k">configuration</span> <span class="k">parameters</span><span class="err">&#39;</span> <span class="k">are</span> <span class="k">visible</span> <span class="k">under</span>
+</span></span><span class="line"><span class="cl">    <span class="err">//</span> <span class="k">edit</span> <span class="k">settings</span> <span class="err">&gt;</span> <span class="k">advanced</span> <span class="err">&gt;</span> <span class="k">configuration</span> <span class="k">parameters</span> <span class="k">in</span> <span class="k">vcenter</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="n">    &#34;guestinfo.userdata&#34;</span>          <span class="o">=</span> <span class="k">data</span><span class="p">.</span><span class="k">template_cloudinit_config</span><span class="p">.</span><span class="k">user_data</span><span class="p">[</span><span class="k">each</span><span class="p">.</span><span class="k">key</span><span class="p">].</span><span class="k">rendered</span>
+</span></span><span class="line"><span class="cl"><span class="n">    &#34;guestinfo.userdata.encoding&#34;</span> <span class="o">=</span> <span class="s2">&#34;gzip+base64&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">    &#34;guestinfo.metadata&#34;</span> <span class="o">=</span> <span class="k">base64encode</span><span class="p">(</span><span class="k">templatefile</span><span class="p">(</span><span class="s2">&#34;templates/metadata.tftpl&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      {
+</span></span><span class="line"><span class="cl"><span class="n">        netbox_id</span> <span class="o">=</span> <span class="k">local</span><span class="p">.</span><span class="k">fetched_vms</span><span class="p">[</span><span class="k">each</span><span class="p">.</span><span class="k">key</span><span class="p">][</span><span class="s2">&#34;id&#34;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="n">        hostname</span>  <span class="o">=</span> <span class="k">local</span><span class="p">.</span><span class="k">fetched_vms</span><span class="p">[</span><span class="k">each</span><span class="p">.</span><span class="k">key</span><span class="p">][</span><span class="s2">&#34;name&#34;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    }<span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="n">    &#34;guestinfo.metadata.encoding&#34;</span> <span class="o">=</span> <span class="s2">&#34;base64&#34;</span>
+</span></span><span class="line"><span class="cl">  }
+</span></span><span class="line"><span class="cl"><span class="n">  depends_on</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="k">data</span><span class="p">.</span><span class="k">local_file</span><span class="p">.</span><span class="k">fetch_netbox</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="k">data</span><span class="p">.</span><span class="k">vsphere_network</span><span class="p">.</span><span class="k">network</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="k">local</span><span class="p">.</span><span class="k">fetched_vms</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="k">data</span><span class="p">.</span><span class="k">template_cloudinit_config</span><span class="p">.</span><span class="k">user_data</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="p">]</span>
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></div><p>There are probably at least two major things that are unfamiliar with
+this configuration:</p>
+<ul>
+<li>Defining a <code>vsphere_network</code></li>
+<li>Passing <code>template_cloudinit_config</code> for initialization</li>
+</ul>
+<p>Since cloud-init has its own section below, let&rsquo;s focus on networks for
+now. But first, a short tangent regarding <code>depends_on</code>:</p>
+<p>Tofu is written in Go, which is great at running things in parallel,
+which Tofu does, but in many cases you want to make sure that some stuff
+has already happened before you attempt to create the VM. In this
+example, this &ldquo;depends_on&rdquo; section has been very much left to marinate
+due to the fact that it&rsquo;s &ldquo;working&rdquo;, but it probably has redundancies.
+An exercise to the reader, if you will.</p>
+<p>Ok, back to networks. We are creating one <code>network_interface</code> for each
+thing we find in &ldquo;interfaces&rdquo; in our JSON blob with the help of a
+<a href="https://developer.hashicorp.com/terraform/language/expressions/dynamic-blocks">dynamic
+block</a>
+which lets us use a loop. So far so confusing, but what about the
+<code>vsphere_network</code> object it refers to by <code>network_id</code>?</p>
+<p>Again, unfortunately, we need to dive into some complexity. Here is the
+definition of the network object itself, after the virtual switches:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-hcl" data-lang="hcl"><span class="line"><span class="cl"><span class="k">data</span> <span class="s2">&#34;vsphere_distributed_virtual_switch&#34; &#34;vds&#34;</span> {
+</span></span><span class="line"><span class="cl"><span class="n">  for_each</span>      <span class="o">=</span> <span class="k">local</span><span class="p">.</span><span class="k">unique_vswitch_list</span>
+</span></span><span class="line"><span class="cl"><span class="n">  name</span>          <span class="o">=</span> <span class="k">each</span><span class="p">.</span><span class="k">key</span>
+</span></span><span class="line"><span class="cl"><span class="n">  datacenter_id</span> <span class="o">=</span> <span class="k">data</span><span class="p">.</span><span class="k">vsphere_datacenter</span><span class="p">.</span><span class="k">dc</span><span class="p">.</span><span class="k">id</span>
+</span></span><span class="line"><span class="cl">}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">data</span> <span class="s2">&#34;vsphere_network&#34; &#34;network&#34;</span> {
+</span></span><span class="line"><span class="cl"><span class="n">  for_each</span> <span class="o">=</span><span class="n"> { for x in local.iface_network_map : x.interface_id</span> <span class="o">=</span><span class="err">&gt;</span> {
+</span></span><span class="line"><span class="cl"><span class="n">    vmware_switch_name</span>  <span class="o">=</span> <span class="k">x</span><span class="p">.</span><span class="k">vmware_switch_name</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="n">    vmware_network_name</span> <span class="o">=</span> <span class="k">x</span><span class="p">.</span><span class="k">vmware_network_name</span>
+</span></span><span class="line"><span class="cl">  } }
+</span></span><span class="line"><span class="cl"><span class="n">  name</span>                            <span class="o">=</span> <span class="k">each</span><span class="p">.</span><span class="k">value</span><span class="p">.</span><span class="k">vmware_network_name</span>
+</span></span><span class="line"><span class="cl"><span class="n">  datacenter_id</span>                   <span class="o">=</span> <span class="k">data</span><span class="p">.</span><span class="k">vsphere_datacenter</span><span class="p">.</span><span class="k">dc</span><span class="p">.</span><span class="k">id</span>
+</span></span><span class="line"><span class="cl"><span class="n">  distributed_virtual_switch_uuid</span> <span class="o">=</span> <span class="k">data</span><span class="p">.</span><span class="k">vsphere_distributed_virtual_switch</span><span class="p">.</span><span class="k">vds</span><span class="p">[</span><span class="k">each</span><span class="p">.</span><span class="k">value</span><span class="p">.</span><span class="k">vmware_switch_name</span><span class="p">].</span><span class="k">id</span>
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></div><p>Again we have <code>local.</code> variables, contained in the same <code>local{}</code> block
+mentioned before in <code>main.tf</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-hcl" data-lang="hcl"><span class="line"><span class="cl"><span class="n">  unique_vswitch_list</span> <span class="o">=</span> <span class="k">toset</span><span class="p">(</span><span class="k">distinct</span><span class="p">(</span><span class="k">flatten</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="p">[</span><span class="k">for</span> <span class="k">k</span><span class="p">,</span> <span class="k">v</span> <span class="k">in</span> <span class="k">local</span><span class="p">.</span><span class="k">fetched_vms</span> <span class="err">:</span> <span class="p">[</span><span class="k">for</span> <span class="k">i</span><span class="p">,</span> <span class="k">j</span> <span class="k">in</span> <span class="k">v</span><span class="p">.</span><span class="k">interfaces</span> <span class="err">:</span> <span class="k">j</span><span class="p">.</span><span class="k">vmware_switch_name</span><span class="p">]]</span>
+</span></span><span class="line"><span class="cl">  <span class="p">)))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">  iface_network_map</span> <span class="o">=</span> <span class="k">flatten</span><span class="p">([</span><span class="k">for</span> <span class="k">k</span><span class="p">,</span> <span class="k">v</span> <span class="k">in</span> <span class="k">local</span><span class="p">.</span><span class="k">fetched_vms</span> <span class="err">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="k">i</span><span class="p">,</span> <span class="k">j</span> <span class="k">in</span> <span class="k">v</span><span class="p">.</span><span class="k">interfaces</span> <span class="err">:</span> {
+</span></span><span class="line"><span class="cl">      <span class="s2">&#34;interface_id&#34;</span> <span class="err">:</span> <span class="k">i</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="s2">&#34;vmware_network_name&#34;</span> <span class="err">:</span> <span class="k">j</span><span class="p">.</span><span class="k">vmware_network_name</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="s2">&#34;vmware_switch_name&#34;</span> <span class="err">:</span> <span class="k">j</span><span class="p">.</span><span class="k">vmware_switch_name</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  }<span class="p">]])</span>
+</span></span></code></pre></div><p>I&rsquo;m not even going to pretend I remember what I was thinking when I
+wrote this, but at least the purpose of this list and map are pretty
+clear:</p>
+<ul>
+<li><code>unique_vswitch_list</code> ensures we have a list of every unique vswitch
+mentioned in the incoming JSON data (it&rsquo;s called <code>vmware_switch_name</code>
+there)</li>
+<li><code>iface_network_map</code> ensures we have a map where we, by id, can look up
+the name of the vmware network and the associated switch for any
+interface.</li>
+</ul>
+<p>A &ldquo;network&rdquo; on the vmware side is, and this may shock you, virtual. In a
+sense I guess all networks are virtual, but this is really very virtual,
+and so is the switch it&rsquo;s related to.</p>
+<p>In order to <em>uniquely</em> identify a network in VMware, we need both the
+name of the network and its associated switch, which is why we first
+create the <code>data.vsphere_distributed_virtual_switch</code> object(s), so that
+they can be used when defining the network object(s), as they want
+<code>distributed_virtual_switch_uuid</code>.</p>
+<p>So when we define our VM, and create our interfaces like so:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-hcl" data-lang="hcl"><span class="line"><span class="cl"><span class="err">//</span> <span class="k">this</span> <span class="k">part</span> <span class="k">was</span> <span class="k">already</span> <span class="k">shown</span> <span class="k">above</span>
+</span></span><span class="line"><span class="cl">  <span class="k">dynamic</span> <span class="s2">&#34;network_interface&#34;</span> {
+</span></span><span class="line"><span class="cl"><span class="n">    for_each</span> <span class="o">=</span> <span class="k">local</span><span class="p">.</span><span class="k">fetched_vms</span><span class="p">[</span><span class="k">each</span><span class="p">.</span><span class="k">key</span><span class="p">][</span><span class="s2">&#34;interfaces&#34;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="k">content</span> {
+</span></span><span class="line"><span class="cl"><span class="n">      network_id</span> <span class="o">=</span> <span class="k">data</span><span class="p">.</span><span class="k">vsphere_network</span><span class="p">.</span><span class="k">network</span><span class="p">[</span><span class="k">network_interface</span><span class="p">.</span><span class="k">key</span><span class="p">].</span><span class="k">id</span>
+</span></span><span class="line"><span class="cl">    }
+</span></span><span class="line"><span class="cl">  }
+</span></span></code></pre></div><p>When we define what network the interface should connect to, this
+already exists as an object that we can look up with
+<code>network_interface.key</code> and get the <code>.id</code> of, because we set that key
+ourselves in the for loop when creating the networks: <code>x.interface_id =&gt; {...}</code></p>
+<p>If you feel confused at this point, don&rsquo;t worry: I wrote this and it&rsquo;s
+confusing to me too, but really the only way to understand what is
+happening here is to attempt to configure it yourself and fail about a
+hundred times. Also, you don&rsquo;t have to use for loops, if you&rsquo;ve never
+used Tofu before, just defining the objects statically without any
+looping is probably a better way to start &mdash; and actually, this is the
+type of configuration you&rsquo;ll usually find in the documentation for the
+providers themselves (which I highly recommend you read).</p>
+<p>All right, since we now know everything there is to know about virtual
+networks in VMware (to be clear, this is sarcasm), let&rsquo;s move on to
+cloud-init.</p>
+<h3 id="cloud-init-3">cloud-init (3)<a href="#cloud-init-3" class="hanchor" ariaLabel="Anchor">#</a> </h3>
+<p>There are few technologies, and maybe even just things in general, that
+have caused more feelings of frustration, despair, self loathing and
+loud volume black metal sessions for me than cloud-init.</p>
+<p>If you have no idea what cloud-init is, count yourself lucky, but you
+won&rsquo;t be lucky for long because I&rsquo;m about to tell you.</p>
+<p>According to their own documentation, cloud-init is:</p>
+<blockquote>
+<p><em>the industry standard multi-distribution method for cross-platform
+cloud instance initialisation</em></p>
+</blockquote>
+<p>Those are some pretty big words, but the worst part is that they&rsquo;re
+right. It&rsquo;s not only the most widely used, it&rsquo;s also several hundred
+megabytes to install, depends on python, only takes YAML, contains
+dozens of modules all enabled by default to be able to &ldquo;platform
+independently&rdquo; change your hostname, and about 60% of the time, it works
+every time.</p>
+<p>Regardless of the abusive relationship that cloud-init has forced me
+into over the years, it does the trick, and it is actually cross
+platform: if you learn it because you need it on VMware, you can, in
+fact, re-use that knowledge when you encounter OpenStack, AWS, or
+something else. Compared to <a href="https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/update-windows-settings-and-scripts-create-your-own-answer-file-sxs?view=windows-11">Microsoft answer
+files</a>,
+it&rsquo;s probably like eating ice cream on a beach (don&rsquo;t click that link).</p>
+<p>So, I&rsquo;m not going to show you basic examples of how to use cloud-init,
+those are everywhere on the Internet and for the purpose of this post,
+we&rsquo;re talking about deploying FreeBSD on VMware. I am also mindful of
+the fact that after more than 600 lines, this is the first time I&rsquo;m
+mentioning FreeBSD, but we will have plenty of time to focus on that
+later when we talk about VM templates in the VMware section.</p>
+<p>The first thing to understand is that Tofu has a templating language,
+similar but not identical to
+<a href="https://palletsprojects.com/projects/jinja/">Jinja</a>, with the
+delightful file ending <code>.tftpl</code>, and we will use this to create our
+cloud-init payloads.</p>
+<p>In a very simplified sense, cloud-init works something like this:</p>
+<ul>
+<li>A cloud-init datasource specific for the hypervisor/environment in
+question fetches the &ldquo;payload&rdquo;. In this scenario, we are using the
+<a href="https://docs.cloud-init.io/en/latest/reference/datasources/vmware.html">VMware</a>
+datasource, which depends on <code>open-vm-tools</code>.</li>
+<li>The &ldquo;payload&rdquo; can arrive in many different ways, anything from HTTP to
+a mounted cdrom device, or as in this case, by simply looking up
+key/value-stuff in VMware.</li>
+<li>cloud-init runs through the modules it is configured to run, and &ldquo;does
+stuff&rdquo; depending on what instructions it finds in the payload.</li>
+</ul>
+<p>The configuration in Tofu is actually pretty brief, but a lot is
+happening behind the scenes:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-hcl" data-lang="hcl"><span class="line"><span class="cl"><span class="err">//</span> <span class="k">already</span> <span class="k">shown</span> <span class="k">previously</span> <span class="k">as</span> <span class="k">a</span> <span class="k">part</span> <span class="k">of</span> <span class="k">vm</span> <span class="k">creation</span>
+</span></span><span class="line"><span class="cl"><span class="n">  extra_config</span> <span class="o">=</span> {
+</span></span><span class="line"><span class="cl"><span class="n">    &#34;guestinfo.userdata&#34;</span> <span class="o">=</span> <span class="k">data</span><span class="p">.</span><span class="k">template_cloudinit_config</span><span class="p">.</span><span class="k">user_data</span><span class="p">[</span><span class="k">each</span><span class="p">.</span><span class="k">key</span><span class="p">].</span><span class="k">rendered</span>
+</span></span><span class="line"><span class="cl"><span class="n">    &#34;guestinfo.userdata.encoding&#34;</span> <span class="o">=</span> <span class="s2">&#34;gzip+base64&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">    &#34;guestinfo.metadata&#34;</span> <span class="o">=</span> <span class="k">base64encode</span><span class="p">(</span><span class="k">templatefile</span><span class="p">(</span><span class="s2">&#34;templates/metadata.tftpl&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      {
+</span></span><span class="line"><span class="cl"><span class="n">        netbox_id</span> <span class="o">=</span> <span class="k">local</span><span class="p">.</span><span class="k">fetched_vms</span><span class="p">[</span><span class="k">each</span><span class="p">.</span><span class="k">key</span><span class="p">][</span><span class="s2">&#34;id&#34;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="n">        hostname</span>  <span class="o">=</span> <span class="k">local</span><span class="p">.</span><span class="k">fetched_vms</span><span class="p">[</span><span class="k">each</span><span class="p">.</span><span class="k">key</span><span class="p">][</span><span class="s2">&#34;name&#34;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    }<span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="n">    &#34;guestinfo.metadata.encoding&#34;</span> <span class="o">=</span> <span class="s2">&#34;base64&#34;</span>
+</span></span><span class="line"><span class="cl">  }
+</span></span></code></pre></div><p>We are passing &ldquo;userdata&rdquo; and &ldquo;metadata&rdquo;, the former being a compressed
+base64 string, and the latter just base64. Since formatting cloud-init
+payloads is <em>not fun</em>, it&rsquo;s very convenient that
+<code>template_cloudinit_config</code> helps us generate this. Here&rsquo;s what it looks
+like:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-hcl" data-lang="hcl"><span class="line"><span class="cl"><span class="k">data</span> <span class="s2">&#34;template_cloudinit_config&#34; &#34;user_data&#34;</span> {
+</span></span><span class="line"><span class="cl"><span class="n">  gzip</span>          <span class="o">=</span> <span class="kt">true</span>
+</span></span><span class="line"><span class="cl"><span class="n">  base64_encode</span> <span class="o">=</span> <span class="kt">true</span>
+</span></span><span class="line"><span class="cl"><span class="n">  for_each</span>      <span class="o">=</span> <span class="k">local</span><span class="p">.</span><span class="k">fetched_vms</span>
+</span></span><span class="line"><span class="cl">  <span class="k">part</span> {
+</span></span><span class="line"><span class="cl"><span class="n">    content_type</span> <span class="o">=</span> <span class="s2">&#34;text/cloud-config&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">    content</span> <span class="o">=</span> <span class="p">(</span><span class="k">templatefile</span><span class="p">(</span><span class="s2">&#34;templates/user-data.tftpl&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      {
+</span></span><span class="line"><span class="cl"><span class="n">        ifaces</span>    <span class="o">=</span> <span class="k">local</span><span class="p">.</span><span class="k">fetched_vms</span><span class="p">[</span><span class="k">each</span><span class="p">.</span><span class="k">key</span><span class="p">][</span><span class="s2">&#34;interfaces&#34;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="n">        hostname</span>  <span class="o">=</span> <span class="k">local</span><span class="p">.</span><span class="k">fetched_vms</span><span class="p">[</span><span class="k">each</span><span class="p">.</span><span class="k">key</span><span class="p">][</span><span class="s2">&#34;name&#34;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="n">        server_os</span> <span class="o">=</span> <span class="k">local</span><span class="p">.</span><span class="k">fetched_vms</span><span class="p">[</span><span class="k">each</span><span class="p">.</span><span class="k">key</span><span class="p">][</span><span class="s2">&#34;custom_fields&#34;][&#34;server_os&#34;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">      }
+</span></span><span class="line"><span class="cl">    <span class="p">))</span>
+</span></span><span class="line"><span class="cl">  }
+</span></span><span class="line"><span class="cl">  <span class="k">part</span> {
+</span></span><span class="line"><span class="cl"><span class="n">    content_type</span> <span class="o">=</span> <span class="s2">&#34;text/x-shellscript&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">    content</span> <span class="o">=</span> <span class="p">(</span><span class="k">templatefile</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">      <span class="err">&#34;</span><span class="si">${</span><span class="nb">lookup</span><span class="p">(</span><span class="err">{</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;freebsd13&#34;  = &#34;templates/bootstrap.sh_freebsd13.tftpl&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;freebsd14&#34;  = &#34;templates/bootstrap.sh_freebsd14.tftpl&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="si">}</span><span class="p">,</span> <span class="k">local</span><span class="p">.</span><span class="k">fetched_vms</span><span class="p">[</span><span class="k">each</span><span class="p">.</span><span class="k">key</span><span class="p">][</span><span class="s2">&#34;custom_fields&#34;][&#34;server_os&#34;], &#34;NO_TEMPLATE_FOUND&#34;)}&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      {
+</span></span><span class="line"><span class="cl"><span class="n">        hostname</span>  <span class="o">=</span> <span class="k">local</span><span class="p">.</span><span class="k">fetched_vms</span><span class="p">[</span><span class="k">each</span><span class="p">.</span><span class="k">key</span><span class="p">][</span><span class="s2">&#34;name&#34;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="n">        server_os</span> <span class="o">=</span> <span class="k">local</span><span class="p">.</span><span class="k">fetched_vms</span><span class="p">[</span><span class="k">each</span><span class="p">.</span><span class="k">key</span><span class="p">][</span><span class="s2">&#34;custom_fields&#34;][&#34;server_os&#34;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="n">        ifaces</span>    <span class="o">=</span> <span class="k">local</span><span class="p">.</span><span class="k">fetched_vms</span><span class="p">[</span><span class="k">each</span><span class="p">.</span><span class="k">key</span><span class="p">][</span><span class="s2">&#34;interfaces&#34;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">      }
+</span></span><span class="line"><span class="cl">    <span class="p">))</span>
+</span></span><span class="line"><span class="cl">  }
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></div><p>The observant reader notices that again, we are fully enjoying loops,
+and this is because each VM requires a separate template: it <em>will</em>
+contain very instance-specific information, such as hostnames.</p>
+<p>You may also have noticed that this object has two &ldquo;parts&rdquo;, one
+<code>text/cloud-config</code> (the user-data), and one <code>text/x-shellscript</code>, which
+unsurprisingly contains a shell script.</p>
+<p>The steps are not that complicated as soon as you understand the syntax:</p>
+<ul>
+<li><code>user-data.tftpl</code> is a template that is rendered and gets passed the
+<code>ifaces</code>, <code>hostname</code> and <code>server_os</code> variables.</li>
+<li>depending on the <code>server_os</code> of the VM, it gets passed one of two
+shell script templates, which in turn gets the same three variables,
+in a different order just to keep things confusing.</li>
+</ul>
+<p>A more direct example of template generation is shown when setting
+<code>guestinfo.metadata</code> in the VM creation.</p>
+<p>Here&rsquo;s what <code>user-data.tftpl</code> might look like:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;${hostname}&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">keyboard</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">layout</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;se&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">locale</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;en_US.UTF-8&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">users</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="l">default</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;foo&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">lock_passwd</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># passwd: echo &#34;something&#34; | mkpasswd -m sha-512 -s</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">passwd</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;$6$15(...)&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">sudo</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;ALL=(ALL) NOPASSWD:ALL&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="l">%{ if server_os != &#34;freebsd14&#34; ~}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">shell</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;/bin/bash&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="l">%{ endif ~}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">ssh_authorized_keys</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s2">&#34;ssh-ed25519 AAAAC3N(...)&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s2">&#34;ssh-ed25519 AAAAC3N(...)&#34;</span><span class="w">
+</span></span></span></code></pre></div><p>Pretty basic stuff, and probably not dissimilar to many user-data
+examples you&rsquo;ll find online (apart from the tftpl syntax).</p>
+<p>Now to a point of contention: if you ask the internet, it will tell you
+that user-data is an excellent place to define pretty much everything,
+be it network interfaces, static routes, package upgrades and anything
+else your heart may desire. I am here to tell you that these are lies,
+and that they will lead you down a very dark path. You are free to take
+it, but you have been warned.</p>
+<p>In my opinion, if you want to &ldquo;do stuff&rdquo; in an automated fashion on
+pretty much any *NIX system, you can do it with shell scripts &mdash; and
+if you can&rsquo;t do it with shell scripts, maybe it&rsquo;s not worth doing.</p>
+<p>You might think to yourself that doing things like interface
+configuration or software updates in a shell script is stupid, because
+you should do it the &ldquo;right way&rdquo; through the tool you are using, and if
+I hadn&rsquo;t tried it myself I&rsquo;d probably agree with you: instead I&rsquo;d invite
+you to not contact me about this and move immediately to trying this out
+yourself by configuring interfaces, multiple conditional routes and
+package updates on Ubuntu, Rocky and FreeBSD using only YAML and then
+get back to me with what your new favorite black metal album and
+preferred form of nicotine is.</p>
+<p>We&rsquo;re doing shell scripts. Here&rsquo;s an example of how
+<code>bootstrap.sh_freebsd14.tftpl</code> might look:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="cp">#!/bin/sh
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>log<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;[</span><span class="k">$(</span>date +<span class="s1">&#39;%Y-%m-%dT%H:%M:%S%z&#39;</span><span class="k">)</span><span class="s2">]: </span><span class="nv">$*</span><span class="s2">&#34;</span> <span class="p">|</span> tee -a /var/log/bootstrap.log
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">err<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;[</span><span class="k">$(</span>date +<span class="s1">&#39;%Y-%m-%dT%H:%M:%S%z&#39;</span><span class="k">)</span><span class="s2">] [ERROR]: </span><span class="nv">$*</span><span class="s2">&#34;</span> <span class="p">|</span> tee -a /var/log/bootstrap.log &gt;<span class="p">&amp;</span><span class="m">2</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">panic<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;[</span><span class="k">$(</span>date +<span class="s1">&#39;%Y-%m-%dT%H:%M:%S%z&#39;</span><span class="k">)</span><span class="s2">] [PANIC]: </span><span class="nv">$*</span><span class="s2">&#34;</span> <span class="p">|</span> tee -a /var/log/bootstrap.log &gt;<span class="p">&amp;</span><span class="m">2</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">exit</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">log <span class="s2">&#34;started running on </span><span class="si">${</span><span class="nv">hostname</span><span class="si">}</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">log <span class="s2">&#34;netbox says: &#39;</span><span class="si">${</span><span class="nv">server_os</span><span class="si">}</span><span class="s2">&#39;.&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">log <span class="s2">&#34;setting default keymap to &#39;se&#39;.&#34;</span>
+</span></span><span class="line"><span class="cl">sysrc <span class="nv">keymap</span><span class="o">=</span><span class="s2">&#34;se&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">log <span class="s2">&#34;setting hostname to &#39;</span><span class="si">${</span><span class="nv">hostname</span><span class="si">}</span><span class="s2">&#39;.&#34;</span>
+</span></span><span class="line"><span class="cl">sysrc <span class="nv">hostname</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">hostname</span><span class="si">}</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">log <span class="s2">&#34;assuming ZFS root filesystem on /dev/da0p5.&#34;</span>
+</span></span><span class="line"><span class="cl">log <span class="s2">&#34;attempting resize and enabling compression.&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> zpool status<span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">  gpart recover /dev/da0 2&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">|</span> tee -a /var/log/bootstrap.log
+</span></span><span class="line"><span class="cl">  gpart resize -i <span class="m">4</span> da0 2&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">|</span> tee -a /var/log/bootstrap.log
+</span></span><span class="line"><span class="cl">  zpool <span class="nb">set</span> <span class="nv">autoexpand</span><span class="o">=</span>on zroot 2&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">|</span> tee -a /var/log/bootstrap.log
+</span></span><span class="line"><span class="cl">  zpool online -e zroot /dev/da0p4 2&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">|</span> tee -a /var/log/bootstrap.log
+</span></span><span class="line"><span class="cl">  zfs <span class="nb">set</span> <span class="nv">compression</span><span class="o">=</span>lz4 zroot 2&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">|</span> tee -a /var/log/bootstrap.log
+</span></span><span class="line"><span class="cl">  log <span class="s2">&#34;resized ZFS root partition, compression set.&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">else</span>
+</span></span><span class="line"><span class="cl">  err <span class="s2">&#34;ZFS operations failed, not ZFS?&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">log <span class="s2">&#34;replacing /etc/ssh/sshd_config.&#34;</span>
+</span></span><span class="line"><span class="cl">cat <span class="s">&lt;&lt; EOF &gt; /etc/ssh/sshd_config
+</span></span></span><span class="line"><span class="cl"><span class="s"># restrict connections to ipv4
+</span></span></span><span class="line"><span class="cl"><span class="s">AddressFamily inet
+</span></span></span><span class="line"><span class="cl"><span class="s">Ciphers aes256-gcm@openssh.com,aes128-gcm@openssh.com
+</span></span></span><span class="line"><span class="cl"><span class="s">ClientAliveCountMax 3
+</span></span></span><span class="line"><span class="cl"><span class="s">ClientAliveInterval 300
+</span></span></span><span class="line"><span class="cl"><span class="s">Compression delayed
+</span></span></span><span class="line"><span class="cl"><span class="s">DisableForwarding yes
+</span></span></span><span class="line"><span class="cl"><span class="s">HostKey /etc/ssh/ssh_host_ed25519_key
+</span></span></span><span class="line"><span class="cl"><span class="s">HostKeyAlgorithms ssh-ed25519
+</span></span></span><span class="line"><span class="cl"><span class="s">MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com
+</span></span></span><span class="line"><span class="cl"><span class="s">KbdInteractiveAuthentication no
+</span></span></span><span class="line"><span class="cl"><span class="s">KexAlgorithms sntrup761x25519-sha512@openssh.com,curve25519-sha256,curve25519-sha256@libssh.org,diffie-hellman-group18-sha512,diffie-hellman-group16-sha512
+</span></span></span><span class="line"><span class="cl"><span class="s">LoginGraceTime 30
+</span></span></span><span class="line"><span class="cl"><span class="s">LogLevel VERBOSE
+</span></span></span><span class="line"><span class="cl"><span class="s">MaxAuthTries 1
+</span></span></span><span class="line"><span class="cl"><span class="s">MaxStartups 3:30:10
+</span></span></span><span class="line"><span class="cl"><span class="s">PasswordAuthentication no
+</span></span></span><span class="line"><span class="cl"><span class="s">PermitRootLogin without-password
+</span></span></span><span class="line"><span class="cl"><span class="s">PermitTunnel no
+</span></span></span><span class="line"><span class="cl"><span class="s">Port 22
+</span></span></span><span class="line"><span class="cl"><span class="s">PrintMotd no
+</span></span></span><span class="line"><span class="cl"><span class="s">RekeyLimit 500M 60m
+</span></span></span><span class="line"><span class="cl"><span class="s">Subsystem       sftp    /usr/lib/openssh/sftp-server
+</span></span></span><span class="line"><span class="cl"><span class="s">TCPKeepAlive no
+</span></span></span><span class="line"><span class="cl"><span class="s">UseDNS no
+</span></span></span><span class="line"><span class="cl"><span class="s">UsePAM yes
+</span></span></span><span class="line"><span class="cl"><span class="s">VersionAddendum &#34;SSH-2.0-Protocol&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">X11Forwarding no
+</span></span></span><span class="line"><span class="cl"><span class="s"># ListenAddress is amended below
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">EOF</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># begin interface loop</span>
+</span></span><span class="line"><span class="cl">%<span class="o">{</span> <span class="k">for</span> k,v in ifaces ~<span class="o">}</span>
+</span></span><span class="line"><span class="cl">log <span class="s2">&#34;configuring interface </span><span class="si">${</span><span class="nv">v</span><span class="p">.name</span><span class="si">}</span><span class="s2">.&#34;</span>
+</span></span><span class="line"><span class="cl">sysrc ifconfig_<span class="si">${</span><span class="nv">v</span><span class="p">.name</span><span class="si">}</span><span class="o">=</span><span class="s2">&#34;inet </span><span class="si">${</span><span class="nv">v</span><span class="p">.ip</span><span class="si">}</span><span class="s2">&#34;</span> 2&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">|</span> tee -a /var/log/bootstrap.log
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">%<span class="o">{</span> <span class="k">if</span> can<span class="o">(</span>v.gateway<span class="o">)</span> ~<span class="o">}</span>
+</span></span><span class="line"><span class="cl">log <span class="s2">&#34;</span><span class="si">${</span><span class="nv">v</span><span class="p">.name</span><span class="si">}</span><span class="s2"> gave us default gateway </span><span class="si">${</span><span class="nv">v</span><span class="p">.gateway</span><span class="si">}</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">sysrc <span class="nv">defaultrouter</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">v</span><span class="p">.gateway</span><span class="si">}</span><span class="s2">&#34;</span> 2&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">|</span> tee -a /var/log/bootstrap.log
+</span></span><span class="line"><span class="cl">%<span class="o">{</span> endif ~<span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">%<span class="o">{</span> <span class="k">if</span> v.name <span class="o">==</span> <span class="s2">&#34;vmx0&#34;</span> ~<span class="o">}</span>
+</span></span><span class="line"><span class="cl">log <span class="s2">&#34;special case for vmx0: 10.1.0.0/16 via </span><span class="si">${</span><span class="nv">cidrhost</span><span class="p">(v.REDACTED, 1)</span><span class="si">}</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">sysrc <span class="nv">route_specialcase</span><span class="o">=</span><span class="s2">&#34;-net 10.1.0.0/16 </span><span class="si">${</span><span class="nv">cidrhost</span><span class="p">(v.REDACTED, 1)</span><span class="si">}</span><span class="s2">&#34;</span> 2&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">|</span> tee -a /var/log/bootstrap.log
+</span></span><span class="line"><span class="cl">sysrc <span class="nv">static_routes</span><span class="o">+=</span><span class="s2">&#34;specialcase&#34;</span> 2&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">|</span> tee -a /var/log/bootstrap.log
+</span></span><span class="line"><span class="cl">log <span class="s2">&#34;adding sshd ListenAddress for vmx0 ip&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;ListenAddress </span><span class="si">${</span><span class="nv">split</span><span class="p">(</span><span class="s2">&#34;/&#34;</span><span class="p">, v.ip)[0]</span><span class="si">}</span><span class="s2">&#34;</span> <span class="p">|</span> tee -a /etc/ssh/sshd_config
+</span></span><span class="line"><span class="cl">%<span class="o">{</span> endif ~<span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">%<span class="o">{</span> <span class="k">if</span> can<span class="o">(</span>v.routes<span class="o">)</span> ~<span class="o">}</span>
+</span></span><span class="line"><span class="cl">%<span class="o">{</span> <span class="k">for</span> to,via in v.routes ~<span class="o">}</span>
+</span></span><span class="line"><span class="cl">log <span class="s2">&#34;adding netbox static route: </span><span class="si">${</span><span class="nv">to</span><span class="si">}</span><span class="s2"> via </span><span class="si">${</span><span class="nv">via</span><span class="si">}</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">sysrc route_<span class="si">${</span><span class="nv">replace</span><span class="p">(replace(to, </span><span class="s2">&#34;.&#34;</span><span class="p">, </span><span class="s2">&#34;_&#34;</span><span class="p">), </span><span class="s2">&#34;/&#34;</span><span class="p">, </span><span class="s2">&#34;_&#34;</span><span class="p">)</span><span class="si">}</span><span class="o">=</span><span class="s2">&#34;-net </span><span class="si">${</span><span class="nv">to</span><span class="si">}</span><span class="s2"> </span><span class="si">${</span><span class="nv">via</span><span class="si">}</span><span class="s2">&#34;</span> 2&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">|</span> tee -a /var/log/bootstrap.log
+</span></span><span class="line"><span class="cl">sysrc <span class="nv">static_routes</span><span class="o">+=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">replace</span><span class="p">(replace(to, </span><span class="s2">&#34;.&#34;</span><span class="p">, </span><span class="s2">&#34;_&#34;</span><span class="p">), </span><span class="s2">&#34;/&#34;</span><span class="p">, </span><span class="s2">&#34;_&#34;</span><span class="p">)</span><span class="si">}</span><span class="s2">&#34;</span> 2&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">|</span> tee -a /var/log/bootstrap.log
+</span></span><span class="line"><span class="cl">%<span class="o">{</span> endfor ~<span class="o">}</span>
+</span></span><span class="line"><span class="cl">%<span class="o">{</span> endif ~<span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">%<span class="o">{</span> endfor ~<span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">log <span class="s2">&#34;restarting netif and routing.&#34;</span>
+</span></span><span class="line"><span class="cl">service netif restart 2&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">|</span> tee -a /var/log/bootstrap.log
+</span></span><span class="line"><span class="cl">service routing restart 2&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">|</span> tee -a /var/log/bootstrap.log
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># freebsd global DNS config</span>
+</span></span><span class="line"><span class="cl">log <span class="s2">&#34;adding external DNS entries.&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;nameserver 8.8.8.8&#34;</span> <span class="p">|</span> tee /etc/resolv.conf
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;nameserver 1.1.1.1&#34;</span> <span class="p">|</span> tee -a /etc/resolv.conf
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">log <span class="s2">&#34;verifying network access, waiting for ping response using DNS (google.se).&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">COUNT</span><span class="o">=</span><span class="m">0</span>
+</span></span><span class="line"><span class="cl"><span class="k">while</span> ! ping -c <span class="m">1</span> google.se &gt; /dev/null 2&gt;<span class="p">&amp;</span>1<span class="p">;</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">  sleep <span class="m">1</span>
+</span></span><span class="line"><span class="cl">  <span class="nv">COUNT</span><span class="o">=</span><span class="k">$((</span>COUNT <span class="o">+</span> <span class="m">1</span><span class="k">))</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="o">[</span> <span class="nv">$COUNT</span> -gt <span class="m">10</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">    panic <span class="s2">&#34;ping response failed, final pkg step will not happen. bailing out.&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">fi</span>
+</span></span><span class="line"><span class="cl"><span class="k">done</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># VERIFY PACKAGES BEFORE ADDING: one incorrect package will break install</span>
+</span></span><span class="line"><span class="cl"><span class="nv">PACKAGES</span><span class="o">=</span><span class="s2">&#34;bind-tools vim nano tree htop curl tmux terminfo-db&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">log <span class="s2">&#34;updating all current packages with pkg.&#34;</span>
+</span></span><span class="line"><span class="cl">pkg update 2&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">|</span> tee -a /var/log/bootstrap.log
+</span></span><span class="line"><span class="cl">pkg upgrade -y 2&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">|</span> tee -a /var/log/bootstrap.log
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">log <span class="s2">&#34;installing packages: &#39;</span><span class="nv">$PACKAGES</span><span class="s2">&#39;.&#34;</span>
+</span></span><span class="line"><span class="cl">pkg install -y <span class="nv">$PACKAGES</span> 2&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">|</span> tee -a /var/log/bootstrap.log
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">log <span class="s2">&#34;enable sshd before reboot.&#34;</span>
+</span></span><span class="line"><span class="cl">sysrc <span class="nv">sshd_enable</span><span class="o">=</span><span class="s2">&#34;YES&#34;</span> 2&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">|</span> tee -a /var/log/bootstrap.log
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># user-data created the &#34;foo&#34; user for us</span>
+</span></span><span class="line"><span class="cl">log <span class="s2">&#34;disabling and locking root user (bsd)&#34;</span>
+</span></span><span class="line"><span class="cl">pw lock root
+</span></span><span class="line"><span class="cl">pw usermod root -s /usr/sbin/nologin
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">SIGNOFF</span><span class="o">=</span><span class="s2">&#34;finished on </span><span class="si">${</span><span class="nv">hostname</span><span class="si">}</span><span class="s2">. rebooting.&#34;</span>
+</span></span><span class="line"><span class="cl">log <span class="s2">&#34;</span><span class="nv">$SIGNOFF</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">shutdown -r now <span class="s2">&#34;</span><span class="nv">$SIGNOFF</span><span class="s2">&#34;</span>
+</span></span></code></pre></div><p>Hopefully, this illustrates some of the benefits of using shell scripts:</p>
+<ul>
+<li>You can set up your own logging</li>
+<li>You can loop over and re-use incoming data freely without having to
+generate YAML (this will hurt you)</li>
+<li>You can handle errors</li>
+<li>It works, because it does exactly what you tell it</li>
+<li>It breaks for the same reason</li>
+</ul>
+<p>At the end of the day, I&rsquo;d rather troubleshoot <strong>small</strong> init scripts
+than trying to understand why one specific cloud-init module isn&rsquo;t
+working as expected on one specific OS. I&rsquo;m not saying this is the best
+way to do it, only that in my experience you can only take so much of
+having to scrap all your work because it worked for A but breaks with B,
+and if you want to move on you need to patch a cloud-init module.</p>
+<p>Of course, I understand shell scripts aren&rsquo;t for everyone or every
+situation, so until you experience the same frustration, which might be
+never, feel free to try out one of <a href="https://cloudinit.readthedocs.io/en/latest/reference/modules.html">the many modules available by
+default</a>.</p>
+<p>Saving the best for last, let&rsquo;s move on to the part that actually has a
+little do with FreeBSD: VMware and creating VM templates.</p>
+<h3 id="vmware-4">VMware (4)<a href="#vmware-4" class="hanchor" ariaLabel="Anchor">#</a> </h3>
+<p>In order to deploy a VM in VMware, you need to have either a template,
+or an existing VM to clone. In reality, as far as I can understand at
+least, these two things are essentially the same thing, only that
+templates are &ldquo;read only&rdquo;.</p>
+<p>There are many fun file formats to choose from, but these are the most
+common you will probably come across, in no particular order:</p>
+<ul>
+<li><code>QCOW2</code>: The QEMU copy on write format, perhaps the most commonly
+available, and the one I pick for FreeBSD and Rocky.</li>
+<li><code>VMDK</code>: The virtual machine disk format, developed by VMware, it&rsquo;s
+somewhat less commonly available but can be easily converted into from
+QCOW2.</li>
+<li><code>OVA</code>: Usually only available for Ubuntu, a lot easier if you&rsquo;re stuck
+with VMware, but pretty uncommon.</li>
+</ul>
+<p>Now, before you say anything, I am well aware that there are third party
+sites that offer things like OVA files for FreeBSD, even though they&rsquo;re
+not officially available. My personal opinion is that using these is
+bordering on insane, as you&rsquo;re giving up the safety of getting your OS
+images directly from the source for a little bit of comfort &mdash; and to
+paraphrase what someone once said: those who gives up security for
+comfort deserves neither. I&rsquo;m not accusing anyone of anything, I&rsquo;m sure
+they&rsquo;re fine, but I won&rsquo;t use them, and if you wanted to spread a
+rootkit around it sure would be a great way to do it.</p>
+<p>The process of creating these templates is done on Linux. Unfortunately
+I don&rsquo;t really know what the equivalent commands would be for FreeBSD,
+but if you want me to add them feel free tell me what they are, because
+I don&rsquo;t use FreeBSD as a desktop OS.</p>
+<p>The process I&rsquo;m currently using for creating FreeBSD templates isn&rsquo;t
+exactly painless, but it isn&rsquo;t too bad either considering you won&rsquo;t be
+doing it that often:</p>
+<ul>
+<li>Download your cloud image <a href="https://download.freebsd.org/ftp/releases/VM-IMAGES/">from the official
+website</a>,
+matching the architecture and file system you want.</li>
+<li>FreeBSD specifically does offer VMDK files, but some operating systems
+do not (I think Rocky is one), so we&rsquo;ll use the QCOW2 and convert it,
+just to show an example of how.</li>
+<li>Unpack the file if necessary.</li>
+</ul>
+<p>The first thing we&rsquo;ll do is increase the allowed disk space usage, since
+it by default is pretty close to full, and we will need to install a bit
+of stuff. You can probably get away with less but I prefer expanding it
+with at least 5G:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">qemu-img resize FreeBSD-14.1-RELEASE-amd64-zfs.qcow2 +5G
+</span></span></code></pre></div><p>Now we can boot it:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">qemu-system-x86_64 <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span> -drive <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span> <span class="nv">file</span><span class="o">=</span>FreeBSD-14.1-RELEASE-amd64-zfs.qcow2,if<span class="o">=</span>virtio <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span> -m 4G <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span> -enable-kvm <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span> -smp <span class="m">4</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span> -cpu host
+</span></span></code></pre></div><p>Then login as &ldquo;root&rdquo; without a password. At this point we will do
+whatever preparations we want in our template:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># you might want to change your keyboard layout</span>
+</span></span><span class="line"><span class="cl">kbdcontrol -l se
+</span></span><span class="line"><span class="cl"><span class="c1"># install cloud-init and open-vm-tools</span>
+</span></span><span class="line"><span class="cl">pkg install net/cloud-init open-vm-tools-nox11
+</span></span><span class="line"><span class="cl"><span class="c1"># install whatever other stuff you want by default</span>
+</span></span><span class="line"><span class="cl">pkg install vim
+</span></span><span class="line"><span class="cl"><span class="c1"># enable relevant services</span>
+</span></span><span class="line"><span class="cl">sysrc <span class="nv">cloudinit_enable</span><span class="o">=</span><span class="s2">&#34;YES&#34;</span>
+</span></span><span class="line"><span class="cl">sysrc <span class="nv">vmware_guest_vmblock_enable</span><span class="o">=</span><span class="s2">&#34;YES&#34;</span>
+</span></span><span class="line"><span class="cl">sysrc <span class="nv">vmware_guest_vmhgfs_enable</span><span class="o">=</span><span class="s2">&#34;NO&#34;</span>    <span class="c1"># YES if you want shared folders</span>
+</span></span><span class="line"><span class="cl">sysrc <span class="nv">vmware_guest_vmmemctl_enable</span><span class="o">=</span><span class="s2">&#34;YES&#34;</span> <span class="c1"># for memory ballooning</span>
+</span></span><span class="line"><span class="cl">sysrc <span class="nv">vmware_guest_vmxnet_enable</span><span class="o">=</span><span class="s2">&#34;YES&#34;</span>   <span class="c1"># vmxnet driver</span>
+</span></span><span class="line"><span class="cl">sysrc <span class="nv">vmware_guestd_enable</span><span class="o">=</span><span class="s2">&#34;YES&#34;</span>         <span class="c1"># vmware ntp, reboot etc</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># not strictly necessary, but good to know if you ever want to</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># reset your cloud-init config so it runs on next boot</span>
+</span></span><span class="line"><span class="cl">cloud-init clean --logs --machine-id
+</span></span><span class="line"><span class="cl"><span class="c1"># hide all our typos from shell history</span>
+</span></span><span class="line"><span class="cl"><span class="nb">unset</span> savehist
+</span></span><span class="line"><span class="cl">poweroff
+</span></span></code></pre></div><p>That&rsquo;s it, we now have a FreeBSD machine that is ready to be
+initialized.</p>
+<p>A short tangent regarding the packages we install: previously I had been
+using vApp values to push cloud-init data into VMs, and while this
+worked all right for both Ubuntu and Rocky, I never got it to work with
+FreeBSD.</p>
+<p>Looking around, I found that there seems to be a more modern (?) way of
+passing this data, which doesn&rsquo;t require you to attach a CD-ROM to the
+machine and grab it from there: all you need to do is ensure
+<code>open-vm-tools</code> is already installed &mdash; which you probably want anyway
+since it adds a lot of basic VMware functionality &mdash; and <code>cloud-init</code>
+will be able to query what&rsquo;s called &ldquo;guestinfo&rdquo;. It&rsquo;s important to note
+though that for this to work, the vApp options need to be <strong>disabled</strong>
+before creating a VM template: this is extra important for something
+like Ubuntu OVA files where they are enabled and filled out by default.</p>
+<p>The values we set on deploy for things like &ldquo;userdata&rdquo; or &ldquo;metadata&rdquo; can
+be seen in the advanced configuration of the VM in vSphere, as mentioned
+in the comments in under the Tofu VM definition.</p>
+<p>Ok, so the machine is ready to go, but in our example it&rsquo;s in the wrong
+format, so we need to convert it to VMDK:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">qemu-img convert -p -f qcow2 -O vmdk -o <span class="nv">subformat</span><span class="o">=</span>streamOptimized -c FreeBSD-14.1-RELEASE-amd64-zfs.qcow2 freebsd14_<span class="k">$(</span>date -I<span class="k">)</span>.vmdk
+</span></span></code></pre></div><p>This will take some time due to compression, but when done you should
+have a VMDK file that isn&rsquo;t larger than necessary and is ready to be
+used as a disk surface for a VM.</p>
+<p>The next steps will differ depending on your environment, so I&rsquo;ll
+describe them in general:</p>
+<ul>
+<li>Upload your VMDK file to a datastore that can be reached from where
+you want to create your VM. You may be able to do it in vSphere, or
+you may have to log in directly against a host, or something else.</li>
+<li>When it&rsquo;s done, create a new virtual machine in vSphere. Add a new
+hard drive, but select &ldquo;existing hard drive&rdquo; and point it to your VMDK
+file.</li>
+<li>Remove the default drive, since we only want one.</li>
+<li>Save your VM, no need to boot it up (it might even fail).</li>
+<li>Create a template from this VM. This will be your main template for
+deploys.</li>
+<li>Make sure this template has a name that matches whatever you told Tofu
+to look for.</li>
+</ul>
+<p>At this point, you should be ready to go. Let&rsquo;s do a short summary of
+what happens on deploy:</p>
+<ul>
+<li>Data about the deploy comes from somewhere and ends up in a JSON file.</li>
+<li>This JSON file is parsed by Tofu, which creates and maps objects
+through the provider you configured.</li>
+<li>Tofu renders cloud-init template data which contain metadata, some
+basic instructions for what users to create or keys to add, as well as
+a shell script which runs automatically.</li>
+<li>Tofu tells VMware via the provider to create any objects that are
+defined but missing, and passes the rendered VM init template as
+base64.</li>
+<li>The VM (hopefully) deploys from the template</li>
+<li>cloud-init runs as it detects this is the first boot, with some help
+from open-vm-tools it finds the init payload that Tofu passed on and
+runs it.</li>
+<li>The VM is now running and configured, with the correct interface
+configurations, routes, packages installed, and whatever else was set
+up by either cloud-init yaml configuration or the shell script.</li>
+</ul>
+<p>All right, we&rsquo;re well past a thousand lines now so this will have to do.
+Hopefully this has been of some use, maybe you learned something or
+maybe you saw something that looks really odd and unnecessary. In either
+case, I hope it was of some use, and feel free to contact me with any
+feedback (preferably the positive kind) or any suggestions on
+improvements.</p>
+<h4 id="changelog">Changelog<a href="#changelog" class="hanchor" ariaLabel="Anchor">#</a> </h4>
+<ul>
+<li><em>2024-09-23 (#1)</em> &mdash; initial post.</li>
+</ul>
+
+      </div></div>
+
+  
+    
+<div class="pagination">
+  <div class="pagination__title">
+    <span class="pagination__title-h">Read other posts</span>
+    <hr />
+  </div>
+  <div class="pagination__buttons">
+    
+    
+    
+      <a href="https://agren.cc/p/trusted-gpg/" class="button inline next">
+        Using signed-by in Debian repository configuration
+      </a>
+    
+  </div>
+</div>
+
+
+  
+
+  
+    
+
+  
+</article>
+
+  </div>
+
+  
+    <footer class="footer">
+    <div class="footer__inner">
+        <span>:: All text written by me is <a
+        href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA
+        4.0</a>, credit "agren.cc"<br/>:: Rendered with <a
+        href="https://gohugo.io/">Hugo</a> and the <a
+        href="https://github.com/panr/hugo-theme-terminal"
+        target="_blank">terminal theme</a>.</span>
+        </div>
+    </div>
+  </footer>
+
+  
+  
+
+  
+
+  <script type="text/javascript" src="/bundle.min.js"></script>
+
+  
+  
+
+
+  
+</div>
+
+</body>
+</html>
