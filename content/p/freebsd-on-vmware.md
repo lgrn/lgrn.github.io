@@ -1,6 +1,6 @@
 ---
 title: 'Deploying FreeBSD on VMware'
-date: 2024-09-21T11:45:00+02:00
+date: 2024-09-23T11:45:00+02:00
 draft: false
 tags:
   - freebsd
@@ -8,18 +8,20 @@ tags:
   - sysadmin
 ---
 
+_Revision: 2024-09-23 (#1)_ --- changelog at the end.
+
 This post is about multiple components involved in deploying FreeBSD to
 a VMware environment. Since there are many moving parts this may also be
 interesting in general to anyone doing "infrastructure as code" and
-cloud deployments.
+cloud deployments, the process is quite similar for Linux.
 
 The components involved are separated into chapters by chronological
 order:
 
-- Netbox (1)
-- OpenTofu (2)
-- cloud-init (3)
-- VMware (4)
+- [Netbox (1)](#netbox-1)
+- [OpenTofu (2)](#opentofu-2)
+- [cloud-init (3)](#cloud-init-3)
+- [VMware (4)](#vmware-4)
 
 Since the entire process is pretty involved, this post aims to give a
 basic outline of how this can be done. If anything is unclear, or if you
@@ -941,6 +943,194 @@ shutdown -r now "$SIGNOFF"
 Hopefully, this illustrates some of the benefits of using shell scripts:
 
 - You can set up your own logging
+- You can loop over and re-use incoming data freely without having to
+  generate YAML (this will hurt you)
 - You can handle errors
-- When you want to do the thing, you can just do the thing without
-  having to find a cloud-init module
+- It works, because it does exactly what you tell it
+- It breaks for the same reason
+
+At the end of the day, I'd rather troubleshoot **small** init scripts
+than trying to understand why one specific cloud-init module isn't working as
+expected on one specific OS. I'm not saying this is the best way to do it, only that in my
+experience you can only take so much of having to scrap all your work
+because it worked for A but breaks with B, and if you want to move on
+you need to patch a cloud-init module.
+
+Of course, I understand shell scripts aren't for everyone or every
+situation, so until you experience the same frustration, which might be
+never, feel free to try out one of [the many
+modules available by default](https://cloudinit.readthedocs.io/en/latest/reference/modules.html).
+
+Ok, this has been dragging on for way too long, so saving the best for
+last, let's move on to the part that actually has a little do with
+FreeBSD: VMware and creating VM templates.
+
+### VMware (4)
+
+In order to deploy a VM in VMware, you need to have either a template,
+or an existing VM to clone. In reality, as far as I can understand at
+least, these two things are essentially the same thing, only that
+templates are "read only".
+
+There are many fun file formats to choose from, but these are the most
+common you will probably come across, in no particular order:
+
+- `QCOW2`: The QEMU copy on write format, perhaps the most commonly
+  available, and the one I pick for FreeBSD and Rocky.
+- `VMDK`: The virtual machine disk format, developed by VMware, it's
+  somewhat less commonly available but can be easily converted into from
+  QCOW2.
+- `OVA`: Usually only available for Ubuntu, a lot easier if you're stuck
+  with VMware, but pretty uncommon.
+
+Now, before you say anything, I am well aware that there are third party
+sites that offer things like OVA files for FreeBSD, even though they're
+not officially available. My personal opinion is that using these is
+bordering on insane, as you're giving up the safety of getting your OS
+images directly from the source for a little bit of comfort --- and to
+paraphrase what someone once said: those who gives up security for
+comfort deserves neither. I'm not accusing anyone of anything, I'm sure
+they're fine, but I won't use them, and if you wanted to spread a
+rootkit around it sure would be a great way to do it.
+
+The process of creating these templates is done on Linux. Unfortunately
+I don't really know what the equivalent commands would be for FreeBSD,
+but if you want me to add them feel free tell me what they are, because
+I don't use FreeBSD as a desktop OS.
+
+The process I'm currently using for creating FreeBSD templates isn't
+exactly painless, but it isn't too bad either considering you won't be
+doing it that often:
+
+- Download your cloud image [from the official
+  website](https://download.freebsd.org/ftp/releases/VM-IMAGES/),
+  matching the architecture and file system you want.
+- FreeBSD specifically does offer VMDK files, but some operating systems
+  do not (I think Rocky is one), so we'll use the QCOW2 and convert it,
+  just to show an example of how.
+- Unpack the file if necessary.
+
+The first thing we'll do is increase the allowed disk space usage, since
+it by default is pretty close to full, and we will need to install a bit
+of stuff. You can probably get away with less but I prefer expanding it
+with at least 5G:
+
+```bash
+qemu-img resize FreeBSD-14.1-RELEASE-amd64-zfs.qcow2 +5G
+```
+
+Now we can boot it:
+
+```bash
+qemu-system-x86_64 \
+ -drive \
+ file=FreeBSD-14.1-RELEASE-amd64-zfs.qcow2,if=virtio \
+ -m 4G \
+ -enable-kvm \
+ -smp 4 \
+ -cpu host
+```
+
+Then login as "root" without a password. At this point we will do
+whatever preparations we want in our template:
+
+```sh
+# you might want to change your keyboard layout
+kbdcontrol -l se
+# install cloud-init and open-vm-tools
+pkg install net/cloud-init open-vm-tools-nox11
+# install whatever other stuff you want by default
+pkg install vim
+# enable relevant services
+sysrc cloudinit_enable="YES"
+sysrc vmware_guest_vmblock_enable="YES"
+sysrc vmware_guest_vmhgfs_enable="NO"    # YES if you want shared folders
+sysrc vmware_guest_vmmemctl_enable="YES" # for memory ballooning
+sysrc vmware_guest_vmxnet_enable="YES"   # vmxnet driver
+sysrc vmware_guestd_enable="YES"         # vmware ntp, reboot etc
+# not strictly necessary, but good to know if you ever want to
+# reset your cloud-init config so it runs on next boot
+cloud-init clean --logs --machine-id
+# hide all our typos from shell history
+unset savehist
+poweroff
+```
+
+That's it, we now have a FreeBSD machine that is ready to be
+initialized.
+
+A short tangent regarding the packages we install: previously I had been
+using vApp values to push cloud-init data into VMs, and while this
+worked all right for both Ubuntu and Rocky, I never got it to work with
+FreeBSD.
+
+Looking around, I found that there seems to be a more modern (?) way of
+passing this data, which doesn't require you to attach a CD-ROM to the
+machine and grab it from there: all you need to do is ensure
+`open-vm-tools` is already installed --- which you probably want anyway
+since it adds a lot of basic VMware functionality --- and `cloud-init`
+will be able to query what's called "guestinfo". It's important to note
+though that for this to work, the vApp options need to be **disabled**
+before creating a VM template: this is extra important for something
+like Ubuntu OVA files where they are enabled and filled out by default.
+
+I won't go into this much more, but the values we set on deploy for
+things like "userdata" or "metadata" can be seen in the advanced
+configuration of the VM in vSphere.
+
+Ok, so the machine is ready to go, but in our example it's in the wrong
+format, so we need to convert it to VMDK:
+
+```bash
+qemu-img convert -p -f qcow2 -O vmdk -o subformat=streamOptimized -c FreeBSD-14.1-RELEASE-amd64-zfs.qcow2 freebsd14_$(date -I).vmdk
+```
+
+This will take some time due to compression, but when done you should
+have a VMDK file that isn't larger than necessary and is ready to be
+used as a disk surface for a VM.
+
+The next steps will differ depending on your environment, so I'll
+describe them in general:
+
+- Upload your VMDK file to a datastore that can be reached from where
+  you want to create your VM. You may be able to do it in vSphere, or
+  you may have to log in directly against a host, or something else.
+- When it's done, create a new virtual machine in vSphere. Add a new
+  hard drive, but select "existing hard drive" and point it to your VMDK
+  file.
+- Remove the default drive, since we only want one.
+- Save your VM, no need to boot it up (it might even fail).
+- Create a template from this VM. This will be your main template for
+  deploys.
+- Make sure this template has a name that matches whatever you told Tofu
+  to look for.
+
+At this point, you should be ready to go. Let's do a short summary of
+what happens on deploy:
+
+- Data about the deploy comes from somewhere and ends up in a JSON file.
+- This JSON file is parsed by Tofu, which creates and maps objects
+  through the provider you configured.
+- Tofu renders cloud-init template data which contain metadata, some basic
+  instructions for what users to create or keys to add, as well as a
+  shell script which runs automatically.
+- Tofu tells VMware via the provider to create any objects that are
+  defined but missing, and passes the rendered VM init template as base64.
+- The VM (hopefully) deploys from the template
+- cloud-init runs as it detects this is the first boot, with some help
+  from open-vm-tools it finds the init payload that Tofu passed on and
+  runs it.
+- The VM is now running and configured, with the correct interface
+  configurations, routes, packages installed, and whatever else was set up by
+  either cloud-init yaml configuration or the shell script.
+
+All right, we're well past a thousand lines now so this will have to do.
+Hopefully this has been of some use, maybe you learned something or
+maybe you saw something that looks really odd and unnecessary. In either
+case, I hope it was of some use, and feel free to contact me with any
+feedback (preferably the positive kind) or any suggestions on
+improvements.
+
+#### Changelog
+
+- _2024-09-23 (#1)_ --- initial post.
