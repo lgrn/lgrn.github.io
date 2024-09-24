@@ -18,6 +18,16 @@
     </item>
     
     <item>
+      <title>Linux</title>
+      <link>https://agren.cc/tags/linux/</link>
+      <pubDate>Mon, 23 Sep 2024 11:45:00 +0200</pubDate>
+      
+      <guid>https://agren.cc/tags/linux/</guid>
+      <description></description>
+      <content></content>
+    </item>
+    
+    <item>
       <title>Sysadmin</title>
       <link>https://agren.cc/tags/sysadmin/</link>
       <pubDate>Mon, 23 Sep 2024 11:45:00 +0200</pubDate>
@@ -48,16 +58,6 @@
     </item>
     
     <item>
-      <title>Linux</title>
-      <link>https://agren.cc/tags/linux/</link>
-      <pubDate>Sun, 05 May 2024 17:45:00 +0200</pubDate>
-      
-      <guid>https://agren.cc/tags/linux/</guid>
-      <description></description>
-      <content></content>
-    </item>
-    
-    <item>
       <title>Ubuntu</title>
       <link>https://agren.cc/tags/ubuntu/</link>
       <pubDate>Sun, 05 May 2024 17:45:00 +0200</pubDate>
@@ -68,31 +68,21 @@
     </item>
     
     <item>
+      <title>Apple</title>
+      <link>https://agren.cc/tags/apple/</link>
+      <pubDate>Wed, 13 Sep 2023 19:08:00 +0200</pubDate>
+      
+      <guid>https://agren.cc/tags/apple/</guid>
+      <description></description>
+      <content></content>
+    </item>
+    
+    <item>
       <title>Wifi</title>
       <link>https://agren.cc/tags/wifi/</link>
       <pubDate>Sun, 25 Dec 2022 14:00:00 +0200</pubDate>
       
       <guid>https://agren.cc/tags/wifi/</guid>
-      <description></description>
-      <content></content>
-    </item>
-    
-    <item>
-      <title>EL8</title>
-      <link>https://agren.cc/tags/el8/</link>
-      <pubDate>Fri, 08 Oct 2021 15:30:51 +0200</pubDate>
-      
-      <guid>https://agren.cc/tags/el8/</guid>
-      <description></description>
-      <content></content>
-    </item>
-    
-    <item>
-      <title>Fail2ban</title>
-      <link>https://agren.cc/tags/fail2ban/</link>
-      <pubDate>Fri, 08 Oct 2021 15:30:51 +0200</pubDate>
-      
-      <guid>https://agren.cc/tags/fail2ban/</guid>
       <description></description>
       <content></content>
     </item>

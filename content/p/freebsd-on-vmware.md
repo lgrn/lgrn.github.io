@@ -6,6 +6,7 @@ tags:
   - freebsd
   - vmware
   - sysadmin
+  - linux
 ---
 
 This post is about multiple components involved in deploying FreeBSD to

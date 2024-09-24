@@ -4,6 +4,7 @@ date: 2024-03-12T12:00:00+02:00
 draft: false
 tags:
   - sysadmin
+  - linux
 ---
 
 Wildcard certificates are really useful, especially in cases where you
@@ -61,8 +62,8 @@ Verify with `certbot --version`
 
 ## Step 2: Set up configuration
 
-Ensure you have a file like `/root/.secrets/cloudflare.ini` that is
-only readable by root and contains something like:
+Ensure you have a file like `/root/.secrets/cloudflare.ini` that is only
+readable by root and contains something like:
 
 ```ini
 dns_cloudflare_email = "your@email.tld"
@@ -88,8 +89,7 @@ plugin to make DNS changes on your behalf, validating your ownership of
 the domain. The certificate will be issued to both `my.domain` and
 `*.my.domain`, meaning that it will also work for any subdomains.
 
-In order to actually receive a certificate, you must remove
-`--dry-run`.
+In order to actually receive a certificate, you must remove `--dry-run`.
 
 ## Step 4: Smash certificate
 
@@ -104,8 +104,8 @@ This certificate expires on 2024-06-01.
 ```
 
 In order for HAProxy to use this certificate, both the full chain and
-the private key must be contained in one single PEM file. This is
-easily achieved by doing:
+the private key must be contained in one single PEM file. This is easily
+achieved by doing:
 
 ```bash
 cat /etc/letsencrypt/live/my.domain/fullchain.pem \
@@ -123,8 +123,9 @@ bind *:443 ssl crt /etc/ssl/haproxy/
 ```
 
 HAProxy is smart enough to figure out which certificate to use, so that
-should be enough. For general TLS configuration, see the
-[HAProxy SSL/TLS configuration tutorial](https://www.haproxy.com/documentation/haproxy-configuration-tutorials/ssl-tls/)
+should be enough. For general TLS configuration, see the [HAProxy
+SSL/TLS configuration
+tutorial](https://www.haproxy.com/documentation/haproxy-configuration-tutorials/ssl-tls/)
 
 Whenever the certificate has changed on disk, you'll want to do:
 

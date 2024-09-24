@@ -11,6 +11,9 @@
     <loc>https://agren.cc/tags/freebsd/</loc>
     <lastmod>2024-09-23T11:45:00+02:00</lastmod>
   </url><url>
+    <loc>https://agren.cc/tags/linux/</loc>
+    <lastmod>2024-09-23T11:45:00+02:00</lastmod>
+  </url><url>
     <loc>https://agren.cc/p/</loc>
     <lastmod>2024-09-23T11:45:00+02:00</lastmod>
   </url><url>
@@ -26,9 +29,6 @@
     <loc>https://agren.cc/tags/debian/</loc>
     <lastmod>2024-05-05T17:45:00+02:00</lastmod>
   </url><url>
-    <loc>https://agren.cc/tags/linux/</loc>
-    <lastmod>2024-05-05T17:45:00+02:00</lastmod>
-  </url><url>
     <loc>https://agren.cc/tags/ubuntu/</loc>
     <lastmod>2024-05-05T17:45:00+02:00</lastmod>
   </url><url>
@@ -38,10 +38,13 @@
     <loc>https://agren.cc/p/certbot-with-haproxy/</loc>
     <lastmod>2024-03-12T12:00:00+02:00</lastmod>
   </url><url>
+    <loc>https://agren.cc/tags/apple/</loc>
+    <lastmod>2023-09-13T19:08:00+02:00</lastmod>
+  </url><url>
     <loc>https://agren.cc/p/curl-to-vlc/</loc>
     <lastmod>2023-09-13T19:08:00+02:00</lastmod>
   </url><url>
-    <loc>https://agren.cc/p/any-device-captive-wifi/</loc>
+    <loc>https://agren.cc/p/mac-spoofing-captive-wifi/</loc>
     <lastmod>2022-12-25T14:00:00+02:00</lastmod>
   </url><url>
     <loc>https://agren.cc/tags/wifi/</loc>
@@ -55,12 +58,6 @@
   </url><url>
     <loc>https://agren.cc/p/scratchpad/</loc>
     <lastmod>2022-09-24T12:51:00+02:00</lastmod>
-  </url><url>
-    <loc>https://agren.cc/tags/el8/</loc>
-    <lastmod>2021-10-08T15:30:51+02:00</lastmod>
-  </url><url>
-    <loc>https://agren.cc/tags/fail2ban/</loc>
-    <lastmod>2021-10-08T15:30:51+02:00</lastmod>
   </url><url>
     <loc>https://agren.cc/p/fail2ban-on-el8/</loc>
     <lastmod>2021-10-08T15:30:51+02:00</lastmod>

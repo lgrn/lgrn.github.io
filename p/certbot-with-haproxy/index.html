@@ -173,6 +173,8 @@
       
       #<a href="https://agren.cc/tags/sysadmin/">sysadmin</a>&nbsp;
       
+      #<a href="https://agren.cc/tags/linux/">linux</a>&nbsp;
+      
     </span>
   
   
@@ -219,8 +221,8 @@ also need the plugin for that:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ln -s /snap/bin/certbot /usr/bin/certbot
 </span></span></code></pre></div><p>Verify with <code>certbot --version</code></p>
 <h2 id="step-2-set-up-configuration">Step 2: Set up configuration<a href="#step-2-set-up-configuration" class="hanchor" ariaLabel="Anchor">#</a> </h2>
-<p>Ensure you have a file like <code>/root/.secrets/cloudflare.ini</code> that is
-only readable by root and contains something like:</p>
+<p>Ensure you have a file like <code>/root/.secrets/cloudflare.ini</code> that is only
+readable by root and contains something like:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="line"><span class="cl"><span class="na">dns_cloudflare_email</span> <span class="o">=</span> <span class="s">&#34;your@email.tld&#34;</span>
 </span></span><span class="line"><span class="cl"><span class="na">dns_cloudflare_api_key</span> <span class="o">=</span> <span class="s">&#34;786sdf6f87fs87ssdffd&#34;</span>
 </span></span></code></pre></div><p>You can set up an API key via the Cloudflare web GUI (google it).</p>
@@ -235,8 +237,7 @@ something like:</p>
 plugin to make DNS changes on your behalf, validating your ownership of
 the domain. The certificate will be issued to both <code>my.domain</code> and
 <code>*.my.domain</code>, meaning that it will also work for any subdomains.</p>
-<p>In order to actually receive a certificate, you must remove
-<code>--dry-run</code>.</p>
+<p>In order to actually receive a certificate, you must remove <code>--dry-run</code>.</p>
 <h2 id="step-4-smash-certificate">Step 4: Smash certificate<a href="#step-4-smash-certificate" class="hanchor" ariaLabel="Anchor">#</a> </h2>
 <p>Once you have successfully gotten a certificate, you&rsquo;ll see something
 like:</p>
@@ -245,8 +246,8 @@ like:</p>
 </span></span><span class="line"><span class="cl">Key is saved at:         /etc/letsencrypt/live/my.domain/privkey.pem
 </span></span><span class="line"><span class="cl">This certificate expires on 2024-06-01.
 </span></span></code></pre></div><p>In order for HAProxy to use this certificate, both the full chain and
-the private key must be contained in one single PEM file. This is
-easily achieved by doing:</p>
+the private key must be contained in one single PEM file. This is easily
+achieved by doing:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">cat /etc/letsencrypt/live/my.domain/fullchain.pem <span class="se">\
 </span></span></span><span class="line"><span class="cl"><span class="se"></span>/etc/letsencrypt/live/my.domain/privkey.pem &gt; <span class="se">\
 </span></span></span><span class="line"><span class="cl"><span class="se"></span>/etc/ssl/haproxy/my_cert.pem
@@ -255,8 +256,9 @@ easily achieved by doing:</p>
 the certificate:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-plain" data-lang="plain"><span class="line"><span class="cl">bind *:443 ssl crt /etc/ssl/haproxy/
 </span></span></code></pre></div><p>HAProxy is smart enough to figure out which certificate to use, so that
-should be enough. For general TLS configuration, see the
-<a href="https://www.haproxy.com/documentation/haproxy-configuration-tutorials/ssl-tls/">HAProxy SSL/TLS configuration tutorial</a></p>
+should be enough. For general TLS configuration, see the <a href="https://www.haproxy.com/documentation/haproxy-configuration-tutorials/ssl-tls/">HAProxy
+SSL/TLS configuration
+tutorial</a></p>
 <p>Whenever the certificate has changed on disk, you&rsquo;ll want to do:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">systemctl reload haproxy
 </span></span></code></pre></div>

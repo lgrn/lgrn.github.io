@@ -8,44 +8,74 @@
     <language>en</language>
     <lastBuildDate>Sun, 25 Dec 2022 14:00:00 +0200</lastBuildDate><atom:link href="https://agren.cc/tags/wifi/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Using any device on Wi-Fi with captive portals</title>
-      <link>https://agren.cc/p/any-device-captive-wifi/</link>
+      <title>MAC spoofing on Wi-Fi with captive portals</title>
+      <link>https://agren.cc/p/mac-spoofing-captive-wifi/</link>
       <pubDate>Sun, 25 Dec 2022 14:00:00 +0200</pubDate>
       
-      <guid>https://agren.cc/p/any-device-captive-wifi/</guid>
-      <description>&lt;p&gt;Maybe you&amp;rsquo;re at a hotel, an airport, a conference, or somewhere else where whoever set up the Wi-Fi thought it was a good idea to use so-called &lt;a href=&#34;https://en.wikipedia.org/wiki/Captive_portal&#34;&gt;captive portals&lt;/a&gt;.&lt;/p&gt;</description>
-      <content>&lt;p&gt;Maybe you&amp;rsquo;re at a hotel, an airport, a conference, or somewhere else where whoever set up the Wi-Fi thought it was a good idea to use so-called &lt;a href=&#34;https://en.wikipedia.org/wiki/Captive_portal&#34;&gt;captive portals&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;Regardless of their purpose, whether it&amp;rsquo;s to limit connection for a specific time, or force end-users to accept some kind of agreement, they usually work the same way: they force you through some kind of web UI, and in the end it will validate your device based on the MAC address only.&lt;/p&gt;
-&lt;p&gt;A MAC address can be changed, which means that if you have a device that cannot access the portal, you can still get that device onto the network by doing the following:&lt;/p&gt;
+      <guid>https://agren.cc/p/mac-spoofing-captive-wifi/</guid>
+      <description>&lt;p&gt;Not all devices are capable of handling &lt;a href=&#34;https://en.wikipedia.org/wiki/Captive_portal&#34;&gt;captive
+portals&lt;/a&gt;. Problemtic
+devices usually include older hardware with outdated browsers, such as
+&amp;ldquo;smart&amp;rdquo; TVs, gaming consoles and the like.&lt;/p&gt;</description>
+      <content>&lt;p&gt;Not all devices are capable of handling &lt;a href=&#34;https://en.wikipedia.org/wiki/Captive_portal&#34;&gt;captive
+portals&lt;/a&gt;. Problemtic
+devices usually include older hardware with outdated browsers, such as
+&amp;ldquo;smart&amp;rdquo; TVs, gaming consoles and the like.&lt;/p&gt;
+&lt;p&gt;Regardless of the portal&amp;rsquo;s purpose, whether it&amp;rsquo;s to limit connection for
+a specific time, or force end-users to accept some kind of agreement,
+they usually work the same way: they force you through some kind of web
+UI, and in the end it will validate your device by storing the MAC
+address server-side.&lt;/p&gt;
+&lt;p&gt;A MAC address can be changed, which means that if you have a device that
+cannot access the portal, you can still get that device onto the network
+if you have a Linux machine that can:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Find out the MAC address of the device&lt;/li&gt;
+&lt;li&gt;Find out the MAC address of the TV or other device&lt;/li&gt;
 &lt;li&gt;Change your laptop&amp;rsquo;s MAC to match the device&lt;/li&gt;
 &lt;li&gt;Go through the validation process&lt;/li&gt;
 &lt;li&gt;Change your laptop&amp;rsquo;s MAC back to something else&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;In short, by masquerading your laptop as the other device, you can ensure that MAC address gets whitelisted, giving your other device access.&lt;/p&gt;
+&lt;p&gt;So by masquerading your laptop as the other device, you can ensure that
+MAC address gets whitelisted, giving your other device access.&lt;/p&gt;
 &lt;h2 id=&#34;step-1-figure-out-the-mac-address&#34;&gt;Step 1: Figure out the MAC address&lt;/h2&gt;
-&lt;p&gt;You may be able to figure out the MAC of the device from a physical sticker, or if it has a settings menu you can probably see it under network settings. In this case, it&amp;rsquo;s a Samsung TV where the built-in browser can&amp;rsquo;t handle the web portal. Let&amp;rsquo;s call it &lt;code&gt;84:C0:EF:00:00:00&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;You may be able to figure out the MAC of the device from a physical
+sticker, or if it has a settings menu you can probably see it under
+network settings. In this case, it&amp;rsquo;s a Samsung TV where the built-in
+browser can&amp;rsquo;t handle the web portal. Let&amp;rsquo;s call it &lt;code&gt;84:C0:EF:00:00:00&lt;/code&gt;.&lt;/p&gt;
 &lt;h2 id=&#34;step-2-change-your-laptops-mac&#34;&gt;Step 2: Change your laptop&amp;rsquo;s MAC&lt;/h2&gt;
-&lt;p&gt;In Linux, this can be done with &lt;code&gt;macchanger&lt;/code&gt;, likely available from your package manager. Remember to disable your wifi device first.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sudo macchanger --mac=84:C0:EF:00:00:00 wlp0s20f3
+&lt;p&gt;In Linux, this can be done with &lt;code&gt;macchanger&lt;/code&gt;, likely available from your
+package manager. Remember to disable your wifi device first.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sudo macchanger --mac&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;84:C0:EF:00:00:00 wlp0s20f3
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;step-3-authenticate&#34;&gt;Step 3: Authenticate&lt;/h2&gt;
-&lt;p&gt;With your new MAC address, authenticate to the wifi just like you otherwise would, or if you&amp;rsquo;re cool, figure out the curl commands to do it.  &amp;ldquo;Network&amp;rdquo; under the developer console (F12) in Firefox is helpful for this, and can export &lt;code&gt;POST&lt;/code&gt; requests as curl which is convenient. It might look something like this:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;curl &amp;#34;$URL&amp;#34; -X POST -H &amp;#39;Accept: */*&amp;#39; -H &amp;#39;Accept-Language: en-US,en;q=0.5&amp;#39; \
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;-H &amp;#39;Accept-Encoding: gzip, deflate, br&amp;#39; \
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;-H &amp;#39;Referer: https://www.example.com/en/online-booking/Customer/EmailLogin?context=default&amp;#39; \
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;-H &amp;#39;Content-Type: application/json&amp;#39; -H &amp;#39;Origin: https://www.example.com&amp;#39; \
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;--cookie-jar &amp;#39;/tmp/cookiejar&amp;#39; \
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;--data-raw &amp;#39;{&amp;#34;Email&amp;#34;:&amp;#34;foo@foo.foo&amp;#34;,&amp;#34;Password&amp;#34;:&amp;#34;f00b4r&amp;#34;,&amp;#34;PersistentLogin&amp;#34;:true,&amp;#34;IsModal&amp;#34;:false}&amp;#39;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;If there&amp;rsquo;s multiple steps required, like also accepting terms of usage after a login, the &lt;code&gt;--cookie-jar&lt;/code&gt; flag is crucial here to allow the use of &lt;code&gt;--cookie&lt;/code&gt; in your next command:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;curl &amp;#34;https://www.example.com/wifi/?terms=accepted&amp;#34; --cookie &amp;#39;/tmp/cookiejar&amp;#39; 
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This allows you to accept the terms with whatever cookies that were given to you when logging in.&lt;/p&gt;
-&lt;p&gt;If the responses are JSON, you can just pipe them to &lt;code&gt;jq&lt;/code&gt; to easily see if all went OK.&lt;/p&gt;
+&lt;p&gt;With your new MAC address, authenticate to the wifi just like you
+otherwise would, or if you&amp;rsquo;re cool, figure out the curl commands to do
+it. &amp;ldquo;Network&amp;rdquo; under the developer console (F12) in Firefox is helpful
+for this, and can export &lt;code&gt;POST&lt;/code&gt; requests as curl which is convenient. It
+might look something like this:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;curl &lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;$URL&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt; -X POST -H &lt;span class=&#34;s1&#34;&gt;&amp;#39;Accept: */*&amp;#39;&lt;/span&gt; -H &lt;span class=&#34;s1&#34;&gt;&amp;#39;Accept-Language: en-US,en;q=0.5&amp;#39;&lt;/span&gt; &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;-H &lt;span class=&#34;s1&#34;&gt;&amp;#39;Accept-Encoding: gzip, deflate, br&amp;#39;&lt;/span&gt; &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;-H &lt;span class=&#34;s1&#34;&gt;&amp;#39;Referer: https://www.example.com/en/online-booking/Customer/EmailLogin?context=default&amp;#39;&lt;/span&gt; &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;-H &lt;span class=&#34;s1&#34;&gt;&amp;#39;Content-Type: application/json&amp;#39;&lt;/span&gt; -H &lt;span class=&#34;s1&#34;&gt;&amp;#39;Origin: https://www.example.com&amp;#39;&lt;/span&gt; &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;--cookie-jar &lt;span class=&#34;s1&#34;&gt;&amp;#39;/tmp/cookiejar&amp;#39;&lt;/span&gt; &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;--data-raw &lt;span class=&#34;s1&#34;&gt;&amp;#39;{&amp;#34;Email&amp;#34;:&amp;#34;foo@foo.foo&amp;#34;,&amp;#34;Password&amp;#34;:&amp;#34;f00b4r&amp;#34;,&amp;#34;PersistentLogin&amp;#34;:true,&amp;#34;IsModal&amp;#34;:false}&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;If there&amp;rsquo;s multiple steps required, like also accepting terms of usage
+after a login, the &lt;code&gt;--cookie-jar&lt;/code&gt; flag is crucial here to allow the use
+of &lt;code&gt;--cookie&lt;/code&gt; in your next command:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;curl &lt;span class=&#34;s2&#34;&gt;&amp;#34;https://www.example.com/wifi/?terms=accepted&amp;#34;&lt;/span&gt; --cookie &lt;span class=&#34;s1&#34;&gt;&amp;#39;/tmp/cookiejar&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This allows you to accept the terms with whatever cookies that were
+given to you when logging in.&lt;/p&gt;
+&lt;p&gt;If the responses are JSON, you can just pipe them to &lt;code&gt;jq&lt;/code&gt; to easily see
+if all went OK.&lt;/p&gt;
 &lt;h2 id=&#34;step-4-reset-your-mac-again&#34;&gt;Step 4: Reset your MAC again&lt;/h2&gt;
-&lt;p&gt;If you got access working with the modified address in Step 3, you can now switch MAC again on your laptop. In this case, we&amp;rsquo;ll just pick a random one. Shut down your wireless device again, and run:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sudo macchanger -a wlp0s20f3
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;You can now re-authenticate your laptop, and when testing the other device, it should be allowed through.&lt;/p&gt;
-&lt;p&gt;If not, you may need to disable the connection on that device and re-connect to the network. At this point, there shouldn&amp;rsquo;t be a portal in the way.&lt;/p&gt;
+&lt;p&gt;If you got access working with the modified address in Step 3, you can
+now switch MAC again on your laptop. In this case, we&amp;rsquo;ll just pick a
+random one. Shut down your wireless device again, and run:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sudo macchanger -a wlp0s20f3
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;You can now re-authenticate your laptop, and when testing the other
+device, it should be allowed through.&lt;/p&gt;
+&lt;p&gt;If not, you may need to disable the connection on that device and
+re-connect to the network. At this point, there shouldn&amp;rsquo;t be a portal in
+the way.&lt;/p&gt;
 </content>
     </item>
     

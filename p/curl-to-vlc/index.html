@@ -173,6 +173,8 @@
       
       #<a href="https://agren.cc/tags/linux/">linux</a>&nbsp;
       
+      #<a href="https://agren.cc/tags/apple/">apple</a>&nbsp;
+      
     </span>
   
   
@@ -186,8 +188,9 @@ really shines is on iOS/tvOS since it allows you to play pretty much any
 video file, and you can send that file over curl.</p>
 <p>While this probably also works for iOS, this example will focus on the
 use case of downloading a YouTube video, stripping it of sponsored
-content and passing it on to VLC on an Apple TV. It&rsquo;s not that difficult, but you do
-need <a href="https://github.com/yt-dlp/yt-dlp"><code>yt-dlp</code></a>, <code>ffmpeg</code> and <code>curl</code>:</p>
+content and passing it on to VLC on an Apple TV. It&rsquo;s not that
+difficult, but you do need <a href="https://github.com/yt-dlp/yt-dlp"><code>yt-dlp</code></a>,
+<code>ffmpeg</code> and <code>curl</code>:</p>
 
 
 
@@ -198,16 +201,15 @@ need <a href="https://github.com/yt-dlp/yt-dlp"><code>yt-dlp</code></a>, <code>f
       <span class="collapsable-code__title">tovlc.sh</span>
       <span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide"></span>
     </label>
-    <pre class="language-bash" ><code>#!/bin/bash
-/usr/bin/yt-dlp $1 -o output.mkv \
+    <pre class="language-bash" ><code>#!/bin/bash /usr/bin/yt-dlp $1 -o
+output.mkv \
 --sponsorblock-remove all \
 --force-overwrites \
 --merge-output-format mkv \
 --embed-subs \
 &amp;&amp; /usr/bin/curl -i \
--X POST &#39;http://appletv.local/upload.json&#39; \
---form file=&#39;@output.mkv&#39;
-</code></pre>
+-X POST &#39;&lt;http://appletv.local/upload.json&gt;&#39; \
+--form file=&#39;@output.mkv&#39; </code></pre>
   </div>
 
 
@@ -229,14 +231,15 @@ to the script (<code>$1</code>)</p>
 contents of the file as <code>file</code>.</p>
 <p>Having this script executable as <code>tovlc</code> in <code>/usr/bin</code> for example
 will allow you to then run things like:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ tovlc https://www.youtube.com/watch?v=foeov6Ahi4Y
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">tovlc <span class="s2">&#34;https://www.youtube.com/watch?v=foeov6Ahi4Y&#34;</span>
 </span></span></code></pre></div><p>Note: I tried having <code>yt-dlp</code> passing the output to stdout with <code>-o -</code>
 followed by a pipe to curl with <code>--form file='@-'</code>, while this should
 work in theory I couldn&rsquo;t get it to work, so the above will require
 enough disk space to store the file before sending it to VLC.</p>
 <h2 id="additional-reading">Additional reading<a href="#additional-reading" class="hanchor" ariaLabel="Anchor">#</a> </h2>
 <ul>
-<li><a href="https://github.com/yt-dlp/yt-dlp#usage-and-options">yt-dlp usage and options</a></li>
+<li><a href="https://github.com/yt-dlp/yt-dlp#usage-and-options">yt-dlp usage and
+options</a></li>
 </ul>
 </li>
 </ul>
@@ -260,8 +263,8 @@ enough disk space to store the file before sending it to VLC.</p>
       ::
     
     
-      <a href="https://agren.cc/p/any-device-captive-wifi/" class="button inline next">
-        Using any device on Wi-Fi with captive portals
+      <a href="https://agren.cc/p/mac-spoofing-captive-wifi/" class="button inline next">
+        MAC spoofing on Wi-Fi with captive portals
       </a>
     
   </div>

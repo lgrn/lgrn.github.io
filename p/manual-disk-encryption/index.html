@@ -183,78 +183,120 @@
   
 
   <div class="post-content"><div>
-        <p>Ubuntu makes it very easy to set up full disk encryption, but it requires you to wipe the entire disk if you want the wizard to do it for you, so this is how you can set it up manually.</p>
-<p>One common reason you may want to do this is in a dual boot scenario, where one or several leading partitions are already taken &ndash; or maybe you simply want to keep whatever is there.</p>
-<p>The option in the Ubuntu installer to <em>&ldquo;Encrypt the new Ubuntu installation for security&rdquo;</em> is only available when choosing <em>&ldquo;Erase disk and install Ubuntu&rdquo;</em>. So, if you don&rsquo;t want to wipe the entire disk, but you still want to boot an encrypted root partition, it needs some preparation.</p>
-<p>This also gives some useful insight into how the disk encryption is actually set up behind the scenes.</p>
+        <p>Ubuntu makes it very easy to set up full disk encryption, but it
+requires you to wipe the entire disk if you want the wizard to do it for
+you, so this is how you can set it up manually.</p>
+<p>One common reason you may want to do this is in a dual boot scenario,
+where one or several leading partitions are already taken &ndash; or maybe
+you simply want to keep whatever is there.</p>
+<p>The option in the Ubuntu installer to <em>&ldquo;Encrypt the new Ubuntu
+installation for security&rdquo;</em> is only available when choosing <em>&ldquo;Erase disk
+and install Ubuntu&rdquo;</em>. So, if you don&rsquo;t want to wipe the entire disk, but
+you still want to boot an encrypted root partition, it needs some
+preparation.</p>
+<p>This also gives some useful insight into how the disk encryption is
+actually set up behind the scenes.</p>
 <p>In this guide we will:</p>
 <ul>
-<li>Set up the partitions we want manually using <code>sgdisk</code> &ndash; but you can use <code>gparted</code> or similar if you prefer.</li>
+<li>Set up the partitions we want manually using <code>sgdisk</code> &ndash; but you can
+use <code>gparted</code> or similar if you prefer.</li>
 <li>Use <code>cryptsetup</code> to encrypt a partition</li>
-<li>Decrypt (open) and mount this encrypted device, and set up LVM within it</li>
-<li>Have Ubuntu run its installation against the unlocked partition, like any normal installation.</li>
-<li>Manually configure the new installation to prompt the user for a passphrase to unlock the device on boot</li>
+<li>Decrypt (open) and mount this encrypted device, and set up LVM within
+it</li>
+<li>Have Ubuntu run its installation against the unlocked partition, like
+any normal installation.</li>
+<li>Manually configure the new installation to prompt the user for a
+passphrase to unlock the device on boot</li>
 </ul>
 <p>This may sound like a lot, but it&rsquo;s pretty straight forward.</p>
-<p>This guide assumes that you already have, or that you will create, an EFI system partition. This is outside the scope of the guide.</p>
-<p><em>Note: This post is heavily inspired by <a href="https://www.mikekasberg.com/blog/2020/04/08/dual-boot-ubuntu-and-windows-with-encryption.html">this post</a> by Mike Kasberg.</em></p>
+<p>This guide assumes that you already have, or that you will create, an
+EFI system partition. This is outside the scope of the guide.</p>
+<p><em>Note: This post is heavily inspired by <a href="https://www.mikekasberg.com/blog/2020/04/08/dual-boot-ubuntu-and-windows-with-encryption.html">this
+post</a>
+by Mike Kasberg.</em></p>
 <h3 id="graphical-representation">Graphical representation<a href="#graphical-representation" class="hanchor" ariaLabel="Anchor">#</a> </h3>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">| ### sda1 ### | ## sda2 ## | ######### sda3 ######### | -,
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-plain" data-lang="plain"><span class="line"><span class="cl">| ### sda1 ### | ## sda2 ## | ######### sda3 ######### | -,
 </span></span><span class="line"><span class="cl">  ^-untouched    ^-/boot       ^- LUKS LVM (encrypted)    |
 </span></span><span class="line"><span class="cl">                                                          |
 </span></span><span class="line"><span class="cl">| ####################### sda3 ####################### | &lt;´
 </span></span><span class="line"><span class="cl">| ## swap (lv) ## | ###########  root (lv) ########### |
 </span></span></code></pre></div><h3 id="introduction">Introduction<a href="#introduction" class="hanchor" ariaLabel="Anchor">#</a> </h3>
-<p>In this example, <code>/dev/sda1</code> is taken and we do not want to remove it. After <code>sda1</code>, there is free space available. You may very well have multiple partitions &ldquo;taken&rdquo;. If so, the partitions you create might be <code>sda5</code>, or <code>sda6</code> etc.</p>
+<p>In this example, <code>/dev/sda1</code> is taken and we do not want to remove it.
+After <code>sda1</code>, there is free space available. You may very well have
+multiple partitions &ldquo;taken&rdquo;. If so, the partitions you create might be
+<code>sda5</code>, or <code>sda6</code> etc.</p>
 <h3 id="partitions">Partitions<a href="#partitions" class="hanchor" ariaLabel="Anchor">#</a> </h3>
-<p>First, create a <code>2G</code> partition for /boot (we&rsquo;re not encrypting this) on <code>/dev/sda</code> as partition <code>2</code>, which is the next free partition number available in this example where only <code>sda1</code> exists.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># sgdisk --new=2:0:+2G /dev/sda
+<p>First, create a <code>2G</code> partition for /boot (we&rsquo;re not encrypting this) on
+<code>/dev/sda</code> as partition <code>2</code>, which is the next free partition number
+available in this example where only <code>sda1</code> exists.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sgdisk --new<span class="o">=</span>2:0:+2G /dev/sda
 </span></span></code></pre></div><p>Let the next partition <code>3</code> fill the remaining space:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># sgdisk --new=3:0:0 /dev/sda
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sgdisk --new<span class="o">=</span>3:0:0 /dev/sda
 </span></span></code></pre></div><p>Now set the name of <code>2</code> to /boot and <code>3</code> to rootfs</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># sgdisk --change-name=2:/boot --change-name=3:rootfs /dev/sda
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sgdisk --change-name<span class="o">=</span>2:/boot --change-name<span class="o">=</span>3:rootfs /dev/sda
 </span></span></code></pre></div><p>Then set the typecode to 8300 on both (Linux filesystem)</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># sgdisk --typecode=2:8300 --typecode=3:8300 /dev/sda
-</span></span></code></pre></div><p>At this point, we&rsquo;re going to use LUKS to encrypt what will later become our root disk (<code>sda3</code>):</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># cryptsetup luksFormat --type=luks1 /dev/sda3
-</span></span></code></pre></div><p>Then open it with the passphrase you chose and call it &ldquo;root&rdquo;, or whatever really:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># cryptsetup open /dev/sda3 root
-</span></span></code></pre></div><p>The naming <code>root</code> makes the unlocked device available at <code>/dev/mapper/root</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sgdisk --typecode<span class="o">=</span>2:8300 --typecode<span class="o">=</span>3:8300 /dev/sda
+</span></span></code></pre></div><p>At this point, we&rsquo;re going to use LUKS to encrypt what will later become
+our root disk (<code>sda3</code>):</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">cryptsetup luksFormat --type<span class="o">=</span>luks1 /dev/sda3
+</span></span></code></pre></div><p>Then open it with the passphrase you chose and call it &ldquo;root&rdquo;, or
+whatever really:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">cryptsetup open /dev/sda3 root
+</span></span></code></pre></div><p>The naming <code>root</code> makes the unlocked device available at
+<code>/dev/mapper/root</code></p>
 <h3 id="lvm">LVM<a href="#lvm" class="hanchor" ariaLabel="Anchor">#</a> </h3>
-<p>We can now treat this meta-device as a regular HDD and create a physical volume for LVM as you would normally:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># pvcreate /dev/mapper/root
-</span></span></code></pre></div><p>Create a volume group, then one logical volume for swap, and use the rest for our root partition.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># vgcreate ubuntu-vg /dev/mapper/root
-</span></span><span class="line"><span class="cl"># lvcreate -L 4G -n swap ubuntu-vg
-</span></span><span class="line"><span class="cl"># lvcreate -l 100%FREE -n root ubuntu-vg
+<p>We can now treat this meta-device as a regular HDD and create a physical
+volume for LVM as you would normally:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">pvcreate /dev/mapper/root
+</span></span></code></pre></div><p>Create a volume group, then one logical volume for swap, and use the
+rest for our root partition.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">vgcreate ubuntu-vg /dev/mapper/root
+</span></span><span class="line"><span class="cl">lvcreate -L 4G -n swap ubuntu-vg
+</span></span><span class="line"><span class="cl">lvcreate -l 100%FREE -n root ubuntu-vg
 </span></span></code></pre></div><h3 id="install-ubuntu">Install Ubuntu<a href="#install-ubuntu" class="hanchor" ariaLabel="Anchor">#</a> </h3>
-<p>Since this encrypted device is already unlocked and LVM has been prepared, we can use the normal GUI installation in Ubuntu to install into it.</p>
-<p>If you want to double check at this point, you can run <code>gparted</code> as root which should show the partitions you just created.</p>
-<p>Start the regular Ubuntu installation, select language, keyboard layout etc. and then select &ldquo;Something else&rdquo; when asked about how you want to install.</p>
+<p>Since this encrypted device is already unlocked and LVM has been
+prepared, we can use the normal GUI installation in Ubuntu to install
+into it.</p>
+<p>If you want to double check at this point, you can run <code>gparted</code> as root
+which should show the partitions you just created.</p>
+<p>Start the regular Ubuntu installation, select language, keyboard layout
+etc. and then select &ldquo;Something else&rdquo; when asked about how you want to
+install.</p>
 <p>Here&rsquo;s what we&rsquo;ll do in the installation GUI:</p>
 <ul>
-<li>Edit /dev/mapper/ubuntu&ndash;vg-root, set to ext4 mounted at /, and format it.</li>
-<li>Edit /dev/mapper/ubuntu&ndash;vg-swap, set to swap area.</li>
-<li>Edit /dev/sda2, set to ext4 mounted at /boot, and format it.</li>
+<li>Edit <code>/dev/mapper/ubuntu--vg-root</code>, set to ext4 mounted at <code>/</code>, and format
+it.</li>
+<li>Edit <code>/dev/mapper/ubuntu--vg-swap</code>, set to swap area.</li>
+<li>Edit <code>/dev/sda2</code>, set to ext4 mounted at <code>/boot</code>, and format it.</li>
 </ul>
-<p>Let the installation complete, but &ndash; <strong>do not</strong> &ndash; reboot or shut down the installation (select &ldquo;Continue Testing&rdquo;).</p>
-<p>The reason we must keep the installation going is that the installation wizard does not understand that it has actually installed Ubuntu into an encrypted device, so we need to add some configuration to the installation we just did while it&rsquo;s still open so that it will prompt the user for the passphrase to decrypt it.</p>
+<p>Let the installation complete, but &ndash; <strong>do not</strong> &ndash; reboot or shut down
+the installation (select &ldquo;Continue Testing&rdquo;).</p>
+<p>The reason we must keep the installation going is that the installation
+wizard does not understand that it has actually installed Ubuntu into an
+encrypted device, so we need to add some configuration to the
+installation we just did while it&rsquo;s still open so that it will prompt
+the user for the passphrase to decrypt it.</p>
 <h3 id="chroot-into-the-installation">chroot into the installation<a href="#chroot-into-the-installation" class="hanchor" ariaLabel="Anchor">#</a> </h3>
 <p>We&rsquo;ll use <code>/target</code> for mounting our installed system:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># mount /dev/mapper/ubuntu--vg-root /target
-</span></span><span class="line"><span class="cl"># mount /dev/sda2 /target/boot
-</span></span><span class="line"><span class="cl"># for n in proc sys dev etc/resolv.conf; do mount --rbind /$n /target/$n; done
-</span></span></code></pre></div><p>Before jumping into it, we need to figure out the UUID (not PARTUUID) of the encrypted partition (/dev/sda3). This can be found by running:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># blkid /dev/sda3
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">mount /dev/mapper/ubuntu--vg-root /target
+</span></span><span class="line"><span class="cl">mount /dev/sda2 /target/boot
+</span></span><span class="line"><span class="cl"><span class="k">for</span> n in proc sys dev etc/resolv.conf<span class="p">;</span> <span class="k">do</span> mount --rbind /<span class="nv">$n</span> /target/<span class="nv">$n</span><span class="p">;</span> <span class="k">done</span>
+</span></span></code></pre></div><p>Before jumping into it, we need to figure out the UUID (not PARTUUID) of
+the encrypted partition (/dev/sda3). This can be found by running:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">blkid /dev/sda3
 </span></span></code></pre></div><p>Save this for later.</p>
 <p>Since <code>/target</code> is now a usable environment, we can chroot to it:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># chroot /target
-</span></span><span class="line"><span class="cl"># mount -a 
-</span></span></code></pre></div><p>Now create and edit <code>/etc/crypttab</code> which likely does not exist and add the name for the device, the device itself (by UUID, no quotes) and some options:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">root UUID=your_uuid_here none luks,discard
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">chroot /target
+</span></span><span class="line"><span class="cl">mount -a
+</span></span></code></pre></div><p>Now create and edit <code>/etc/crypttab</code> which likely does not exist and add
+the name for the device, the device itself (by UUID, no quotes) and some
+options:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-plain" data-lang="plain"><span class="line"><span class="cl">root UUID=your_uuid_here none luks,discard
 </span></span></code></pre></div><p>Save the file, then apply your changes by running:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># update-initramfs -k all -c
-</span></span></code></pre></div><p>This will re-generate your initrd images, and when done you&rsquo;re ready to reboot. After the reboot, you should be greeted with a prompt asking you for the passphrase to decrypt &ldquo;root&rdquo;, and that&rsquo;s it!</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">update-initramfs -k all -c
+</span></span></code></pre></div><p>This will re-generate your initrd images, and when done you&rsquo;re ready to
+reboot. After the reboot, you should be greeted with a prompt asking you
+for the passphrase to decrypt &ldquo;root&rdquo;, and that&rsquo;s it!</p>
 
       </div></div>
 
@@ -267,8 +309,8 @@
   </div>
   <div class="pagination__buttons">
     
-      <a href="https://agren.cc/p/any-device-captive-wifi/" class="button inline prev">
-        Using any device on Wi-Fi with captive portals
+      <a href="https://agren.cc/p/mac-spoofing-captive-wifi/" class="button inline prev">
+        MAC spoofing on Wi-Fi with captive portals
       </a>
     
     
