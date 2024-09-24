@@ -1295,11 +1295,11 @@ options&lt;/a&gt;&lt;/li&gt;
       
       <guid>https://agren.cc/p/mac-spoofing-captive-wifi/</guid>
       <description>&lt;p&gt;Not all devices are capable of handling &lt;a href=&#34;https://en.wikipedia.org/wiki/Captive_portal&#34;&gt;captive
-portals&lt;/a&gt;. Problemtic
+portals&lt;/a&gt;. Problematic
 devices usually include older hardware with outdated browsers, such as
 &amp;ldquo;smart&amp;rdquo; TVs, gaming consoles and the like.&lt;/p&gt;</description>
       <content>&lt;p&gt;Not all devices are capable of handling &lt;a href=&#34;https://en.wikipedia.org/wiki/Captive_portal&#34;&gt;captive
-portals&lt;/a&gt;. Problemtic
+portals&lt;/a&gt;. Problematic
 devices usually include older hardware with outdated browsers, such as
 &amp;ldquo;smart&amp;rdquo; TVs, gaming consoles and the like.&lt;/p&gt;
 &lt;p&gt;Regardless of the portal&amp;rsquo;s purpose, whether it&amp;rsquo;s to limit connection for
@@ -1326,7 +1326,7 @@ browser can&amp;rsquo;t handle the web portal. Let&amp;rsquo;s call it &lt;code&
 &lt;h2 id=&#34;step-2-change-your-laptops-mac&#34;&gt;Step 2: Change your laptop&amp;rsquo;s MAC&lt;/h2&gt;
 &lt;p&gt;In Linux, this can be done with &lt;code&gt;macchanger&lt;/code&gt;, likely available from your
 package manager. Remember to disable your wifi device first.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sudo macchanger --mac&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;84:C0:EF:00:00:00 wlp0s20f3
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sudo macchanger --mac&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;84:C0:EF:00:00:00&amp;#34;&lt;/span&gt; wlp0s20f3
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;step-3-authenticate&#34;&gt;Step 3: Authenticate&lt;/h2&gt;
 &lt;p&gt;With your new MAC address, authenticate to the wifi just like you
 otherwise would, or if you&amp;rsquo;re cool, figure out the curl commands to do
@@ -1814,13 +1814,15 @@ This will ban an IP for &lt;code&gt;24h&lt;/code&gt; if &lt;code&gt;3&lt;/code&g
       
       <guid>https://agren.cc/about/</guid>
       <description>&lt;h1 id=&#34;about-this-site&#34;&gt;About this site&lt;/h1&gt;
-&lt;p&gt;This is where I collect mostly technical information that I found
-useful, so maybe you will too.&lt;/p&gt;</description>
+&lt;p&gt;This is where I write about mostly technical information that I found
+useful, so maybe you will too. If you wish to contact me, you can email
+me at &amp;rsquo;linus&amp;rsquo; on this domain. If you prefer encrypted e-mails, see
+below.&lt;/p&gt;</description>
       <content>&lt;h1 id=&#34;about-this-site&#34;&gt;About this site&lt;/h1&gt;
-&lt;p&gt;This is where I collect mostly technical information that I found
-useful, so maybe you will too.&lt;/p&gt;
-&lt;p&gt;If you wish to contact me, you can email me at linus at agren cc. If you
-prefer encrypted e-mails, see below.&lt;/p&gt;
+&lt;p&gt;This is where I write about mostly technical information that I found
+useful, so maybe you will too. If you wish to contact me, you can email
+me at &amp;rsquo;linus&amp;rsquo; on this domain. If you prefer encrypted e-mails, see
+below.&lt;/p&gt;
 &lt;h2 id=&#34;openpgp-key&#34;&gt;OpenPGP key&lt;/h2&gt;
 &lt;p&gt;My key is published on &lt;a href=&#34;https://keys.openpgp.org/&#34;&gt;keys.openpgp.org&lt;/a&gt;,
 search for my e-mail (linus at agren cc) either through the web

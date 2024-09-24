@@ -1,10 +1,9 @@
 # About this site
 
-This is where I collect mostly technical information that I found
-useful, so maybe you will too.
-
-If you wish to contact me, you can email me at linus at agren cc. If you
-prefer encrypted e-mails, see below.
+This is where I write about mostly technical information that I found
+useful, so maybe you will too. If you wish to contact me, you can email
+me at 'linus' on this domain. If you prefer encrypted e-mails, see
+below.
 
 ## OpenPGP key
 
@@ -20,4 +19,4 @@ It **should** match the following:
 
 ## Mastodon
 
-https://telegrafverket.cc/@linus
+<https://telegrafverket.cc/@linus>

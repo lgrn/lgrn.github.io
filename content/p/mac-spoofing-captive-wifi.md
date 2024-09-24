@@ -8,7 +8,7 @@ tags:
 ---
 
 Not all devices are capable of handling [captive
-portals](https://en.wikipedia.org/wiki/Captive_portal). Problemtic
+portals](https://en.wikipedia.org/wiki/Captive_portal). Problematic
 devices usually include older hardware with outdated browsers, such as
 "smart" TVs, gaming consoles and the like.
 
@@ -43,7 +43,7 @@ In Linux, this can be done with `macchanger`, likely available from your
 package manager. Remember to disable your wifi device first.
 
 ```bash
-sudo macchanger --mac=84:C0:EF:00:00:00 wlp0s20f3
+sudo macchanger --mac="84:C0:EF:00:00:00" wlp0s20f3
 ```
 
 ## Step 3: Authenticate
