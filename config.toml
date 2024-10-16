@@ -21,6 +21,7 @@ path = 'github.com/panr/hugo-theme-terminal/v4'
 pagerSize = 10
 
 [params]
+author = 'agren.cc'
 autoCover = true
 fullWidthTheme = false
 centerTheme = true
@@ -54,6 +55,3 @@ url = "/about/index.html"
 identifier = "mastodon"
 name = "mastodon"
 url = "https://telegrafverket.cc/@linus"
-
-[author]
-name = 'agren.cc'
