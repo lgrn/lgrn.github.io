@@ -10,9 +10,9 @@ tags:
   - flatcar
 ---
 
-Flatcar Linux is a fork of CoreOS, specifically designed to run
-container workloads. It has an immutable root file system and automatic
-updates, here's how you can run it as a VM under Incus.
+Flatcar Linux is a fork of the now defunct CoreOS, specifically designed
+to run container workloads. It has an immutable root file system and
+automatic updates, and here's how you can run it as a VM under Incus.
 
 Much like FreeBSD, no images are available for Flatcar:
 
@@ -20,7 +20,8 @@ Much like FreeBSD, no images are available for Flatcar:
 incus image list images: flatcar
 ```
 
-We'll install Flatcar in a similar hacky fashion to [this article]({{< ref "freebsd-vm-incus" >}}), i.e. create an empty VM and `dd` directly
+We'll install Flatcar in a similar hacky fashion to [this article]({{<
+ref "freebsd-vm-incus" >}}), i.e. create an empty VM and `dd` directly
 to the block device.
 
 Let's start by creating an empty VM:
