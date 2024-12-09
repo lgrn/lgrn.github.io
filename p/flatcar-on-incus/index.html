@@ -88,7 +88,7 @@
 <meta property="og:image:height" content="627">
 
 
-  <meta property="article:published_time" content="2024-12-08 11:45:00 &#43;0200 &#43;0200" />
+  <meta property="article:published_time" content="2024-12-09 15:01:00 &#43;0200 &#43;0200" />
 
 
 
@@ -167,7 +167,7 @@
   <h1 class="post-title">
     <a href="https://agren.cc/p/flatcar-on-incus/">Flatcar Linux VM under Incus on Debian</a>
   </h1>
-  <div class="post-meta"><time class="post-date">2024-12-08</time></div>
+  <div class="post-meta"><time class="post-date">2024-12-09</time></div>
 
   
     <span class="post-tags">
@@ -208,37 +208,73 @@ page</a>, make it executable and
 put it in <code>/usr/bin</code> (or wherever in your path you want it).</p>
 <p>Now, create a simple <code>config.yaml</code> for butane to parse:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">variant</span><span class="p">:</span><span class="w"> </span><span class="l">flatcar</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="m">1.0.0</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="m">1.1.0</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kernel_arguments</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">should_exist</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">flatcar.autologin</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">should_not_exist</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">quiet</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">passwd</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">users</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">your_name</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">foo</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">password_hash</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;$6$7y.DFqCb(...)&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">ssh_authorized_keys</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="l">ssh-ed25519 AAAA(...)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="l">ssh-ed25519 AAAAC3Nz(...)</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">groups</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;sudo&#39;</span><span class="p">]</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">storage</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">filesystems</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">device</span><span class="p">:</span><span class="w"> </span><span class="l">/dev/disk/by-partlabel/ROOT</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l">btrfs</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">wipe_filesystem</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">label</span><span class="p">:</span><span class="w"> </span><span class="l">ROOT</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">files</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/etc/sudoers.d/username</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;/etc/systemd/network/00-eth0.network&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">overwrite</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">contents</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">inline</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
+</span></span></span><span class="line"><span class="cl"><span class="sd">          [Match]
+</span></span></span><span class="line"><span class="cl"><span class="sd">          Name=eth0
+</span></span></span><span class="line"><span class="cl"><span class="sd">
+</span></span></span><span class="line"><span class="cl"><span class="sd">          [Network]
+</span></span></span><span class="line"><span class="cl"><span class="sd">          Address=10.200.147.72/26
+</span></span></span><span class="line"><span class="cl"><span class="sd">          Gateway=10.200.147.65
+</span></span></span><span class="line"><span class="cl"><span class="sd">          DNS=1.1.1.1</span><span class="w">          
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;/etc/sudoers.d/foo&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">overwrite</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="m">0440</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">contents</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">inline</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
-</span></span></span><span class="line"><span class="cl"><span class="sd">          your_name ALL=(ALL) NOPASSWD: ALL</span><span class="w">          
-</span></span></span></code></pre></div><p>Pipe it through butane and put it somewhere Incus can read it:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">cat config.yaml <span class="p">|</span> butane <span class="p">|</span> tee /var/lib/incus/devices/flatcar/ignition.json
+</span></span></span><span class="line"><span class="cl"><span class="sd">          foo ALL=(ALL) NOPASSWD: ALL</span><span class="w">          
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">systemd</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">units</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">my.service</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">contents</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
+</span></span></span><span class="line"><span class="cl"><span class="sd">        [Unit]
+</span></span></span><span class="line"><span class="cl"><span class="sd">        Description=my service
+</span></span></span><span class="line"><span class="cl"><span class="sd">        After=network.target
+</span></span></span><span class="line"><span class="cl"><span class="sd">
+</span></span></span><span class="line"><span class="cl"><span class="sd">        [Service]
+</span></span></span><span class="line"><span class="cl"><span class="sd">        ExecStart=/usr/local/bin/binary
+</span></span></span><span class="line"><span class="cl"><span class="sd">        Restart=always
+</span></span></span><span class="line"><span class="cl"><span class="sd">
+</span></span></span><span class="line"><span class="cl"><span class="sd">        [Install]
+</span></span></span><span class="line"><span class="cl"><span class="sd">        WantedBy=multi-user.target</span><span class="w">        
+</span></span></span></code></pre></div><p>Check the config and fix any errors:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">butane -c -s config.yaml
+</span></span></code></pre></div><p>Pipe it through butane and put it somewhere Incus can read it:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">cat config.yaml <span class="p">|</span> butane -s -o /var/lib/incus/devices/flatcar/ignition.json
 </span></span></code></pre></div><p>Now set the metadata key specific for flatcar directly with qemu so it
 knows where to look for the file:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">incus config <span class="nb">set</span> flatcar raw.qemu <span class="s2">&#34; -fw_cfg name=opt/com.coreos/config,file=/var/lib/incus/devices/flatcar/ignition.json&#34;</span>
-</span></span></code></pre></div><p>Grab a file that tickles your fancy from
+</span></span></code></pre></div><p>Set whatever other values you may want with <code>incus config edit</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">config</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">limits.cpu</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;2&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">limits.memory</span><span class="p">:</span><span class="w"> </span><span class="l">2GiB</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">security.secureboot</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;false&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="l">(...)</span><span class="w">
+</span></span></span></code></pre></div><p>Grab a file that tickles your fancy from
 <a href="https://stable.release.flatcar-linux.net/amd64-usr/current/?sort=size&order=desc">/stable/amd64-usr/current/</a>:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">curl -OL https://stable.release.flatcar-linux.net/amd64-usr/current/flatcar_production_qemu_uefi_image.img.bz2
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">curl -OL https://stable.release.flatcar-linux.net/amd64-usr/current/flatcar_production_image.bin.bz2
 </span></span></code></pre></div><p>Find the block device for your running VM:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ls -alh /dev/zvol/default/virtual-machines/
 </span></span></code></pre></div><p>Then write the image directly to it:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">bzip2 -dc flatcar_production_qemu_uefi_image.img.bz2 <span class="p">|</span> dd <span class="nv">of</span><span class="o">=</span>/dev/zd16 <span class="nv">bs</span><span class="o">=</span>4M <span class="nv">conv</span><span class="o">=</span>fsync <span class="nv">status</span><span class="o">=</span>progress
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">bzip2 -dc <span class="o">[</span>image<span class="o">]</span> <span class="p">|</span> dd <span class="nv">of</span><span class="o">=</span>/dev/zvol/default/virtual-machines/foo.block <span class="nv">bs</span><span class="o">=</span>4M <span class="nv">conv</span><span class="o">=</span>fsync <span class="nv">status</span><span class="o">=</span>progress
 </span></span></code></pre></div><p>When it&rsquo;s done, force stop and start the VM:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">incus stop flatcar --force <span class="o">&amp;&amp;</span> incus start flatcar
 </span></span></code></pre></div><p>You should now be able to SSH into the VM with the passwordless sudo-user and key

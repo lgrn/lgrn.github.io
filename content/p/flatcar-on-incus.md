@@ -1,6 +1,6 @@
 ---
 title: 'Flatcar Linux VM under Incus on Debian'
-date: 2024-12-08T11:45:00+02:00
+date: 2024-12-09T15:01:00+02:00
 draft: false
 tags:
   - sysadmin
@@ -43,31 +43,65 @@ Now, create a simple `config.yaml` for butane to parse:
 
 ```yaml
 variant: flatcar
-version: 1.0.0
+version: 1.1.0
+kernel_arguments:
+  should_exist:
+    - flatcar.autologin
+  should_not_exist:
+    - quiet
 passwd:
   users:
-    - name: your_name
+    - name: foo
+      password_hash: '$6$7y.DFqCb(...)'
       ssh_authorized_keys:
-        - ssh-ed25519 AAAA(...)
+        - ssh-ed25519 AAAAC3Nz(...)
       groups: ['sudo']
 storage:
-  filesystems:
-    - device: /dev/disk/by-partlabel/ROOT
-      format: btrfs
-      wipe_filesystem: true
-      label: ROOT
   files:
-    - path: /etc/sudoers.d/username
+    - path: '/etc/systemd/network/00-eth0.network'
+      overwrite: true
+      contents:
+        inline: |
+          [Match]
+          Name=eth0
+
+          [Network]
+          Address=10.200.147.72/26
+          Gateway=10.200.147.65
+          DNS=1.1.1.1
+    - path: '/etc/sudoers.d/foo'
+      overwrite: true
       mode: 0440
       contents:
         inline: |
-          your_name ALL=(ALL) NOPASSWD: ALL
+          foo ALL=(ALL) NOPASSWD: ALL
+systemd:
+  units:
+    - name: my.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=my service
+        After=network.target
+
+        [Service]
+        ExecStart=/usr/local/bin/binary
+        Restart=always
+
+        [Install]
+        WantedBy=multi-user.target
+```
+
+Check the config and fix any errors:
+
+```bash
+butane -c -s config.yaml
 ```
 
 Pipe it through butane and put it somewhere Incus can read it:
 
 ```bash
-cat config.yaml | butane | tee /var/lib/incus/devices/flatcar/ignition.json
+cat config.yaml | butane -s -o /var/lib/incus/devices/flatcar/ignition.json
 ```
 
 Now set the metadata key specific for flatcar directly with qemu so it
@@ -77,11 +111,21 @@ knows where to look for the file:
 incus config set flatcar raw.qemu " -fw_cfg name=opt/com.coreos/config,file=/var/lib/incus/devices/flatcar/ignition.json"
 ```
 
+Set whatever other values you may want with `incus config edit`:
+
+```yaml
+config:
+  limits.cpu: "2"
+  limits.memory: 2GiB
+  security.secureboot: "false"
+  (...)
+```
+
 Grab a file that tickles your fancy from
 [/stable/amd64-usr/current/](https://stable.release.flatcar-linux.net/amd64-usr/current/?sort=size&order=desc):
 
 ```bash
-curl -OL https://stable.release.flatcar-linux.net/amd64-usr/current/flatcar_production_qemu_uefi_image.img.bz2
+curl -OL https://stable.release.flatcar-linux.net/amd64-usr/current/flatcar_production_image.bin.bz2
 ```
 
 Find the block device for your running VM:
@@ -93,7 +137,7 @@ ls -alh /dev/zvol/default/virtual-machines/
 Then write the image directly to it:
 
 ```bash
-bzip2 -dc flatcar_production_qemu_uefi_image.img.bz2 | dd of=/dev/zd16 bs=4M conv=fsync status=progress
+bzip2 -dc [image] | dd of=/dev/zvol/default/virtual-machines/foo.block bs=4M conv=fsync status=progress
 ```
 
 When it's done, force stop and start the VM:
