@@ -6,7 +6,242 @@
     <description>Recent content in Ps on agren.cc</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 09 Dec 2024 15:01:00 +0200</lastBuildDate><atom:link href="https://agren.cc/p/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 18 Jan 2025 12:00:00 +0200</lastBuildDate><atom:link href="https://agren.cc/p/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Using and configuring WeeChat, making IRC mostly painless</title>
+      <link>https://agren.cc/p/using-weechat/</link>
+      <pubDate>Sat, 18 Jan 2025 12:00:00 +0200</pubDate>
+      
+      <guid>https://agren.cc/p/using-weechat/</guid>
+      <description>&lt;p&gt;There&amp;rsquo;s a simplicity to IRC compared to most &amp;ldquo;modern&amp;rdquo; alternatives that
+is easy to love. This article is about how to set up the basics of
+the WeeChat IRC client.&lt;/p&gt;</description>
+      <content>&lt;p&gt;There&amp;rsquo;s a simplicity to IRC compared to most &amp;ldquo;modern&amp;rdquo; alternatives that
+is easy to love. This article is about how to set up the basics of
+the WeeChat IRC client.&lt;/p&gt;
+&lt;p&gt;First of all, a short tangent regarding the name: &lt;em&gt;WeeChat&lt;/em&gt; (the IRC
+client) was released in 2003, predating the Chinese instant messaging
+app &lt;a href=&#34;https://en.wikipedia.org/wiki/WeChat&#34;&gt;WeChat&lt;/a&gt; by about eight years.
+This, of course, does not matter much since the latter has more than
+1.2B users (2022), which means confusion is unavoidable. It might be
+unnecessary to state it, but they have no connection to eachother.&lt;/p&gt;
+&lt;h2 id=&#34;installing-weechat&#34;&gt;Installing WeeChat&lt;/h2&gt;
+&lt;p&gt;It&amp;rsquo;s pretty likely that your *NIX package manager already offers
+WeeChat, so using &lt;code&gt;pacman&lt;/code&gt;, &lt;code&gt;dnf&lt;/code&gt;, &lt;code&gt;apt&lt;/code&gt; or &lt;code&gt;pkg&lt;/code&gt; should be sufficient.
+We&amp;rsquo;ll also be using &lt;code&gt;tmux&lt;/code&gt; to keep the session alive, so for Debian:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;apt install weechat tmux
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;first-launch&#34;&gt;First launch&lt;/h2&gt;
+&lt;p&gt;If you&amp;rsquo;ve never used &lt;code&gt;tmux&lt;/code&gt; before, you only need to know that:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;tmux&lt;/code&gt; starts a new session&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;CTRL+b&lt;/code&gt; followed by &lt;code&gt;d&lt;/code&gt; will detach your session, keeping it alive in
+the background.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;tmux a&lt;/code&gt; will attach your tmux session again, assuming there is only one.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;So let&amp;rsquo;s start by creating our first tmux session, then start WeeChat
+inside it:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;tmux
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;weechat
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;When starting WeeChat the first time, you&amp;rsquo;ll be in the &lt;code&gt;core&lt;/code&gt; buffer,
+which just means you haven&amp;rsquo;t configured any IRC servers yet to switch
+between. Let&amp;rsquo;s do that now.&lt;/p&gt;
+&lt;h2 id=&#34;configuring-irc-servers&#34;&gt;Configuring IRC servers&lt;/h2&gt;
+&lt;p&gt;Let&amp;rsquo;s set up a connection to
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Libera_Chat&#34;&gt;Libera.Chat&lt;/a&gt;, a network
+founded in 2021 by former staff at Freenode. It&amp;rsquo;s used by a wide variety
+of open source projects, and is a good place to start.&lt;/p&gt;
+&lt;p&gt;This part is also covered pretty well in the &lt;a href=&#34;https://weechat.org/files/doc/stable/weechat_quickstart.en.html#add_irc_server&#34;&gt;WeeChat
+Quickstart&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;First, let&amp;rsquo;s add Libera as a server. As with any IRC network, it&amp;rsquo;s best
+to check with them directly what servers you can use, which Libera
+provides in their &lt;a href=&#34;https://libera.chat/guides/connect&#34;&gt;Connecting to
+Libera.Chat&lt;/a&gt; article:&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;Description&lt;/th&gt;
+          &lt;th&gt;Hostname&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Default&lt;/td&gt;
+          &lt;td&gt;irc.libera.chat&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Europe&lt;/td&gt;
+          &lt;td&gt;irc.eu.libera.chat&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;US &amp;amp; Canada&lt;/td&gt;
+          &lt;td&gt;irc.us.libera.chat&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Australia and New Zealand&lt;/td&gt;
+          &lt;td&gt;irc.au.libera.chat&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;East Asia&lt;/td&gt;
+          &lt;td&gt;irc.ea.libera.chat&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;IPv4 only&lt;/td&gt;
+          &lt;td&gt;irc.ipv4.libera.chat&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;IPv6 only&lt;/td&gt;
+          &lt;td&gt;irc.ipv6.libera.chat&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;Description&lt;/th&gt;
+          &lt;th&gt;Ports&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Plain-text&lt;/td&gt;
+          &lt;td&gt;6665-6667, 8000-8002&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;TLS&lt;/td&gt;
+          &lt;td&gt;6697, 7000, 7070&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;I&amp;rsquo;m in the EU, and I like TLS, so I&amp;rsquo;ll do:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;/server add libera irc.eu.libera.chat/6697
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;irc: server added: libera
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Normally, you should be able to add &lt;code&gt;-tls&lt;/code&gt; to this command, but for some
+reason I couldn&amp;rsquo;t get it to work, but that&amp;rsquo;s fine: this is an excellent
+reason to go through configuration of existing servers.&lt;/p&gt;
+&lt;h3 id=&#34;reconfigure-the-libera-server&#34;&gt;Reconfigure the &amp;rsquo;libera&amp;rsquo; server&lt;/h3&gt;
+&lt;p&gt;Run the following to get a verbose output of all attributes set for all
+servers, and use PGUP/PGDOWN to scroll:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;/server listfull
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Along lots of other attributes, you&amp;rsquo;ll see:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Server: libera [not connected]
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  addresses. . . . . . : &amp;#39;irc.eu.libera.chat/6697&amp;#39;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  (...)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  ssl. . . . . . . . . :   (off)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;We know this should be a secure connection, so let&amp;rsquo;s change that value.
+These attributes are all available via &lt;code&gt;irc.server.libera&lt;/code&gt;, where
+&lt;code&gt;libera&lt;/code&gt; is the name you chose for the server, so the &lt;code&gt;ssl&lt;/code&gt; value is set
+with:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;/set irc.server.libera.ssl on
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Option changed: irc.server.libera.ssl = on  (default if null: off)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This will be useful to know later when we want to set things like
+&lt;code&gt;autoconnect&lt;/code&gt;, &lt;code&gt;autojoin&lt;/code&gt; and so on.&lt;/p&gt;
+&lt;h3 id=&#34;choosing-a-name&#34;&gt;Choosing a name&lt;/h3&gt;
+&lt;p&gt;Before connecting, we need to choose a name. Unlike what some may be
+used to, the nickname on IRC is set by the user themselves on every
+connection, and must be &amp;ldquo;reserved&amp;rdquo; by registration and authentication.
+WeeChat can handle this for us, but the risk of collision with yourself
+or someone that has rudely stolen your name means that setting up
+alternate names is common practice. Assuming your preferred name is
+&lt;code&gt;deppenleerzeichen&lt;/code&gt; on this network, you may want to at least set:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;/set irc.server.libera.nicks &amp;#34;deppenleerzeichen,deppenleerzeichen_&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Option changed: irc.server.libera.nicks = &amp;#34;deppenleerzeichen,deppenleerzeichen_&amp;#34;  (default if null: &amp;#34;root,root1,root2,root3,root4&amp;#34;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;In this case, I&amp;rsquo;m running WeeChat in a container as root, which is why the
+default name is variants of &amp;ldquo;root&amp;rdquo; (the user running weechat).&lt;/p&gt;
+&lt;h3 id=&#34;registering-your-name&#34;&gt;Registering your name&lt;/h3&gt;
+&lt;p&gt;We&amp;rsquo;re now ready to connect, with our completely unregistered and made up
+name:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;/connect libera
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;(...)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;libera  -- | User mode [+Ziw] by deppenleerzeiche
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The &lt;a href=&#34;https://libera.chat/guides/usermodes&#34;&gt;user mode&lt;/a&gt; &lt;code&gt;+Z&lt;/code&gt; tells us that
+a secure connection was established successfully.&lt;/p&gt;
+&lt;p&gt;At this point, we could just join channels and start chatting away, but:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;We want our name to be registered, not only so we can know it won&amp;rsquo;t be
+used by other people, but also because some channels require it.&lt;/li&gt;
+&lt;li&gt;It hides your &amp;ldquo;host&amp;rdquo;, meaning that if you run &lt;code&gt;/whois your_name&lt;/code&gt;, your
+reverse DNS will be replaced by &lt;code&gt;user/your_name&lt;/code&gt;, which is nice.&lt;/li&gt;
+&lt;li&gt;We also want to set up authorization and channel joins automatically,
+so we don&amp;rsquo;t have to manually do this every time WeeChat starts back up
+(because you&amp;rsquo;ll forget how).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;a href=&#34;https://libera.chat/guides/registration&#34;&gt;Nickname Registration&lt;/a&gt; in
+libera&amp;rsquo;s own documentation tells us how to do it:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;/msg NickServ REGISTER some_decent_password youremail@example.com
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;An email containing nickname activation instructions has been sent to REDACTED.
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Please check the address if you don&amp;#39;t receive it. If it is incorrect, DROP then REGISTER again.
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;If you do not complete registration within one day, your nickname will expire.
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;deppenleerzeiche is now registered to REDACTED.
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The e-mail you receive will contain a command you can run that looks
+like:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;/msg NickServ VERIFY REGISTER deppenleerzeiche something
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Just run that, and you&amp;rsquo;re done. Now that we have registered our name, we
+can set up authentication and channel joins to happen automatically.&lt;/p&gt;
+&lt;h3 id=&#34;sasl-authentication&#34;&gt;SASL authentication&lt;/h3&gt;
+&lt;p&gt;Back in the bad old days, identification was done by doing something
+like &lt;code&gt;/msg nickserv identify&lt;/code&gt;, which just sent a simple message to the
+&amp;ldquo;nickserv&amp;rdquo; user (a bot) which then proved your identity. These days,
+when supported, you should use SASL, so we&amp;rsquo;re doing that.&lt;/p&gt;
+&lt;p&gt;Simply set &lt;code&gt;sasl_username&lt;/code&gt; and &lt;code&gt;sasl_password&lt;/code&gt; to your nickname and
+chosen password respectively:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;WARNING&lt;/strong&gt;: If you are setting this up in a shared environment, this is
+not a secure way to store your password. Refer to &lt;a href=&#34;https://weechat.org/files/doc/stable/weechat_quickstart.en.html#irc_server_options&#34;&gt;Set custom IRC server
+options&lt;/a&gt;
+and use &lt;code&gt;/secure passphrase&lt;/code&gt; and &lt;code&gt;/secure set&lt;/code&gt; to set up a secure
+variable like &lt;code&gt;${sec.data.libera_password}&lt;/code&gt; instead.&lt;/p&gt;
+&lt;p&gt;The below is a bit simpler, but should only be used on single user systems.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;/set irc.server.libera.sasl_username &amp;#34;mynick&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;/set irc.server.libera.sasl_password &amp;#34;xxxxxxx&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;If you &lt;code&gt;/disconnect libera&lt;/code&gt; then &lt;code&gt;/connect libera&lt;/code&gt;, somewhere in the
+output you should hopefully see:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;You are now logged in as deppenleerzeiche (deppenleerzeiche!root@user/deppenleerzeiche)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;deppenleerzeiche SASL authentication successful
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;final-touches&#34;&gt;Final touches&lt;/h3&gt;
+&lt;p&gt;Since we now have automatic authentication, the only thing left is to
+set up autoconnect rather than having to do &lt;code&gt;/connect&lt;/code&gt;, and what
+channels we want to join. Autoconnect is just one of the attributes we
+saw earlier with &lt;code&gt;/server listfull&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;/set irc.server.libera.autoconnect on
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;You can verify that this works by doing &lt;code&gt;/exit&lt;/code&gt;, which will kill
+WeeChat, then running &lt;code&gt;weechat&lt;/code&gt; again.&lt;/p&gt;
+&lt;p&gt;The easiest way to set up auto-join of channels in my opinion is to
+simply join the channels you want, for example:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;/join #libera
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;To switch between channels and the &amp;ldquo;status&amp;rdquo; window, just do ALT+UP/DOWN,
+or ALT+N where N is the number displayed on the left. When you&amp;rsquo;re in the
+status window, you can switch between server-specific buffers and the
+core buffer by pressing CTRL+x. You&amp;rsquo;ll notice that highlight colors
+change (to show what lines are relevant to your current buffer), and
+that &lt;code&gt;irc/libera&lt;/code&gt; or &lt;code&gt;core&lt;/code&gt; is displayed in the bottom left.&lt;/p&gt;
+&lt;p&gt;This is relevant because some commands only make sense in the context of
+a single server, like the one we&amp;rsquo;re going to run now:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;/autojoin apply
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;libera     | Autojoin changed from empty value to &amp;#34;#libera&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This simply adds all the channels you are currently in to your autojoin
+list. If you run this in the &amp;ldquo;core&amp;rdquo; context, you&amp;rsquo;ll instead get:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;weechat =!= | irc: command &amp;#34;autojoin&amp;#34; must be executed on irc buffer (server, channel or private)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;You can now again run &lt;code&gt;/exit&lt;/code&gt;, start WeeChat back up, and notice that
+both authentication and channel joins happen automatically.&lt;/p&gt;
+&lt;h3 id=&#34;summary&#34;&gt;Summary&lt;/h3&gt;
+&lt;p&gt;We have:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Installed WeeChat&lt;/li&gt;
+&lt;li&gt;Configured connecting to an IRC server over TLS&lt;/li&gt;
+&lt;li&gt;Registered our name, and set up automatic authentication&lt;/li&gt;
+&lt;li&gt;Set up auto-join for the channels we want&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;There&amp;rsquo;s obviously a lot more you can do with WeeChat, if you have any
+suggestions or feedback feel free to get back to me via Mastodon
+&lt;a href=&#34;https://telegrafverket.cc/@linus&#34;&gt;@linus@telegrafverket.cc&lt;/a&gt; or e-mail.&lt;/p&gt;
+</content>
+    </item>
+    
     <item>
       <title>Flatcar Linux VM under Incus on Debian</title>
       <link>https://agren.cc/p/flatcar-on-incus/</link>
@@ -59,13 +294,13 @@ put it in &lt;code&gt;/usr/bin&lt;/code&gt; (or wherever in your path you want i
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;sd&#34;&gt;          [Network]
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;sd&#34;&gt;          Address=10.200.147.72/26
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;sd&#34;&gt;          Gateway=10.200.147.65
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;sd&#34;&gt;          DNS=1.1.1.1&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;          
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;sd&#34;&gt;          DNS=1.1.1.1&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;- &lt;span class=&#34;nt&#34;&gt;path&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;/etc/sudoers.d/foo&amp;#39;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;      &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;overwrite&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;kc&#34;&gt;true&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;      &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;mode&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;m&#34;&gt;0440&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;      &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;contents&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;        &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;inline&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;sd&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;sd&#34;&gt;          foo ALL=(ALL) NOPASSWD: ALL&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;          
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;sd&#34;&gt;          foo ALL=(ALL) NOPASSWD: ALL&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;systemd&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;units&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;- &lt;span class=&#34;nt&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;my.service&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
@@ -80,7 +315,7 @@ put it in &lt;code&gt;/usr/bin&lt;/code&gt; (or wherever in your path you want i
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;sd&#34;&gt;        Restart=always
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;sd&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;sd&#34;&gt;        [Install]
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;sd&#34;&gt;        WantedBy=multi-user.target&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;        
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;sd&#34;&gt;        WantedBy=multi-user.target&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Check the config and fix any errors:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;butane -c -s config.yaml
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Pipe it through butane and put it somewhere Incus can read it:&lt;/p&gt;
@@ -95,7 +330,7 @@ knows where to look for the file:&lt;/p&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;security.secureboot&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;false&amp;#34;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;(...)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Grab a file that tickles your fancy from
-&lt;a href=&#34;https://stable.release.flatcar-linux.net/amd64-usr/current/?sort=size&amp;order=desc&#34;&gt;/stable/amd64-usr/current/&lt;/a&gt;:&lt;/p&gt;
+&lt;a href=&#34;https://stable.release.flatcar-linux.net/amd64-usr/current/?sort=size&amp;amp;order=desc&#34;&gt;/stable/amd64-usr/current/&lt;/a&gt;:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;curl -OL https://stable.release.flatcar-linux.net/amd64-usr/current/flatcar_production_image.bin.bz2
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Find the block device for your running VM:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;ls -alh /dev/zvol/default/virtual-machines/
