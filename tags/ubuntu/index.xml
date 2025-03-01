@@ -6,7 +6,122 @@
     <description>Recent content in Ubuntu on agren.cc</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 05 May 2024 17:45:00 +0200</lastBuildDate><atom:link href="https://agren.cc/tags/ubuntu/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 01 Mar 2025 09:45:00 +0200</lastBuildDate><atom:link href="https://agren.cc/tags/ubuntu/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Making tailscaled dependable for sshd and other services</title>
+      <link>https://agren.cc/p/systemd-tailscale/</link>
+      <pubDate>Sat, 01 Mar 2025 09:45:00 +0200</pubDate>
+      
+      <guid>https://agren.cc/p/systemd-tailscale/</guid>
+      <description>&lt;p&gt;If you use Tailscale on your server, you may have services that should
+only listen on that IP. Unfortunately, the tailscaled service often goes
+active before it&amp;rsquo;s actually done, breaking dependencies: here&amp;rsquo;s how to
+fix it.&lt;/p&gt;</description>
+      <content>&lt;p&gt;If you use Tailscale on your server, you may have services that should
+only listen on that IP. Unfortunately, the tailscaled service often goes
+active before it&amp;rsquo;s actually done, breaking dependencies: here&amp;rsquo;s how to
+fix it.&lt;/p&gt;
+&lt;p&gt;There are multiple Github issues pointing out that the &lt;code&gt;tailscaled&lt;/code&gt;
+systemd service does not behave very well and often says that it&amp;rsquo;s ready
+before a bindable IP is actually available:
+&lt;a href=&#34;https://github.com/tailscale/tailscale/issues/11504&#34;&gt;#11504&lt;/a&gt; and
+&lt;a href=&#34;https://github.com/tailscale/tailscale/issues/3340&#34;&gt;#3340&lt;/a&gt; are two
+examples.&lt;/p&gt;
+&lt;p&gt;In March 2024, almost a year ago as of this writing, it was pointed out
+that this looks like a regression, but since it still doesn&amp;rsquo;t seem to be
+fixed, it requires users to work around it.&lt;/p&gt;
+&lt;p&gt;One great way mentioned in #11504 is that you can add an &lt;code&gt;ExecStartPost&lt;/code&gt;
+attribute for the tailscaled service that ensures it&amp;rsquo;s &lt;em&gt;actually&lt;/em&gt; done
+before marking the service as running.&lt;/p&gt;
+&lt;p&gt;In this example, we&amp;rsquo;ll illustrate how to set up and make a dependency in the ssh
+daemon service more reliable, for situations where your tailscale ip is
+the only ip that you expect to use for ssh.&lt;/p&gt;
+&lt;h2 id=&#34;step-1-improve-tailscaledservice-reliability-with-an-override&#34;&gt;Step 1: Improve &lt;code&gt;tailscaled.service&lt;/code&gt; reliability with an override&lt;/h2&gt;
+&lt;p&gt;Run the following to open your editor, creating an override for the
+service object:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;systemctl edit tailscaled
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Read the comments on screen, and add the following between the two
+comment blocks as instructed:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-toml&#34; data-lang=&#34;toml&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Service&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;ExecStartPost&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;timeout&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;60&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;s&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;bash&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;-c&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;until tailscale status --peers=false; do sleep 1; done&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The comments will show you the current configuration of the service
+object, where you may note that &lt;code&gt;ExecStartPost&lt;/code&gt; is not set. The way
+overrides work is that anything specified will &amp;ldquo;merge&amp;rdquo; into the existing
+service configuration without having to change it, which is good since
+it&amp;rsquo;s often owned by the package itself. It follows the logic of
+&lt;code&gt;.d&lt;/code&gt;-directories, which is also clear by the path chosen for these
+override files.&lt;/p&gt;
+&lt;p&gt;When you have saved and exited from your editor, you can run the
+following to see the full &amp;ldquo;state&amp;rdquo; of your current service object
+configuration:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;systemctl cat tailscaled
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Note that your override shows up at the bottom.&lt;/p&gt;
+&lt;h2 id=&#34;step-2-configure-sshd-and-create-a-dependency&#34;&gt;Step 2: Configure sshd and create a dependency&lt;/h2&gt;
+&lt;p&gt;If you want your ssh daemon to only listen on a specific ip, the easiest
+way to achieve this is to simply configure it in &lt;code&gt;sshd_config&lt;/code&gt;. Look for
+the &lt;code&gt;ListenAddress&lt;/code&gt; attribute, and specify it once or several times,
+depending on your use case. In this example, we are using both tailscale
+and wireguard, so the sshd configuration looks like this:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-plain&#34; data-lang=&#34;plain&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;ListenAddress 100.74.237.36
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;ListenAddress 10.10.10.5
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Confirming that this configuration is active, after a restart if changed
+recently, can be done by simply looking for the &lt;code&gt;Port&lt;/code&gt; configured in
+sshd in the output of &lt;code&gt;ss&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;ss -tuln &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; grep &lt;span class=&#34;s1&#34;&gt;&amp;#39;:22&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-plain&#34; data-lang=&#34;plain&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;tcp LISTEN 0 128 100.74.237.36:22 0.0.0.0:*
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;tcp LISTEN 0 128    10.10.10.5:22 0.0.0.0:*
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;If your sshd configuration is set up correctly, all you have to do is
+create the service object dependency, to ensure that the ssh daemon
+waits for &lt;code&gt;tailscaled.service&lt;/code&gt; before starting, which should now be a
+bit more reliable with the above workaround.&lt;/p&gt;
+&lt;p&gt;Again, simply do:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;systemctl edit ssh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;A short tangent on lists in systemd: some attributes, like &lt;code&gt;After&lt;/code&gt; in
+this case, are &lt;strong&gt;lists&lt;/strong&gt;. You can tell that something is a list from the
+way that it&amp;rsquo;s clearly a list:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-toml&#34; data-lang=&#34;toml&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;Attribute&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;lists&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;have&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;multiple&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;objects&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Although it&amp;rsquo;s not a valid syntax, the above can be mentally parsed as:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-toml&#34; data-lang=&#34;toml&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;Attribute&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;=[&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;lists&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;have&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;multiple&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;objects&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;There are other attributes which are clearly not lists, like
+&lt;code&gt;Description&lt;/code&gt; which takes a string, and only one string.&lt;/p&gt;
+&lt;p&gt;Because overrides will &amp;ldquo;merge&amp;rdquo; values, the default behavior when
+overriding a list is to &lt;em&gt;append to that list&lt;/em&gt;. If you want to actually
+&lt;strong&gt;override&lt;/strong&gt; the list, you therefore need to remember to null the list
+first before overriding it. For example, if the current value is
+&lt;code&gt;Attribute=foo fax&lt;/code&gt; and you want to completely override it, this
+requires you to do:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-toml&#34; data-lang=&#34;toml&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Section&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;Attribute&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;=&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;Attribute&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;bar&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;baz&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;If you don&amp;rsquo;t do this, the end result of the override would be
+&lt;code&gt;Attribute=foo fax bar bax&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;This is good to know, but not strictly relevant in our case, as we
+actually do want to just append new dependencies, so after running
+&lt;code&gt;systemctl edit ssh&lt;/code&gt; we can simply add:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-toml&#34; data-lang=&#34;toml&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Unit&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;After&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;wg-quick&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;@&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;wg0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;service&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;tailscaled&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;service&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;If you are not using wireguard, this would obviously just be
+&lt;code&gt;tailscaled.service&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;After saving and running &lt;code&gt;systemctl daemon-reload&lt;/code&gt;, we can again verify,
+both with &amp;ldquo;cat&amp;rdquo; and &amp;ldquo;show&amp;rdquo;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;systemctl cat ssh &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; grep After
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-toml&#34; data-lang=&#34;toml&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;After&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;network&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;target&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;auditd&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;service&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;After&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;wg-quick&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;@&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;wg0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;service&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;tailscaled&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;service&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;If you want to be extra sure, you can also check the output of:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;systemctl show ssh &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; grep &lt;span class=&#34;nv&#34;&gt;After&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Now that both &lt;code&gt;tailscaled.service&lt;/code&gt; and &lt;code&gt;ssh.service&lt;/code&gt; are fixed up, you
+can at your convenience try rebooting the server, first ensuring you have a
+way of getting back in if it breaks, of course.&lt;/p&gt;
+&lt;p&gt;You can then, hopefully, observe the services starting in the correct
+order:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;journalctl --boot &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; grep -E &lt;span class=&#34;s2&#34;&gt;&amp;#34;ssh.service|tailscaled.service&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-plain&#34; data-lang=&#34;plain&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;systemd[1]: Starting tailscaled.service - Tailscale node agent...
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;systemd[1]: Started tailscaled.service - Tailscale node agent.
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;systemd[1]: Starting ssh.service - OpenBSD Secure Shell server...
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;systemd[1]: Started ssh.service - OpenBSD Secure Shell server.
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content>
+    </item>
+    
     <item>
       <title>Using signed-by in Debian repository configuration</title>
       <link>https://agren.cc/p/trusted-gpg/</link>

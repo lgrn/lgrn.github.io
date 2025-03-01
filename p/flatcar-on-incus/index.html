@@ -233,13 +233,13 @@ put it in <code>/usr/bin</code> (or wherever in your path you want it).</p>
 </span></span></span><span class="line"><span class="cl"><span class="sd">          [Network]
 </span></span></span><span class="line"><span class="cl"><span class="sd">          Address=10.200.147.72/26
 </span></span></span><span class="line"><span class="cl"><span class="sd">          Gateway=10.200.147.65
-</span></span></span><span class="line"><span class="cl"><span class="sd">          DNS=1.1.1.1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="sd">          DNS=1.1.1.1</span><span class="w">          
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;/etc/sudoers.d/foo&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">overwrite</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="m">0440</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">contents</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">inline</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
-</span></span></span><span class="line"><span class="cl"><span class="sd">          foo ALL=(ALL) NOPASSWD: ALL</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="sd">          foo ALL=(ALL) NOPASSWD: ALL</span><span class="w">          
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">systemd</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">units</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">my.service</span><span class="w">
@@ -254,7 +254,7 @@ put it in <code>/usr/bin</code> (or wherever in your path you want it).</p>
 </span></span></span><span class="line"><span class="cl"><span class="sd">        Restart=always
 </span></span></span><span class="line"><span class="cl"><span class="sd">
 </span></span></span><span class="line"><span class="cl"><span class="sd">        [Install]
-</span></span></span><span class="line"><span class="cl"><span class="sd">        WantedBy=multi-user.target</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="sd">        WantedBy=multi-user.target</span><span class="w">        
 </span></span></span></code></pre></div><p>Check the config and fix any errors:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">butane -c -s config.yaml
 </span></span></code></pre></div><p>Pipe it through butane and put it somewhere Incus can read it:</p>
@@ -269,7 +269,7 @@ knows where to look for the file:</p>
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">security.secureboot</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;false&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="l">(...)</span><span class="w">
 </span></span></span></code></pre></div><p>Grab a file that tickles your fancy from
-<a href="https://stable.release.flatcar-linux.net/amd64-usr/current/?sort=size&amp;order=desc">/stable/amd64-usr/current/</a>:</p>
+<a href="https://stable.release.flatcar-linux.net/amd64-usr/current/?sort=size&order=desc">/stable/amd64-usr/current/</a>:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">curl -OL https://stable.release.flatcar-linux.net/amd64-usr/current/flatcar_production_image.bin.bz2
 </span></span></code></pre></div><p>Find the block device for your running VM:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ls -alh /dev/zvol/default/virtual-machines/

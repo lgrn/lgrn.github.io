@@ -6,13 +6,13 @@
     <description>Recent content in Tags on agren.cc</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 18 Jan 2025 12:00:00 +0200</lastBuildDate><atom:link href="https://agren.cc/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 01 Mar 2025 09:45:00 +0200</lastBuildDate><atom:link href="https://agren.cc/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Freebsd</title>
-      <link>https://agren.cc/tags/freebsd/</link>
-      <pubDate>Sat, 18 Jan 2025 12:00:00 +0200</pubDate>
+      <title>Debian</title>
+      <link>https://agren.cc/tags/debian/</link>
+      <pubDate>Sat, 01 Mar 2025 09:45:00 +0200</pubDate>
       
-      <guid>https://agren.cc/tags/freebsd/</guid>
+      <guid>https://agren.cc/tags/debian/</guid>
       <description></description>
       <content></content>
     </item>
@@ -20,9 +20,59 @@
     <item>
       <title>Linux</title>
       <link>https://agren.cc/tags/linux/</link>
-      <pubDate>Sat, 18 Jan 2025 12:00:00 +0200</pubDate>
+      <pubDate>Sat, 01 Mar 2025 09:45:00 +0200</pubDate>
       
       <guid>https://agren.cc/tags/linux/</guid>
+      <description></description>
+      <content></content>
+    </item>
+    
+    <item>
+      <title>Sysadmin</title>
+      <link>https://agren.cc/tags/sysadmin/</link>
+      <pubDate>Sat, 01 Mar 2025 09:45:00 +0200</pubDate>
+      
+      <guid>https://agren.cc/tags/sysadmin/</guid>
+      <description></description>
+      <content></content>
+    </item>
+    
+    <item>
+      <title>Systemd</title>
+      <link>https://agren.cc/tags/systemd/</link>
+      <pubDate>Sat, 01 Mar 2025 09:45:00 +0200</pubDate>
+      
+      <guid>https://agren.cc/tags/systemd/</guid>
+      <description></description>
+      <content></content>
+    </item>
+    
+    <item>
+      <title>Tailscale</title>
+      <link>https://agren.cc/tags/tailscale/</link>
+      <pubDate>Sat, 01 Mar 2025 09:45:00 +0200</pubDate>
+      
+      <guid>https://agren.cc/tags/tailscale/</guid>
+      <description></description>
+      <content></content>
+    </item>
+    
+    <item>
+      <title>Ubuntu</title>
+      <link>https://agren.cc/tags/ubuntu/</link>
+      <pubDate>Sat, 01 Mar 2025 09:45:00 +0200</pubDate>
+      
+      <guid>https://agren.cc/tags/ubuntu/</guid>
+      <description></description>
+      <content></content>
+    </item>
+    
+    <item>
+      <title>Freebsd</title>
+      <link>https://agren.cc/tags/freebsd/</link>
+      <pubDate>Sat, 18 Jan 2025 12:00:00 +0200</pubDate>
+      
+      <guid>https://agren.cc/tags/freebsd/</guid>
       <description></description>
       <content></content>
     </item>
@@ -58,16 +108,6 @@
     </item>
     
     <item>
-      <title>Sysadmin</title>
-      <link>https://agren.cc/tags/sysadmin/</link>
-      <pubDate>Mon, 09 Dec 2024 15:01:00 +0200</pubDate>
-      
-      <guid>https://agren.cc/tags/sysadmin/</guid>
-      <description></description>
-      <content></content>
-    </item>
-    
-    <item>
       <title>Mail</title>
       <link>https://agren.cc/tags/mail/</link>
       <pubDate>Sat, 09 Nov 2024 16:00:00 +0100</pubDate>
@@ -93,26 +133,6 @@
       <pubDate>Mon, 23 Sep 2024 11:45:00 +0200</pubDate>
       
       <guid>https://agren.cc/tags/vmware/</guid>
-      <description></description>
-      <content></content>
-    </item>
-    
-    <item>
-      <title>Debian</title>
-      <link>https://agren.cc/tags/debian/</link>
-      <pubDate>Sun, 05 May 2024 17:45:00 +0200</pubDate>
-      
-      <guid>https://agren.cc/tags/debian/</guid>
-      <description></description>
-      <content></content>
-    </item>
-    
-    <item>
-      <title>Ubuntu</title>
-      <link>https://agren.cc/tags/ubuntu/</link>
-      <pubDate>Sun, 05 May 2024 17:45:00 +0200</pubDate>
-      
-      <guid>https://agren.cc/tags/ubuntu/</guid>
       <description></description>
       <content></content>
     </item>
