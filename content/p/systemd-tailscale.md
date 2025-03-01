@@ -152,8 +152,7 @@ After=wg-quick@wg0.service tailscaled.service
 If you are not using wireguard, this would obviously just be
 `tailscaled.service`.
 
-After saving and running `systemctl daemon-reload`, we can again verify,
-both with "cat" and "show":
+After saving and running `systemctl daemon-reload`, we can again verify:
 
 ```sh
 systemctl cat ssh | grep After

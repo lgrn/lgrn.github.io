@@ -277,8 +277,7 @@ actually do want to just append new dependencies, so after running
 </span></span><span class="line"><span class="cl"><span class="nx">After</span><span class="p">=</span><span class="nx">wg-quick</span><span class="err">@</span><span class="nx">wg0</span><span class="p">.</span><span class="nx">service</span> <span class="nx">tailscaled</span><span class="p">.</span><span class="nx">service</span>
 </span></span></code></pre></div><p>If you are not using wireguard, this would obviously just be
 <code>tailscaled.service</code>.</p>
-<p>After saving and running <code>systemctl daemon-reload</code>, we can again verify,
-both with &ldquo;cat&rdquo; and &ldquo;show&rdquo;:</p>
+<p>After saving and running <code>systemctl daemon-reload</code>, we can again verify:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">systemctl cat ssh <span class="p">|</span> grep After
 </span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-toml" data-lang="toml"><span class="line"><span class="cl"><span class="nx">After</span><span class="p">=</span><span class="nx">network</span><span class="p">.</span><span class="nx">target</span> <span class="nx">auditd</span><span class="p">.</span><span class="nx">service</span>
 </span></span><span class="line"><span class="cl"><span class="nx">After</span><span class="p">=</span><span class="nx">wg-quick</span><span class="err">@</span><span class="nx">wg0</span><span class="p">.</span><span class="nx">service</span> <span class="nx">tailscaled</span><span class="p">.</span><span class="nx">service</span>
