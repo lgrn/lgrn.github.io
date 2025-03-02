@@ -3,27 +3,36 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://agren.cc/</loc>
-    <lastmod>2025-03-01T09:45:00+02:00</lastmod>
+    <lastmod>2025-03-02T11:00:00+02:00</lastmod>
   </url><url>
-    <loc>https://agren.cc/tags/debian/</loc>
-    <lastmod>2025-03-01T09:45:00+02:00</lastmod>
+    <loc>https://agren.cc/tags/javascript/</loc>
+    <lastmod>2025-03-02T11:00:00+02:00</lastmod>
   </url><url>
     <loc>https://agren.cc/tags/linux/</loc>
+    <lastmod>2025-03-02T11:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://agren.cc/tags/lxc/</loc>
+    <lastmod>2025-03-02T11:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://agren.cc/p/</loc>
+    <lastmod>2025-03-02T11:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://agren.cc/tags/sysadmin/</loc>
+    <lastmod>2025-03-02T11:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://agren.cc/tags/</loc>
+    <lastmod>2025-03-02T11:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://agren.cc/p/umami-bun/</loc>
+    <lastmod>2025-03-02T11:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://agren.cc/tags/debian/</loc>
     <lastmod>2025-03-01T09:45:00+02:00</lastmod>
   </url><url>
     <loc>https://agren.cc/p/systemd-tailscale/</loc>
     <lastmod>2025-03-01T09:45:00+02:00</lastmod>
   </url><url>
-    <loc>https://agren.cc/p/</loc>
-    <lastmod>2025-03-01T09:45:00+02:00</lastmod>
-  </url><url>
-    <loc>https://agren.cc/tags/sysadmin/</loc>
-    <lastmod>2025-03-01T09:45:00+02:00</lastmod>
-  </url><url>
     <loc>https://agren.cc/tags/systemd/</loc>
-    <lastmod>2025-03-01T09:45:00+02:00</lastmod>
-  </url><url>
-    <loc>https://agren.cc/tags/</loc>
     <lastmod>2025-03-01T09:45:00+02:00</lastmod>
   </url><url>
     <loc>https://agren.cc/tags/tailscale/</loc>

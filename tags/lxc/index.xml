@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Lxc on agren.cc</title>
+    <link>https://agren.cc/tags/lxc/</link>
+    <description>Recent content in Lxc on agren.cc</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 02 Mar 2025 11:00:00 +0200</lastBuildDate><atom:link href="https://agren.cc/tags/lxc/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Umami analytics with bun instead of npm</title>
+      <link>https://agren.cc/p/umami-bun/</link>
+      <pubDate>Sun, 02 Mar 2025 11:00:00 +0200</pubDate>
+      
+      <guid>https://agren.cc/p/umami-bun/</guid>
+      <description>&lt;p&gt;Node.js and &lt;code&gt;npm&lt;/code&gt; has been the standard for a long time when it comes to
+running web applications written in server-side javascript. Here&amp;rsquo;s how
+to set up the Umami analytics application with Bun instead.&lt;/p&gt;</description>
+      <content>&lt;p&gt;Node.js and &lt;code&gt;npm&lt;/code&gt; has been the standard for a long time when it comes to
+running web applications written in server-side javascript. Here&amp;rsquo;s how
+to set up the Umami analytics application with Bun instead.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/oven-sh/bun&#34;&gt;Bun&lt;/a&gt; is the hyped JS runtime written in Zig
+that is faster, includes a bundler, has native typescript support and
+runs as a single binary. While I&amp;rsquo;m no fan of
+javascript myself (neither hosting it nor the language itself), Bun
+seems really interesting, and reminds me of &lt;a href=&#34;https://frankenphp.dev/&#34;&gt;FrankenPHP&lt;/a&gt; for PHP applications.&lt;/p&gt;
+&lt;p&gt;So when I came across &lt;a href=&#34;https://github.com/umami-software/umami&#34;&gt;Umami&lt;/a&gt;
+when looking into self-hosted analytics platforms (used on this website
+as we speak, your data is being rescued, please do not resist) I thought
+it would be a great opportunity to try replacing &lt;code&gt;npm&lt;/code&gt; and &lt;code&gt;yarn&lt;/code&gt; suggested by the
+installation instructions with Bun.&lt;/p&gt;
+&lt;p&gt;First, a reservation: I know almost nothing about node.js or javascript
+development, apart from the fact that it&amp;rsquo;s an absolute mess setting up
+web applications if you don&amp;rsquo;t want to use ready made docker images
+(which I don&amp;rsquo;t). Being forced to used the Node Version Switcher and
+having your reserved disk space run out after multiple gigabytes of
+dependencies are pulled is enough to make a grown man cry &amp;ndash; all this to
+say that if you see something that looks strange and completely violates
+any expectations of how these webapps should be set up, feel free to
+&lt;a href=&#34;https://telegrafverket.cc/@linus&#34;&gt;contact me&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 id=&#34;step-1-setting-up-the-container&#34;&gt;Step 1: Setting up the container&lt;/h2&gt;
+&lt;p&gt;I&amp;rsquo;ll be running this on Alpine, so I just do:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;incus launch images:alpine/edge umami
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;I also use a &lt;code&gt;low-prio&lt;/code&gt; Incus profile for this which sets:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nt&#34;&gt;config&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;limits.cpu.priority&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;5&amp;#34;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;limits.disk.priority&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;0&amp;#34;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;limits.memory&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;3GiB&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;limits.memory.enforce&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;soft&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;step-2-installing-bun-and-umami&#34;&gt;Step 2: Installing bun and umami&lt;/h2&gt;
+&lt;p&gt;After some trial and error, these seem to be the packages required:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;apk add bash unzip curl micro libstdc++ gcc git nodejs npm
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;In most cases I would hope &lt;code&gt;nodejs&lt;/code&gt; and &lt;code&gt;npm&lt;/code&gt; wouldn&amp;rsquo;t be required, but
+in this case it is as the umami database initialization does not work
+without them. The only optional package here is &lt;code&gt;micro&lt;/code&gt; which is just a
+personal preference of editor.&lt;/p&gt;
+&lt;p&gt;Installing bun is done with:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;curl -fsSL https://bun.sh/install &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; bash
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Set up your &lt;code&gt;.bashrc&lt;/code&gt; and switch to &lt;code&gt;bash&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;bash
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;cat ~/.bashrc
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;export&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;BUN_INSTALL&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;$HOME&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;/.bun&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;export&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;PATH&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;$BUN_INSTALL&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;/bin:&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;$PATH&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;source ~/.bashrc&lt;/code&gt;and then clone the repo and run the installation:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;git clone https://github.com/umami-software/umami.git
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;cd&lt;/span&gt; umami
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;bun install
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;In my case, I&amp;rsquo;m using a shared Postgres instance, so I&amp;rsquo;ll set up a user
+and database for umami to use:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;CREATE&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;DATABASE&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;umami&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;CREATE&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;USER&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;umami&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;WITH&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;PASSWORD&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;something&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;GRANT&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;ALL&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;PRIVILEGES&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;ON&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;DATABASE&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;umami&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;TO&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;umami&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Access is restricted by the Postgres &lt;code&gt;listen_addresses&lt;/code&gt; as well as
+&lt;code&gt;pg_hba&lt;/code&gt; specifying that these password connections can only come from
+the local network:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-plain&#34; data-lang=&#34;plain&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;host all all 10.186.228.1/24 scram-sha-256
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Create &lt;code&gt;.env&lt;/code&gt; and add something like:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nv&#34;&gt;DATABASE_URL&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;postgresql://umami:something@10.186.221.20:5432/umami
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;By trial and error, I figured out that &lt;code&gt;npm-run-all&lt;/code&gt; is used and needs
+to be added:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;bun add npm-run-all
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;After this is all done, we can run the entire &amp;ldquo;build&amp;rdquo; as defined in
+&lt;code&gt;package.json&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;bun run build
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;When this is done, we need to create the service. Here&amp;rsquo;s an example of
+how it might look on Alpine:&lt;/p&gt;
+
+
+
+  &lt;div class=&#34;collapsable-code&#34;&gt;
+    &lt;input id=&#34;1&#34; type=&#34;checkbox&#34;  /&gt;
+    &lt;label for=&#34;1&#34;&gt;
+      &lt;span class=&#34;collapsable-code__language&#34;&gt;bash&lt;/span&gt;
+      &lt;span class=&#34;collapsable-code__title&#34;&gt;/etc/init.d/umami&lt;/span&gt;
+      &lt;span class=&#34;collapsable-code__toggle&#34; data-label-expand=&#34;Show&#34; data-label-collapse=&#34;Hide&#34;&gt;&lt;/span&gt;
+    &lt;/label&gt;
+    &lt;pre class=&#34;language-bash&#34; &gt;&lt;code&gt;#!/sbin/openrc-run
+
+name=&amp;#34;umami&amp;#34;
+BUN_PATH=&amp;#34;/root/.bun/bin/bun&amp;#34;
+WORKING_DIR=&amp;#34;/root/umami&amp;#34;
+PIDFILE=&amp;#34;/run/${name}.pid&amp;#34;
+
+command=&amp;#34;${BUN_PATH} start&amp;#34;
+command_background=true
+pidfile=&amp;#34;${PIDFILE}&amp;#34;
+directory=&amp;#34;${WORKING_DIR}&amp;#34;
+
+depend() {
+    need net
+}
+
+start_pre() {
+    checkpath --directory --mode 0755 /run
+}
+
+start() {
+    ebegin &amp;#34;Starting ${name}&amp;#34;
+    start-stop-daemon --start --background --make-pidfile --pidfile &amp;#34;${PIDFILE}&amp;#34; --chdir &amp;#34;${directory}&amp;#34; --exec ${BUN_PATH} -- start
+    eend $?
+}
+
+stop() {
+    ebegin &amp;#34;Stopping ${name}&amp;#34;
+    if [ -f &amp;#34;${PIDFILE}&amp;#34; ]; then
+        start-stop-daemon --stop --pidfile &amp;#34;${PIDFILE}&amp;#34; --retry 5
+    else
+        eerror &amp;#34;PID file not found: ${PIDFILE}&amp;#34;
+    fi
+    eend $?
+}
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/div&gt;
+
+
+&lt;p&gt;Make the service file executable with &lt;code&gt;chmod +x /etc/init.d/umami&lt;/code&gt; and
+then &lt;code&gt;rc-update add umami default&lt;/code&gt; to have it start on boot.&lt;/p&gt;
+&lt;p&gt;Finally, do &lt;code&gt;rc-service umami start&lt;/code&gt; and try curling localhost:3000 to
+see if you get the expected output.&lt;/p&gt;
+&lt;p&gt;If you do, set up your reverse proxy of choice and log in with
+admin/umami and configure your first site.&lt;/p&gt;
+</content>
+    </item>
+    
+  </channel>
+</rss>
