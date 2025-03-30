@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <title>Manually set up services on OPNsense :: agren.cc</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="One of the main benefits of OPNsense is obviously the web interface, but if you just want to set up a service manually like on FreeBSD, here&rsquo;s how you can do it. In this case, we&rsquo;re setting up dnscrypt-proxy.
+" />
+<meta name="keywords" content="" />
+
+  <meta name="robots" content="noodp" />
+
+<link rel="canonical" href="https://agren.cc/p/opnsense-services/" />
+
+
+
+
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/fonts.min.e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/main.min.f45962ce6ffdd2247db17a705d0190d5ca08e6b0757015b1061b0594e50b535b.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/prism.min.3080cbc8607b8ded79eec60a46295119aef4486a3a2d88c9ddc57ee285ca19ca.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/syntax.min.e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/terminal.min.795e2bed278f30aabee20511815271033ceb14e4a8348f8501a71429808fa574.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/buttons.min.2bc533403a27dfe0e93105a92502b42ce4587e2e4a87d9f7d349e51e16e09478.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/code.min.00125962708925857e7b66dbc58391d55be1191a3d0ce2034de8c9cd2c481c36.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/footer.min.2e3eb191baee58dd05a9f0104ac1fab0827bca7c64dafe0b2579f934c33a1d69.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/gist.min.a751e8b0abe1ba8bc53ced52a38b19d8950fe78ca29454ea8c2595cf26aad5c0.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/header.min.b6fb4423cf82a9f9d7abc9cd010223fa3d70a6526a3f28f8e17d814c06e18f9e.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/menu.min.83637a90d903026bc280d3f82f96ceb06c5fc72b7c1a8d686afb5bbf818a29f7.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/pagination.min.82f6400eae7c7c6dc3c866733c2ec0579e4089608fea69400ff85b3880aa0d3c.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/post.min.fc74ca360273c1d828da3c02b8174eba435607b369d98418ccc6f2243cd4e75d.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/terms.min.b81791663c3790e738e571cdbf802312390d30e4b1d8dc9d814a5b5454d0ac11.css">
+
+
+
+
+
+
+
+<link rel="shortcut icon" href="https://agren.cc/favicon.png">
+<link rel="apple-touch-icon" href="https://agren.cc/apple-touch-icon.png">
+
+
+<meta name="twitter:card" content="summary" />
+
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Manually set up services on OPNsense">
+<meta property="og:description" content="One of the main benefits of OPNsense is obviously the web interface, but if you just want to set up a service manually like on FreeBSD, here&rsquo;s how you can do it. In this case, we&rsquo;re setting up dnscrypt-proxy.
+" />
+<meta property="og:url" content="https://agren.cc/p/opnsense-services/" />
+<meta property="og:site_name" content="agren.cc" />
+
+  <meta property="og:image" content="https://agren.cc/og-image.png">
+
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+
+
+  <meta property="article:published_time" content="2025-03-30 11:00:00 &#43;0200 CEST" />
+
+
+
+
+
+
+
+
+
+<meta name="fediverse:creator" content="@linus@telegrafverket.cc" />
+<link rel="me" href="https://telegrafverket.cc/@linus" />
+
+
+<script defer src="https://umami.telegrafverket.cc/script.js" data-website-id="243279d9-ab6f-4575-a481-988858fdbb61"></script>
+
+
+</head>
+<body>
+
+
+<div class="container center">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="/">
+  <div class="logo">
+    agren.cc
+  </div>
+</a>
+
+    </div>
+    
+      <ul class="menu menu--mobile">
+  <li class="menu__trigger">Menu&nbsp;▾</li>
+  <li>
+    <ul class="menu__dropdown">
+      
+        
+          <li><a href="/about/index.html">about</a></li>
+        
+      
+        
+          <li><a href="https://telegrafverket.cc/@linus">mastodon</a></li>
+        
+      
+      
+    </ul>
+  </li>
+</ul>
+
+    
+    
+  </div>
+  
+    <nav class="navigation-menu">
+  <ul class="navigation-menu__inner menu--desktop">
+    
+      
+        
+          <li><a href="/about/index.html" >about</a></li>
+        
+      
+        
+          <li><a href="https://telegrafverket.cc/@linus" >mastodon</a></li>
+        
+      
+    
+  </ul>
+</nav>
+
+  
+</header>
+
+
+  <div class="content">
+    
+<article class="post">
+  <h1 class="post-title">
+    <a href="https://agren.cc/p/opnsense-services/">Manually set up services on OPNsense</a>
+  </h1>
+  <div class="post-meta"><time class="post-date">2025-03-30</time></div>
+
+  
+    <span class="post-tags">
+      
+      #<a href="https://agren.cc/tags/sysadmin/">sysadmin</a>&nbsp;
+      
+      #<a href="https://agren.cc/tags/freebsd/">freebsd</a>&nbsp;
+      
+      #<a href="https://agren.cc/tags/opnsense/">opnsense</a>&nbsp;
+      
+    </span>
+  
+  
+
+
+  
+
+  <div class="post-content"><div>
+        <p>One of the main benefits of OPNsense is obviously the web interface, but
+if you just want to set up a service manually like on FreeBSD, here&rsquo;s how you can
+do it. In this case, we&rsquo;re setting up dnscrypt-proxy.</p>
+<p>It&rsquo;s a DNS proxy that allows you to send <em>encrypted</em> DNS queries from your
+router, while still responding to &ldquo;normal&rdquo; DNS queries from your
+internal network. Since it also supports blacklisting and cloaking, it
+can be very useful in situations where you don&rsquo;t want to run a full DNS
+server but still want to serve and secure your DNS queries locally.</p>
+<p>First of all, ensure you grab the correct package and that the other
+packages are not installed:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># pkg search dnscrypt</span>
+</span></span><span class="line"><span class="cl">dnscrypt-proxy2-2.1.5_10       Flexible DNS proxy with support <span class="k">for</span> encrypted protocols
+</span></span><span class="line"><span class="cl">os-dnscrypt-proxy-1.15_2       Flexible DNS proxy supporting DNSCrypt and DoH
+</span></span><span class="line"><span class="cl">os-dnscrypt-proxy-devel-1.15_2 Flexible DNS proxy supporting DNSCrypt and DoH
+</span></span></code></pre></div><p>The <code>os-*</code> packages are OPNsense packages which will install it as a
+&ldquo;plugin&rdquo; in your web-gui. In this case we don&rsquo;t want that, we&rsquo;re setting
+it up as a normal service, so <code>pkg install dnscrypt-proxy2</code> while
+ensuring the other two are not present.</p>
+<p>When installed, we need to configure it, then enable the service.
+Configuration is located in <code>/usr/local/etc/dnscrypt-proxy</code>, and my
+config file looks like this:</p>
+
+
+
+  <div class="collapsable-code">
+    <input id="1" type="checkbox"  />
+    <label for="1">
+      <span class="collapsable-code__language">toml</span>
+      <span class="collapsable-code__title">dnscrypt-proxy.toml</span>
+      <span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide"></span>
+    </label>
+    <pre class="language-toml" ><code>server_names = [&#39;mullvad&#39;]
+listen_addresses = [&#39;127.0.0.1:53&#39;,&#39;192.168.1.1:53&#39;]
+max_clients = 250
+ipv4_servers = true
+ipv6_servers = false
+dnscrypt_servers = true
+doh_servers = true
+require_dnssec = true
+require_nolog = true
+require_nofilter = true
+force_tcp = false
+timeout = 2500
+keepalive = 30
+log_level = 2
+log_file = &#39;/var/log/dnscrypt-proxy/dnscrypt-proxy.log&#39;
+use_syslog = false
+cert_refresh_delay = 240
+dnscrypt_ephemeral_keys = false
+tls_disable_session_tickets = false
+bootstrap_resolvers = [&#39;9.9.9.9:53&#39;]
+ignore_system_dns = false
+netprobe_timeout = 30
+log_files_max_size = 10
+log_files_max_age = 7
+log_files_max_backups = 1
+block_ipv6 = false
+
+forwarding_rules = &#39;forwarding-rules.txt&#39;
+cloaking_rules = &#39;cloaking-rules.txt&#39;
+
+cache = true
+cache_size = 4096
+cache_min_ttl = 2400
+cache_max_ttl = 86400
+cache_neg_min_ttl = 60
+cache_neg_max_ttl = 600
+
+[allowed_names]
+  allowed_names_file = &#39;whitelist.txt&#39;
+  log_file = &#39;/var/log/dnscrypt-proxy/whitelisted.log&#39;
+  log_format = &#39;tsv&#39;
+
+[blocked_names]
+  blocked_names_file = &#39;blocked-names.txt&#39;
+
+[static]
+  [static.&#39;mullvad&#39;]
+  stamp = &#39;sdns://AgcAAAAAAAAACzE5NC4yNDIuMi4yAA9kbnMubXVsbHZhZC5uZXQKL2Rucy1xdWVyeQ&#39;
+</code></pre>
+  </div>
+
+
+<p>In this config, <code>server_names</code> refer to the external
+<code>[static.'mullvad']</code> DNS configured at
+the bottom, and <code>listen_addresses</code> matches the IP this router has on my
+local network.</p>
+<p>In this case, <code>bootstrap_resolvers</code> is configured, because the DNS
+configured uses DNS-over-HTTPS, which requires resolving a hostname.
+This &ldquo;bootstrap resolver&rdquo; is not used for any other queries than making
+the actual DNS server work.</p>
+<p>If you wish, you may use <code>forwarding_rules</code> (I don&rsquo;t, but the file must
+exist) or <code>cloaking_rules</code>. In my case, I use cloaking to ensure that
+servers that are actually within the same internal network are resolved
+with local IP addresses instead. For example, if you have
+<code>blog.my.domain</code> hosted on a server at home, other people should get
+your external IP in their response, but if it can be reached at
+<code>192.168.1.101</code> in your network, you probably want to cloak it:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-plain" data-lang="plain"><span class="line"><span class="cl">blog.my.domain 192.168.1.101
+</span></span></code></pre></div><p>This way, when you try reading your blog on your internal network you&rsquo;ll
+hit that server directly instead, because dnscrypt-proxy will change
+the response.</p>
+<p>I don&rsquo;t use <code>allowed_names</code>, but <code>blocked_names</code> is very useful. I point
+it to <code>blocked-names.txt</code> and then fetch this file nightly followed by a
+restart of the service.</p>
+<p>I do this via <code>/etc/periodic/daily/900.dnscrypt-blocklist</code> (executable)
+which looks something like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="cp">#!/bin/sh
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>/usr/local/bin/curl <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/wildcard/pro-onlydomains.txt <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>-o /usr/local/etc/dnscrypt-proxy/blocked-names.txt <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span><span class="o">&amp;&amp;</span> /usr/sbin/service dnscrypt-proxy restart
+</span></span></code></pre></div><p>This simply grabs the latest version of
+<a href="https://github.com/hagezi/dns-blocklists">hagezi/dns-blocklists</a> and
+overwrites <code>blocked-names.txt</code> with it, followed by a service restart.</p>
+<p>By doing this, you have a daily updated blocklist that will refuse to
+resolve any domain listed. There are many blocklists to choose from, so
+pick one that fits you.</p>
+<p>When you&rsquo;re happy with your configuration, it&rsquo;s time to enable the
+service. On OPNsense (FreeBSD), this is done via <code>rc.conf</code>, specifically
+<code>/etc/rc.conf.d/dnscrypt_proxy</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="line"><span class="cl"><span class="c1"># Ensure this line DOES NOT exist, this is used by the web gui plugin</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># dnscrypt_proxy_setup=&#34;/usr/local/opnsense/scripts/OPNsense/Dnscryptproxy/setup.sh&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="na">dnscrypt_proxy_enable</span><span class="o">=</span><span class="s">&#34;YES&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="na">dnscrypt_proxy_suexec</span><span class="o">=</span><span class="s">&#34;YES&#34;</span>
+</span></span></code></pre></div><p>You should now, hopefully, be able to simply do:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">service dnscrypt-proxy start
+</span></span></code></pre></div><p>Check the log and try making some queries:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">tail -f /var/log/dnscrypt-proxy/dnscrypt-proxy.log
+</span></span></code></pre></div><p>On another system, checking a blocked and non-blocked domain:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">dig +short health-tips-shortcuts.00go.com @192.168.1.1
+</span></span><span class="line"><span class="cl"><span class="s2">&#34;This query has been locally blocked&#34;</span> <span class="s2">&#34;by dnscrypt-proxy&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">dig +short agren.cc @192.168.1.1
+</span></span><span class="line"><span class="cl">172.67.181.149
+</span></span><span class="line"><span class="cl">104.21.18.104
+</span></span></code></pre></div><p>You&rsquo;re done!</p>
+<h2 id="bonus-material-dns-stamps">Bonus material: DNS stamps<a href="#bonus-material-dns-stamps" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<p>This extra section is for anyone who thinks this DNS server looks a bit odd:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-plain" data-lang="plain"><span class="line"><span class="cl">sdns://AgcAAAAAAAAACzE5NC4yNDIuMi4yAA9kbnMubXVsbHZhZC5uZXQKL2Rucy1xdWVyeQ
+</span></span></code></pre></div><p>This is what&rsquo;s called a &ldquo;DNS stamp&rdquo;, an encoding format that
+includes everything you need to securely connect to a DNS server in one
+string.</p>
+<p>You can paste it into <a href="https://dnscrypt.info/stamps/">https://dnscrypt.info/stamps/</a> to see what it
+contains: it basically just says that it&rsquo;s DNS-over-HTTPS (DoH), and
+that <code>dns.mullvad.net/dns-query</code> should be queried.
+Since this is DoH, it does not include a public key in the stamp itself &ndash;
+instead we rely on our <code>bootstrap_resolvers</code> to help us reach
+<code>dns.mullvad.net</code>, which then needs to present us with a valid
+certificate, just like any normal HTTPS response.</p>
+<p>Mullvad only provides DoH, but if you look at the <a href="https://dnscrypt.info/public-servers/">public server
+list</a> and compare it to for example
+<code>dnscry.pt-stockholm-ipv4</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sdns://AQcAAAAAAAAADjE4NS4xOTUuMjM2LjYyIBs-wdms4LUcYsk1gE7X2G0U7jqOAxC0ihiHfIwVJAYTGTIuZG5zY3J5cHQtY2VydC5kbnNjcnkucHQ
+</span></span></code></pre></div><p>This longer string specifies DNSCrypt (not DoH) and includes the public
+key of the provider in addition to the IP; this way an initial DNS
+lookup is not necessary.</p>
+<p>What protocol to use for secure DNS resolution is completely subjective.</p>
+
+      </div></div>
+
+  
+    
+<div class="pagination">
+  <div class="pagination__title">
+    <span class="pagination__title-h">Read other posts</span>
+    <hr />
+  </div>
+  <div class="pagination__buttons">
+    
+    
+    
+      <a href="https://agren.cc/p/umami-bun/" class="button inline next">
+        Umami analytics with bun instead of npm
+      </a>
+    
+  </div>
+</div>
+
+
+  
+
+  
+    
+
+  
+</article>
+
+  </div>
+
+  
+    <footer class="footer">
+    <div class="footer__inner">
+        <span>:: All text written by me is <a
+        href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA
+        4.0</a>, credit "agren.cc"<br/>:: Rendered with <a
+        href="https://gohugo.io/">Hugo</a> and the <a
+        href="https://github.com/panr/hugo-theme-terminal"
+        target="_blank">terminal theme</a>.</span>
+        </div>
+    </div>
+  </footer>
+
+  
+  
+
+  
+
+  <script type="text/javascript" src="/bundle.min.js"></script>
+
+  
+  
+
+
+  
+</div>
+
+</body>
+</html>

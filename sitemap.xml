@@ -3,7 +3,25 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://agren.cc/</loc>
-    <lastmod>2025-03-02T11:00:00+02:00</lastmod>
+    <lastmod>2025-03-30T11:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://agren.cc/tags/freebsd/</loc>
+    <lastmod>2025-03-30T11:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://agren.cc/p/opnsense-services/</loc>
+    <lastmod>2025-03-30T11:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://agren.cc/tags/opnsense/</loc>
+    <lastmod>2025-03-30T11:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://agren.cc/p/</loc>
+    <lastmod>2025-03-30T11:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://agren.cc/tags/sysadmin/</loc>
+    <lastmod>2025-03-30T11:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://agren.cc/tags/</loc>
+    <lastmod>2025-03-30T11:00:00+02:00</lastmod>
   </url><url>
     <loc>https://agren.cc/tags/javascript/</loc>
     <lastmod>2025-03-02T11:00:00+02:00</lastmod>
@@ -12,15 +30,6 @@
     <lastmod>2025-03-02T11:00:00+02:00</lastmod>
   </url><url>
     <loc>https://agren.cc/tags/lxc/</loc>
-    <lastmod>2025-03-02T11:00:00+02:00</lastmod>
-  </url><url>
-    <loc>https://agren.cc/p/</loc>
-    <lastmod>2025-03-02T11:00:00+02:00</lastmod>
-  </url><url>
-    <loc>https://agren.cc/tags/sysadmin/</loc>
-    <lastmod>2025-03-02T11:00:00+02:00</lastmod>
-  </url><url>
-    <loc>https://agren.cc/tags/</loc>
     <lastmod>2025-03-02T11:00:00+02:00</lastmod>
   </url><url>
     <loc>https://agren.cc/p/umami-bun/</loc>
@@ -40,9 +49,6 @@
   </url><url>
     <loc>https://agren.cc/tags/ubuntu/</loc>
     <lastmod>2025-03-01T09:45:00+02:00</lastmod>
-  </url><url>
-    <loc>https://agren.cc/tags/freebsd/</loc>
-    <lastmod>2025-01-18T12:00:00+02:00</lastmod>
   </url><url>
     <loc>https://agren.cc/p/using-weechat/</loc>
     <lastmod>2025-01-18T12:00:00+02:00</lastmod>

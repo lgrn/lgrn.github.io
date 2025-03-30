@@ -6,7 +6,177 @@
     <description>Recent content in Ps on agren.cc</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 02 Mar 2025 11:00:00 +0200</lastBuildDate><atom:link href="https://agren.cc/p/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 30 Mar 2025 11:00:00 +0200</lastBuildDate><atom:link href="https://agren.cc/p/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Manually set up services on OPNsense</title>
+      <link>https://agren.cc/p/opnsense-services/</link>
+      <pubDate>Sun, 30 Mar 2025 11:00:00 +0200</pubDate>
+      
+      <guid>https://agren.cc/p/opnsense-services/</guid>
+      <description>&lt;p&gt;One of the main benefits of OPNsense is obviously the web interface, but
+if you just want to set up a service manually like on FreeBSD, here&amp;rsquo;s how you can
+do it. In this case, we&amp;rsquo;re setting up dnscrypt-proxy.&lt;/p&gt;</description>
+      <content>&lt;p&gt;One of the main benefits of OPNsense is obviously the web interface, but
+if you just want to set up a service manually like on FreeBSD, here&amp;rsquo;s how you can
+do it. In this case, we&amp;rsquo;re setting up dnscrypt-proxy.&lt;/p&gt;
+&lt;p&gt;It&amp;rsquo;s a DNS proxy that allows you to send &lt;em&gt;encrypted&lt;/em&gt; DNS queries from your
+router, while still responding to &amp;ldquo;normal&amp;rdquo; DNS queries from your
+internal network. Since it also supports blacklisting and cloaking, it
+can be very useful in situations where you don&amp;rsquo;t want to run a full DNS
+server but still want to serve and secure your DNS queries locally.&lt;/p&gt;
+&lt;p&gt;First of all, ensure you grab the correct package and that the other
+packages are not installed:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# pkg search dnscrypt&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;dnscrypt-proxy2-2.1.5_10       Flexible DNS proxy with support &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; encrypted protocols
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;os-dnscrypt-proxy-1.15_2       Flexible DNS proxy supporting DNSCrypt and DoH
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;os-dnscrypt-proxy-devel-1.15_2 Flexible DNS proxy supporting DNSCrypt and DoH
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The &lt;code&gt;os-*&lt;/code&gt; packages are OPNsense packages which will install it as a
+&amp;ldquo;plugin&amp;rdquo; in your web-gui. In this case we don&amp;rsquo;t want that, we&amp;rsquo;re setting
+it up as a normal service, so &lt;code&gt;pkg install dnscrypt-proxy2&lt;/code&gt; while
+ensuring the other two are not present.&lt;/p&gt;
+&lt;p&gt;When installed, we need to configure it, then enable the service.
+Configuration is located in &lt;code&gt;/usr/local/etc/dnscrypt-proxy&lt;/code&gt;, and my
+config file looks like this:&lt;/p&gt;
+
+
+
+  &lt;div class=&#34;collapsable-code&#34;&gt;
+    &lt;input id=&#34;1&#34; type=&#34;checkbox&#34;  /&gt;
+    &lt;label for=&#34;1&#34;&gt;
+      &lt;span class=&#34;collapsable-code__language&#34;&gt;toml&lt;/span&gt;
+      &lt;span class=&#34;collapsable-code__title&#34;&gt;dnscrypt-proxy.toml&lt;/span&gt;
+      &lt;span class=&#34;collapsable-code__toggle&#34; data-label-expand=&#34;Show&#34; data-label-collapse=&#34;Hide&#34;&gt;&lt;/span&gt;
+    &lt;/label&gt;
+    &lt;pre class=&#34;language-toml&#34; &gt;&lt;code&gt;server_names = [&amp;#39;mullvad&amp;#39;]
+listen_addresses = [&amp;#39;127.0.0.1:53&amp;#39;,&amp;#39;192.168.1.1:53&amp;#39;]
+max_clients = 250
+ipv4_servers = true
+ipv6_servers = false
+dnscrypt_servers = true
+doh_servers = true
+require_dnssec = true
+require_nolog = true
+require_nofilter = true
+force_tcp = false
+timeout = 2500
+keepalive = 30
+log_level = 2
+log_file = &amp;#39;/var/log/dnscrypt-proxy/dnscrypt-proxy.log&amp;#39;
+use_syslog = false
+cert_refresh_delay = 240
+dnscrypt_ephemeral_keys = false
+tls_disable_session_tickets = false
+bootstrap_resolvers = [&amp;#39;9.9.9.9:53&amp;#39;]
+ignore_system_dns = false
+netprobe_timeout = 30
+log_files_max_size = 10
+log_files_max_age = 7
+log_files_max_backups = 1
+block_ipv6 = false
+
+forwarding_rules = &amp;#39;forwarding-rules.txt&amp;#39;
+cloaking_rules = &amp;#39;cloaking-rules.txt&amp;#39;
+
+cache = true
+cache_size = 4096
+cache_min_ttl = 2400
+cache_max_ttl = 86400
+cache_neg_min_ttl = 60
+cache_neg_max_ttl = 600
+
+[allowed_names]
+  allowed_names_file = &amp;#39;whitelist.txt&amp;#39;
+  log_file = &amp;#39;/var/log/dnscrypt-proxy/whitelisted.log&amp;#39;
+  log_format = &amp;#39;tsv&amp;#39;
+
+[blocked_names]
+  blocked_names_file = &amp;#39;blocked-names.txt&amp;#39;
+
+[static]
+  [static.&amp;#39;mullvad&amp;#39;]
+  stamp = &amp;#39;sdns://AgcAAAAAAAAACzE5NC4yNDIuMi4yAA9kbnMubXVsbHZhZC5uZXQKL2Rucy1xdWVyeQ&amp;#39;
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/div&gt;
+
+
+&lt;p&gt;In this config, &lt;code&gt;server_names&lt;/code&gt; refer to the external
+&lt;code&gt;[static.&#39;mullvad&#39;]&lt;/code&gt; DNS configured at
+the bottom, and &lt;code&gt;listen_addresses&lt;/code&gt; matches the IP this router has on my
+local network.&lt;/p&gt;
+&lt;p&gt;In this case, &lt;code&gt;bootstrap_resolvers&lt;/code&gt; is configured, because the DNS
+configured uses DNS-over-HTTPS, which requires resolving a hostname.
+This &amp;ldquo;bootstrap resolver&amp;rdquo; is not used for any other queries than making
+the actual DNS server work.&lt;/p&gt;
+&lt;p&gt;If you wish, you may use &lt;code&gt;forwarding_rules&lt;/code&gt; (I don&amp;rsquo;t, but the file must
+exist) or &lt;code&gt;cloaking_rules&lt;/code&gt;. In my case, I use cloaking to ensure that
+servers that are actually within the same internal network are resolved
+with local IP addresses instead. For example, if you have
+&lt;code&gt;blog.my.domain&lt;/code&gt; hosted on a server at home, other people should get
+your external IP in their response, but if it can be reached at
+&lt;code&gt;192.168.1.101&lt;/code&gt; in your network, you probably want to cloak it:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-plain&#34; data-lang=&#34;plain&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;blog.my.domain 192.168.1.101
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This way, when you try reading your blog on your internal network you&amp;rsquo;ll
+hit that server directly instead, because dnscrypt-proxy will change
+the response.&lt;/p&gt;
+&lt;p&gt;I don&amp;rsquo;t use &lt;code&gt;allowed_names&lt;/code&gt;, but &lt;code&gt;blocked_names&lt;/code&gt; is very useful. I point
+it to &lt;code&gt;blocked-names.txt&lt;/code&gt; and then fetch this file nightly followed by a
+restart of the service.&lt;/p&gt;
+&lt;p&gt;I do this via &lt;code&gt;/etc/periodic/daily/900.dnscrypt-blocklist&lt;/code&gt; (executable)
+which looks something like this:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;#!/bin/sh
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;/usr/local/bin/curl &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/wildcard/pro-onlydomains.txt &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;-o /usr/local/etc/dnscrypt-proxy/blocked-names.txt &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; /usr/sbin/service dnscrypt-proxy restart
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This simply grabs the latest version of
+&lt;a href=&#34;https://github.com/hagezi/dns-blocklists&#34;&gt;hagezi/dns-blocklists&lt;/a&gt; and
+overwrites &lt;code&gt;blocked-names.txt&lt;/code&gt; with it, followed by a service restart.&lt;/p&gt;
+&lt;p&gt;By doing this, you have a daily updated blocklist that will refuse to
+resolve any domain listed. There are many blocklists to choose from, so
+pick one that fits you.&lt;/p&gt;
+&lt;p&gt;When you&amp;rsquo;re happy with your configuration, it&amp;rsquo;s time to enable the
+service. On OPNsense (FreeBSD), this is done via &lt;code&gt;rc.conf&lt;/code&gt;, specifically
+&lt;code&gt;/etc/rc.conf.d/dnscrypt_proxy&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-ini&#34; data-lang=&#34;ini&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# Ensure this line DOES NOT exist, this is used by the web gui plugin&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# dnscrypt_proxy_setup=&amp;#34;/usr/local/opnsense/scripts/OPNsense/Dnscryptproxy/setup.sh&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;na&#34;&gt;dnscrypt_proxy_enable&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;YES&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;na&#34;&gt;dnscrypt_proxy_suexec&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;YES&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;You should now, hopefully, be able to simply do:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;service dnscrypt-proxy start
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Check the log and try making some queries:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;tail -f /var/log/dnscrypt-proxy/dnscrypt-proxy.log
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;On another system, checking a blocked and non-blocked domain:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;dig +short health-tips-shortcuts.00go.com @192.168.1.1
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;This query has been locally blocked&amp;#34;&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;by dnscrypt-proxy&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;dig +short agren.cc @192.168.1.1
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;172.67.181.149
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;104.21.18.104
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;You&amp;rsquo;re done!&lt;/p&gt;
+&lt;h2 id=&#34;bonus-material-dns-stamps&#34;&gt;Bonus material: DNS stamps&lt;/h2&gt;
+&lt;p&gt;This extra section is for anyone who thinks this DNS server looks a bit odd:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-plain&#34; data-lang=&#34;plain&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sdns://AgcAAAAAAAAACzE5NC4yNDIuMi4yAA9kbnMubXVsbHZhZC5uZXQKL2Rucy1xdWVyeQ
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This is what&amp;rsquo;s called a &amp;ldquo;DNS stamp&amp;rdquo;, an encoding format that
+includes everything you need to securely connect to a DNS server in one
+string.&lt;/p&gt;
+&lt;p&gt;You can paste it into &lt;a href=&#34;https://dnscrypt.info/stamps/&#34;&gt;https://dnscrypt.info/stamps/&lt;/a&gt; to see what it
+contains: it basically just says that it&amp;rsquo;s DNS-over-HTTPS (DoH), and
+that &lt;code&gt;dns.mullvad.net/dns-query&lt;/code&gt; should be queried.
+Since this is DoH, it does not include a public key in the stamp itself &amp;ndash;
+instead we rely on our &lt;code&gt;bootstrap_resolvers&lt;/code&gt; to help us reach
+&lt;code&gt;dns.mullvad.net&lt;/code&gt;, which then needs to present us with a valid
+certificate, just like any normal HTTPS response.&lt;/p&gt;
+&lt;p&gt;Mullvad only provides DoH, but if you look at the &lt;a href=&#34;https://dnscrypt.info/public-servers/&#34;&gt;public server
+list&lt;/a&gt; and compare it to for example
+&lt;code&gt;dnscry.pt-stockholm-ipv4&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sdns://AQcAAAAAAAAADjE4NS4xOTUuMjM2LjYyIBs-wdms4LUcYsk1gE7X2G0U7jqOAxC0ihiHfIwVJAYTGTIuZG5zY3J5cHQtY2VydC5kbnNjcnkucHQ
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This longer string specifies DNSCrypt (not DoH) and includes the public
+key of the provider in addition to the IP; this way an initial DNS
+lookup is not necessary.&lt;/p&gt;
+&lt;p&gt;What protocol to use for secure DNS resolution is completely subjective.&lt;/p&gt;
+</content>
+    </item>
+    
     <item>
       <title>Umami analytics with bun instead of npm</title>
       <link>https://agren.cc/p/umami-bun/</link>
