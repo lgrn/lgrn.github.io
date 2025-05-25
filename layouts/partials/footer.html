@@ -1,9 +1,11 @@
 <footer class="footer">
   <div class="footer__inner">
-    <span style="font-size: small">
+    <span style="font-size: small; margin: auto; text-align: center">
       Text written by me is licensed under
       <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>
-      - credit "agren.cc". Rendered with
+      - credit "agren.cc"
+      <br />
+      Rendered with
       <a href="https://gohugo.io/">Hugo</a>
       and the
       <a href="https://github.com/panr/hugo-theme-terminal" target="_blank">
@@ -11,9 +13,13 @@
       </a>
     </span>
   </div>
-  <img
-    src="/corvid.png"
-    style="margin: auto; border: none; padding-top: 64px" />
+  <a
+    href="https://www.metmuseum.org/art/collection/search/54642"
+    target="_BLANK">
+    <img
+      src="/corvid.png"
+      style="margin: auto; border: none; padding-top: 64px" />
+  </a>
 </footer>
 
 {{ $menu := resources.Get "js/menu.js" | js.Build }} {{ $prism := resources.Get

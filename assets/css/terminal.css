@@ -9,10 +9,17 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'google-woff2';
+  src: url('/WOFF2/Google-Sans-Mono-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
 :root {
   --background: #1a170f;
   --foreground: #eceae5;
-  --accent: #58c1e7;
+  --accent: #7c9dc4;
   --font-size: 1rem;
   --line-height: 1.54rem;
   --radius: 0pxpx;
@@ -34,8 +41,8 @@ body {
   margin: 0;
   padding: 0;
   font-family:
-    "victormono",
-    serif !important;
+    "google-woff2",
+    monospace !important;
   font-size: 1rem;
   font-weight: 400;
   line-height: var(--line-height);
@@ -268,7 +275,7 @@ ol li {
 code,
 kbd {
   font-family:
-    "victor mono",
+    "google-woff2",
     Monaco,
     Consolas,
     Ubuntu Mono,
