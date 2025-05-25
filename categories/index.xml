@@ -4,7 +4,8 @@
     <title>Categories on agren.cc</title>
     <link>https://agren.cc/categories/</link>
     <description>Recent content in Categories on agren.cc</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en</language><atom:link href="https://agren.cc/categories/index.xml" rel="self" type="application/rss+xml" />
+    <generator>Hugo</generator>
+    <language>en</language>
+    <atom:link href="https://agren.cc/categories/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>

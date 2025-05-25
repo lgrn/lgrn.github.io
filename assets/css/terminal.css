@@ -388,3 +388,8 @@ hr {
   background: var(--accent);
   height: 2px;
 }
+
+/* fix broken padding in theme version 4.2.3 */
+pre.chroma {
+  padding: 10px !important;
+}

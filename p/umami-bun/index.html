@@ -31,31 +31,31 @@
   <link rel="stylesheet" href="https://agren.cc/css/syntax.min.e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.css">
 
   
-  <link rel="stylesheet" href="https://agren.cc/css/terminal.min.795e2bed278f30aabee20511815271033ceb14e4a8348f8501a71429808fa574.css">
+  <link rel="stylesheet" href="https://agren.cc/css/terminal.min.f3091de30a4afc947844bfa392ded2d38d83ef69796a92117302fe242ff9328d.css">
 
   
-  <link rel="stylesheet" href="https://agren.cc/css/buttons.min.2bc533403a27dfe0e93105a92502b42ce4587e2e4a87d9f7d349e51e16e09478.css">
+  <link rel="stylesheet" href="https://agren.cc/css/buttons.min.86f6b4c106b6c6eb690ae5203d36b442c1f66f718ff4e8164fa86cf6c61ad641.css">
 
   
-  <link rel="stylesheet" href="https://agren.cc/css/code.min.00125962708925857e7b66dbc58391d55be1191a3d0ce2034de8c9cd2c481c36.css">
+  <link rel="stylesheet" href="https://agren.cc/css/code.min.d529ea4b2fb8d34328d7d31afc5466d5f7bc2f0bc9abdd98b69385335d7baee4.css">
 
   
-  <link rel="stylesheet" href="https://agren.cc/css/footer.min.2e3eb191baee58dd05a9f0104ac1fab0827bca7c64dafe0b2579f934c33a1d69.css">
+  <link rel="stylesheet" href="https://agren.cc/css/footer.min.eb8dfc2c6a7eafa36cd3ba92d63e69e849e2200e0002a228d137f236b09ecd75.css">
 
   
   <link rel="stylesheet" href="https://agren.cc/css/gist.min.a751e8b0abe1ba8bc53ced52a38b19d8950fe78ca29454ea8c2595cf26aad5c0.css">
 
   
-  <link rel="stylesheet" href="https://agren.cc/css/header.min.b6fb4423cf82a9f9d7abc9cd010223fa3d70a6526a3f28f8e17d814c06e18f9e.css">
+  <link rel="stylesheet" href="https://agren.cc/css/header.min.75c7eb0e2872d95ff48109c6647d0223a38db52e2561dd87966eb5fc7c6bdac6.css">
 
   
-  <link rel="stylesheet" href="https://agren.cc/css/menu.min.83637a90d903026bc280d3f82f96ceb06c5fc72b7c1a8d686afb5bbf818a29f7.css">
+  <link rel="stylesheet" href="https://agren.cc/css/menu.min.3c17467ebeb3d38663dce68f71f519901124fa5cbb4519b2fb0667a21e9aca39.css">
 
   
-  <link rel="stylesheet" href="https://agren.cc/css/pagination.min.82f6400eae7c7c6dc3c866733c2ec0579e4089608fea69400ff85b3880aa0d3c.css">
+  <link rel="stylesheet" href="https://agren.cc/css/pagination.min.bbb986dbce00a5ce5aca0504b7925fc1c581992a4bf57f163e5d69cc1db7d836.css">
 
   
-  <link rel="stylesheet" href="https://agren.cc/css/post.min.fc74ca360273c1d828da3c02b8174eba435607b369d98418ccc6f2243cd4e75d.css">
+  <link rel="stylesheet" href="https://agren.cc/css/post.min.e6dddd258e64c83e05cec0cd49c05216742d42fc8ecbfbe6b67083412b609bd3.css">
 
   
   <link rel="stylesheet" href="https://agren.cc/css/terms.min.b81791663c3790e738e571cdbf802312390d30e4b1d8dc9d814a5b5454d0ac11.css">
@@ -262,51 +262,43 @@ how it might look on Alpine:</p>
 
 
 
-  <div class="collapsable-code">
-    <input id="1" type="checkbox"  />
-    <label for="1">
-      <span class="collapsable-code__language">bash</span>
-      <span class="collapsable-code__title">/etc/init.d/umami</span>
-      <span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide"></span>
-    </label>
-    <pre class="language-bash" ><code>#!/sbin/openrc-run
-
-name=&#34;umami&#34;
-BUN_PATH=&#34;/root/.bun/bin/bun&#34;
-WORKING_DIR=&#34;/root/umami&#34;
-PIDFILE=&#34;/run/${name}.pid&#34;
-
-command=&#34;${BUN_PATH} start&#34;
-command_background=true
-pidfile=&#34;${PIDFILE}&#34;
-directory=&#34;${WORKING_DIR}&#34;
-
-depend() {
-    need net
-}
-
-start_pre() {
-    checkpath --directory --mode 0755 /run
-}
-
-start() {
-    ebegin &#34;Starting ${name}&#34;
-    start-stop-daemon --start --background --make-pidfile --pidfile &#34;${PIDFILE}&#34; --chdir &#34;${directory}&#34; --exec ${BUN_PATH} -- start
-    eend $?
-}
-
-stop() {
-    ebegin &#34;Stopping ${name}&#34;
-    if [ -f &#34;${PIDFILE}&#34; ]; then
-        start-stop-daemon --stop --pidfile &#34;${PIDFILE}&#34; --retry 5
-    else
-        eerror &#34;PID file not found: ${PIDFILE}&#34;
-    fi
-    eend $?
-}
-</code></pre>
-  </div>
-
+<details class="collapsable-code" >
+    <summary title="Click to interact"><span class="collapsable-code__title">/etc/init.d/umami</span></summary>
+    <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="cp">#!/sbin/openrc-run
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="nv">name</span><span class="o">=</span><span class="s2">&#34;umami&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">BUN_PATH</span><span class="o">=</span><span class="s2">&#34;/root/.bun/bin/bun&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">WORKING_DIR</span><span class="o">=</span><span class="s2">&#34;/root/umami&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">PIDFILE</span><span class="o">=</span><span class="s2">&#34;/run/</span><span class="si">${</span><span class="nv">name</span><span class="si">}</span><span class="s2">.pid&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">command</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">BUN_PATH</span><span class="si">}</span><span class="s2"> start&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">command_background</span><span class="o">=</span><span class="nb">true</span>
+</span></span><span class="line"><span class="cl"><span class="nv">pidfile</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">PIDFILE</span><span class="si">}</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">directory</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">WORKING_DIR</span><span class="si">}</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">depend<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    need net
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">start_pre<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    checkpath --directory --mode <span class="m">0755</span> /run
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">start<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    ebegin <span class="s2">&#34;Starting </span><span class="si">${</span><span class="nv">name</span><span class="si">}</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">    start-stop-daemon --start --background --make-pidfile --pidfile <span class="s2">&#34;</span><span class="si">${</span><span class="nv">PIDFILE</span><span class="si">}</span><span class="s2">&#34;</span> --chdir <span class="s2">&#34;</span><span class="si">${</span><span class="nv">directory</span><span class="si">}</span><span class="s2">&#34;</span> --exec <span class="si">${</span><span class="nv">BUN_PATH</span><span class="si">}</span> -- start
+</span></span><span class="line"><span class="cl">    eend <span class="nv">$?</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">stop<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    ebegin <span class="s2">&#34;Stopping </span><span class="si">${</span><span class="nv">name</span><span class="si">}</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="o">[</span> -f <span class="s2">&#34;</span><span class="si">${</span><span class="nv">PIDFILE</span><span class="si">}</span><span class="s2">&#34;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">        start-stop-daemon --stop --pidfile <span class="s2">&#34;</span><span class="si">${</span><span class="nv">PIDFILE</span><span class="si">}</span><span class="s2">&#34;</span> --retry <span class="m">5</span>
+</span></span><span class="line"><span class="cl">    <span class="k">else</span>
+</span></span><span class="line"><span class="cl">        eerror <span class="s2">&#34;PID file not found: </span><span class="si">${</span><span class="nv">PIDFILE</span><span class="si">}</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">fi</span>
+</span></span><span class="line"><span class="cl">    eend <span class="nv">$?</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span></span></span></code></pre></div></details>
 
 <p>Make the service file executable with <code>chmod +x /etc/init.d/umami</code> and
 then <code>rc-update add umami default</code> to have it start on boot.</p>
@@ -327,7 +319,7 @@ admin/umami and configure your first site.</p>
   <div class="pagination__buttons">
     
       <a href="https://agren.cc/p/opnsense-services/" class="button inline prev">
-        Manually set up services on OPNsense
+        &lt; [<span class="button__text">Manually set up services on OPNsense</span>]
       </a>
     
     
@@ -335,7 +327,7 @@ admin/umami and configure your first site.</p>
     
     
       <a href="https://agren.cc/p/systemd-tailscale/" class="button inline next">
-        Making tailscaled dependable for sshd and other services
+         [<span class="button__text">Making tailscaled dependable for sshd and other services</span>] &gt;
       </a>
     
   </div>
@@ -366,7 +358,9 @@ admin/umami and configure your first site.</p>
       </a>
     </span>
   </div>
-  <img src="corvid.png" style="margin: auto; border: none; padding-top: 64px" />
+  <img
+    src="/corvid.png"
+    style="margin: auto; border: none; padding-top: 64px" />
 </footer>
 
   

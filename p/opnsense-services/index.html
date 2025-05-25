@@ -31,31 +31,31 @@
   <link rel="stylesheet" href="https://agren.cc/css/syntax.min.e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.css">
 
   
-  <link rel="stylesheet" href="https://agren.cc/css/terminal.min.795e2bed278f30aabee20511815271033ceb14e4a8348f8501a71429808fa574.css">
+  <link rel="stylesheet" href="https://agren.cc/css/terminal.min.f3091de30a4afc947844bfa392ded2d38d83ef69796a92117302fe242ff9328d.css">
 
   
-  <link rel="stylesheet" href="https://agren.cc/css/buttons.min.2bc533403a27dfe0e93105a92502b42ce4587e2e4a87d9f7d349e51e16e09478.css">
+  <link rel="stylesheet" href="https://agren.cc/css/buttons.min.86f6b4c106b6c6eb690ae5203d36b442c1f66f718ff4e8164fa86cf6c61ad641.css">
 
   
-  <link rel="stylesheet" href="https://agren.cc/css/code.min.00125962708925857e7b66dbc58391d55be1191a3d0ce2034de8c9cd2c481c36.css">
+  <link rel="stylesheet" href="https://agren.cc/css/code.min.d529ea4b2fb8d34328d7d31afc5466d5f7bc2f0bc9abdd98b69385335d7baee4.css">
 
   
-  <link rel="stylesheet" href="https://agren.cc/css/footer.min.2e3eb191baee58dd05a9f0104ac1fab0827bca7c64dafe0b2579f934c33a1d69.css">
+  <link rel="stylesheet" href="https://agren.cc/css/footer.min.eb8dfc2c6a7eafa36cd3ba92d63e69e849e2200e0002a228d137f236b09ecd75.css">
 
   
   <link rel="stylesheet" href="https://agren.cc/css/gist.min.a751e8b0abe1ba8bc53ced52a38b19d8950fe78ca29454ea8c2595cf26aad5c0.css">
 
   
-  <link rel="stylesheet" href="https://agren.cc/css/header.min.b6fb4423cf82a9f9d7abc9cd010223fa3d70a6526a3f28f8e17d814c06e18f9e.css">
+  <link rel="stylesheet" href="https://agren.cc/css/header.min.75c7eb0e2872d95ff48109c6647d0223a38db52e2561dd87966eb5fc7c6bdac6.css">
 
   
-  <link rel="stylesheet" href="https://agren.cc/css/menu.min.83637a90d903026bc280d3f82f96ceb06c5fc72b7c1a8d686afb5bbf818a29f7.css">
+  <link rel="stylesheet" href="https://agren.cc/css/menu.min.3c17467ebeb3d38663dce68f71f519901124fa5cbb4519b2fb0667a21e9aca39.css">
 
   
-  <link rel="stylesheet" href="https://agren.cc/css/pagination.min.82f6400eae7c7c6dc3c866733c2ec0579e4089608fea69400ff85b3880aa0d3c.css">
+  <link rel="stylesheet" href="https://agren.cc/css/pagination.min.bbb986dbce00a5ce5aca0504b7925fc1c581992a4bf57f163e5d69cc1db7d836.css">
 
   
-  <link rel="stylesheet" href="https://agren.cc/css/post.min.fc74ca360273c1d828da3c02b8174eba435607b369d98418ccc6f2243cd4e75d.css">
+  <link rel="stylesheet" href="https://agren.cc/css/post.min.e6dddd258e64c83e05cec0cd49c05216742d42fc8ecbfbe6b67083412b609bd3.css">
 
   
   <link rel="stylesheet" href="https://agren.cc/css/terms.min.b81791663c3790e738e571cdbf802312390d30e4b1d8dc9d814a5b5454d0ac11.css">
@@ -213,64 +213,56 @@ config file looks like this:</p>
 
 
 
-  <div class="collapsable-code">
-    <input id="1" type="checkbox"  />
-    <label for="1">
-      <span class="collapsable-code__language">toml</span>
-      <span class="collapsable-code__title">dnscrypt-proxy.toml</span>
-      <span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide"></span>
-    </label>
-    <pre class="language-toml" ><code>server_names = [&#39;mullvad&#39;]
-listen_addresses = [&#39;127.0.0.1:53&#39;,&#39;192.168.1.1:53&#39;]
-max_clients = 250
-ipv4_servers = true
-ipv6_servers = false
-dnscrypt_servers = true
-doh_servers = true
-require_dnssec = true
-require_nolog = true
-require_nofilter = true
-force_tcp = false
-timeout = 2500
-keepalive = 30
-log_level = 2
-log_file = &#39;/var/log/dnscrypt-proxy/dnscrypt-proxy.log&#39;
-use_syslog = false
-cert_refresh_delay = 240
-dnscrypt_ephemeral_keys = false
-tls_disable_session_tickets = false
-bootstrap_resolvers = [&#39;9.9.9.9:53&#39;]
-ignore_system_dns = false
-netprobe_timeout = 30
-log_files_max_size = 10
-log_files_max_age = 7
-log_files_max_backups = 1
-block_ipv6 = false
-
-forwarding_rules = &#39;forwarding-rules.txt&#39;
-cloaking_rules = &#39;cloaking-rules.txt&#39;
-
-cache = true
-cache_size = 4096
-cache_min_ttl = 2400
-cache_max_ttl = 86400
-cache_neg_min_ttl = 60
-cache_neg_max_ttl = 600
-
-[allowed_names]
-  allowed_names_file = &#39;whitelist.txt&#39;
-  log_file = &#39;/var/log/dnscrypt-proxy/whitelisted.log&#39;
-  log_format = &#39;tsv&#39;
-
-[blocked_names]
-  blocked_names_file = &#39;blocked-names.txt&#39;
-
-[static]
-  [static.&#39;mullvad&#39;]
-  stamp = &#39;sdns://AgcAAAAAAAAACzE5NC4yNDIuMi4yAA9kbnMubXVsbHZhZC5uZXQKL2Rucy1xdWVyeQ&#39;
-</code></pre>
-  </div>
-
+<details class="collapsable-code" >
+    <summary title="Click to interact"><span class="collapsable-code__title">dnscrypt-proxy.toml</span></summary>
+    <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-toml" data-lang="toml"><span class="line"><span class="cl"><span class="nx">server_names</span> <span class="p">=</span> <span class="p">[</span><span class="s1">&#39;mullvad&#39;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nx">listen_addresses</span> <span class="p">=</span> <span class="p">[</span><span class="s1">&#39;127.0.0.1:53&#39;</span><span class="p">,</span><span class="s1">&#39;192.168.1.1:53&#39;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nx">max_clients</span> <span class="p">=</span> <span class="mi">250</span>
+</span></span><span class="line"><span class="cl"><span class="nx">ipv4_servers</span> <span class="p">=</span> <span class="kc">true</span>
+</span></span><span class="line"><span class="cl"><span class="nx">ipv6_servers</span> <span class="p">=</span> <span class="kc">false</span>
+</span></span><span class="line"><span class="cl"><span class="nx">dnscrypt_servers</span> <span class="p">=</span> <span class="kc">true</span>
+</span></span><span class="line"><span class="cl"><span class="nx">doh_servers</span> <span class="p">=</span> <span class="kc">true</span>
+</span></span><span class="line"><span class="cl"><span class="nx">require_dnssec</span> <span class="p">=</span> <span class="kc">true</span>
+</span></span><span class="line"><span class="cl"><span class="nx">require_nolog</span> <span class="p">=</span> <span class="kc">true</span>
+</span></span><span class="line"><span class="cl"><span class="nx">require_nofilter</span> <span class="p">=</span> <span class="kc">true</span>
+</span></span><span class="line"><span class="cl"><span class="nx">force_tcp</span> <span class="p">=</span> <span class="kc">false</span>
+</span></span><span class="line"><span class="cl"><span class="nx">timeout</span> <span class="p">=</span> <span class="mi">2500</span>
+</span></span><span class="line"><span class="cl"><span class="nx">keepalive</span> <span class="p">=</span> <span class="mi">30</span>
+</span></span><span class="line"><span class="cl"><span class="nx">log_level</span> <span class="p">=</span> <span class="mi">2</span>
+</span></span><span class="line"><span class="cl"><span class="nx">log_file</span> <span class="p">=</span> <span class="s1">&#39;/var/log/dnscrypt-proxy/dnscrypt-proxy.log&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">use_syslog</span> <span class="p">=</span> <span class="kc">false</span>
+</span></span><span class="line"><span class="cl"><span class="nx">cert_refresh_delay</span> <span class="p">=</span> <span class="mi">240</span>
+</span></span><span class="line"><span class="cl"><span class="nx">dnscrypt_ephemeral_keys</span> <span class="p">=</span> <span class="kc">false</span>
+</span></span><span class="line"><span class="cl"><span class="nx">tls_disable_session_tickets</span> <span class="p">=</span> <span class="kc">false</span>
+</span></span><span class="line"><span class="cl"><span class="nx">bootstrap_resolvers</span> <span class="p">=</span> <span class="p">[</span><span class="s1">&#39;9.9.9.9:53&#39;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nx">ignore_system_dns</span> <span class="p">=</span> <span class="kc">false</span>
+</span></span><span class="line"><span class="cl"><span class="nx">netprobe_timeout</span> <span class="p">=</span> <span class="mi">30</span>
+</span></span><span class="line"><span class="cl"><span class="nx">log_files_max_size</span> <span class="p">=</span> <span class="mi">10</span>
+</span></span><span class="line"><span class="cl"><span class="nx">log_files_max_age</span> <span class="p">=</span> <span class="mi">7</span>
+</span></span><span class="line"><span class="cl"><span class="nx">log_files_max_backups</span> <span class="p">=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl"><span class="nx">block_ipv6</span> <span class="p">=</span> <span class="kc">false</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">forwarding_rules</span> <span class="p">=</span> <span class="s1">&#39;forwarding-rules.txt&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">cloaking_rules</span> <span class="p">=</span> <span class="s1">&#39;cloaking-rules.txt&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">cache</span> <span class="p">=</span> <span class="kc">true</span>
+</span></span><span class="line"><span class="cl"><span class="nx">cache_size</span> <span class="p">=</span> <span class="mi">4096</span>
+</span></span><span class="line"><span class="cl"><span class="nx">cache_min_ttl</span> <span class="p">=</span> <span class="mi">2400</span>
+</span></span><span class="line"><span class="cl"><span class="nx">cache_max_ttl</span> <span class="p">=</span> <span class="mi">86400</span>
+</span></span><span class="line"><span class="cl"><span class="nx">cache_neg_min_ttl</span> <span class="p">=</span> <span class="mi">60</span>
+</span></span><span class="line"><span class="cl"><span class="nx">cache_neg_max_ttl</span> <span class="p">=</span> <span class="mi">600</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">allowed_names</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">allowed_names_file</span> <span class="p">=</span> <span class="s1">&#39;whitelist.txt&#39;</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">log_file</span> <span class="p">=</span> <span class="s1">&#39;/var/log/dnscrypt-proxy/whitelisted.log&#39;</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">log_format</span> <span class="p">=</span> <span class="s1">&#39;tsv&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">blocked_names</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">blocked_names_file</span> <span class="p">=</span> <span class="s1">&#39;blocked-names.txt&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">static</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">  <span class="p">[</span><span class="nx">static</span><span class="p">.</span><span class="s1">&#39;mullvad&#39;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">stamp</span> <span class="p">=</span> <span class="s1">&#39;sdns://AgcAAAAAAAAACzE5NC4yNDIuMi4yAA9kbnMubXVsbHZhZC5uZXQKL2Rucy1xdWVyeQ&#39;</span></span></span></code></pre></div></details>
 
 <p>In this config, <code>server_names</code> refer to the external
 <code>[static.'mullvad']</code> DNS configured at
@@ -362,7 +354,7 @@ lookup is not necessary.</p>
     
     
       <a href="https://agren.cc/p/umami-bun/" class="button inline next">
-        Umami analytics with bun instead of npm
+         [<span class="button__text">Umami analytics with bun instead of npm</span>] &gt;
       </a>
     
   </div>
@@ -393,7 +385,9 @@ lookup is not necessary.</p>
       </a>
     </span>
   </div>
-  <img src="corvid.png" style="margin: auto; border: none; padding-top: 64px" />
+  <img
+    src="/corvid.png"
+    style="margin: auto; border: none; padding-top: 64px" />
 </footer>
 
   
