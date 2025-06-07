@@ -6,8 +6,22 @@
     <description>Recent content in Tags on agren.cc</description>
     <generator>Hugo</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 30 Mar 2025 11:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Sat, 07 Jun 2025 22:00:00 +0200</lastBuildDate>
     <atom:link href="https://agren.cc/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Sysadmin</title>
+      <link>https://agren.cc/tags/sysadmin/</link>
+      <pubDate>Sat, 07 Jun 2025 22:00:00 +0200</pubDate>
+      <guid>https://agren.cc/tags/sysadmin/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Tls</title>
+      <link>https://agren.cc/tags/tls/</link>
+      <pubDate>Sat, 07 Jun 2025 22:00:00 +0200</pubDate>
+      <guid>https://agren.cc/tags/tls/</guid>
+      <description></description>
+    </item>
     <item>
       <title>Freebsd</title>
       <link>https://agren.cc/tags/freebsd/</link>
@@ -20,13 +34,6 @@
       <link>https://agren.cc/tags/opnsense/</link>
       <pubDate>Sun, 30 Mar 2025 11:00:00 +0200</pubDate>
       <guid>https://agren.cc/tags/opnsense/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Sysadmin</title>
-      <link>https://agren.cc/tags/sysadmin/</link>
-      <pubDate>Sun, 30 Mar 2025 11:00:00 +0200</pubDate>
-      <guid>https://agren.cc/tags/sysadmin/</guid>
       <description></description>
     </item>
     <item>

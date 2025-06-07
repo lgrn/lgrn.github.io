@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <title>Automated DNS-01 certificates with acme-dns and letsencrypt :: agren.cc</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="The most common way to verify ownership of a hostname to receive a TLS certificate is the HTTP-01 challenge on port 80, but DNS challenges not only allows you to get wildcard certificates, they can also be used on systems with no incoming internet access, with no manual intervention required on renewals.
+" />
+<meta name="keywords" content="" />
+
+  <meta name="robots" content="noodp" />
+
+<link rel="canonical" href="https://agren.cc/p/acme-dns/" />
+
+
+
+
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/fonts.min.e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/main.min.f45962ce6ffdd2247db17a705d0190d5ca08e6b0757015b1061b0594e50b535b.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/prism.min.3080cbc8607b8ded79eec60a46295119aef4486a3a2d88c9ddc57ee285ca19ca.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/syntax.min.e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/terminal.min.b5a18d6c426c8c0231887a3ca76227afb156bc4314a3ef4c2bd27b2309b6ffb4.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/buttons.min.86f6b4c106b6c6eb690ae5203d36b442c1f66f718ff4e8164fa86cf6c61ad641.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/code.min.d529ea4b2fb8d34328d7d31afc5466d5f7bc2f0bc9abdd98b69385335d7baee4.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/footer.min.eb8dfc2c6a7eafa36cd3ba92d63e69e849e2200e0002a228d137f236b09ecd75.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/gist.min.a751e8b0abe1ba8bc53ced52a38b19d8950fe78ca29454ea8c2595cf26aad5c0.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/header.min.75c7eb0e2872d95ff48109c6647d0223a38db52e2561dd87966eb5fc7c6bdac6.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/menu.min.3c17467ebeb3d38663dce68f71f519901124fa5cbb4519b2fb0667a21e9aca39.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/pagination.min.bbb986dbce00a5ce5aca0504b7925fc1c581992a4bf57f163e5d69cc1db7d836.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/post.min.e6dddd258e64c83e05cec0cd49c05216742d42fc8ecbfbe6b67083412b609bd3.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/terms.min.b81791663c3790e738e571cdbf802312390d30e4b1d8dc9d814a5b5454d0ac11.css">
+
+
+
+
+
+
+
+<link rel="shortcut icon" href="https://agren.cc/favicon.png">
+<link rel="apple-touch-icon" href="https://agren.cc/apple-touch-icon.png">
+
+
+<meta name="twitter:card" content="summary" />
+
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Automated DNS-01 certificates with acme-dns and letsencrypt">
+<meta property="og:description" content="The most common way to verify ownership of a hostname to receive a TLS certificate is the HTTP-01 challenge on port 80, but DNS challenges not only allows you to get wildcard certificates, they can also be used on systems with no incoming internet access, with no manual intervention required on renewals.
+" />
+<meta property="og:url" content="https://agren.cc/p/acme-dns/" />
+<meta property="og:site_name" content="agren.cc" />
+
+  <meta property="og:image" content="https://agren.cc/og-image.png">
+
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+
+
+  <meta property="article:published_time" content="2025-06-07 22:00:00 &#43;0200 CEST" />
+
+
+
+
+
+
+
+
+
+<meta name="fediverse:creator" content="@linus@telegrafverket.cc" />
+<link rel="me" href="https://telegrafverket.cc/@linus" />
+
+
+<script defer src="https://umami.telegrafverket.cc/script.js" data-website-id="243279d9-ab6f-4575-a481-988858fdbb61"></script>
+
+
+</head>
+<body>
+
+
+<div class="container center">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="/">
+  <div class="logo">
+    agren.cc
+  </div>
+</a>
+
+    </div>
+    
+      <ul class="menu menu--mobile">
+  <li class="menu__trigger">Menu&nbsp;▾</li>
+  <li>
+    <ul class="menu__dropdown">
+      
+        
+          <li><a href="/about/index.html">about</a></li>
+        
+      
+        
+          <li><a href="https://telegrafverket.cc/@linus">mastodon</a></li>
+        
+      
+      
+    </ul>
+  </li>
+</ul>
+
+    
+    
+  </div>
+  
+    <nav class="navigation-menu">
+  <ul class="navigation-menu__inner menu--desktop">
+    
+      
+        
+          <li><a href="/about/index.html" >about</a></li>
+        
+      
+        
+          <li><a href="https://telegrafverket.cc/@linus" >mastodon</a></li>
+        
+      
+    
+  </ul>
+</nav>
+
+  
+</header>
+
+
+  <div class="content">
+    
+<article class="post">
+  <h1 class="post-title">
+    <a href="https://agren.cc/p/acme-dns/">Automated DNS-01 certificates with acme-dns and letsencrypt</a>
+  </h1>
+  <div class="post-meta"><time class="post-date">2025-06-07</time></div>
+
+  
+    <span class="post-tags">
+      
+      #<a href="https://agren.cc/tags/sysadmin/">sysadmin</a>&nbsp;
+      
+      #<a href="https://agren.cc/tags/tls/">tls</a>&nbsp;
+      
+    </span>
+  
+  
+
+
+  
+
+  <div class="post-content"><div>
+        <p>The most common way to verify ownership of a hostname to receive a TLS
+certificate is the HTTP-01 challenge on port 80, but DNS challenges not
+only allows you to get wildcard certificates, they can also be used on
+systems with no incoming internet access, with no manual intervention
+required on renewals.</p>
+<h2 id="introduction-dns-01-vs-http-01">Introduction: DNS-01 vs HTTP-01<a href="#introduction-dns-01-vs-http-01" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<h3 id="http-01">HTTP-01<a href="#http-01" class="hanchor" ariaLabel="Anchor">#</a> </h3>
+<p>When you pass a HTTP-01 challenge, it&rsquo;s because you were given a token,
+and the hostname you wanted a certificate for was called up on port 80
+and responded with that same token. For this reason letsencrypt,
+or whatever ACME vendor you might be using, can be sure that you are in
+control of this host.</p>
+<p>There are two major drawbacks with the HTTP-01 validation, which may or
+not matter depending on your use case:</p>
+<ol>
+<li>The server in question must be able to answer port 80 requests from
+the Internet.</li>
+<li>The certificate you request must be for a single FQDN with an
+A-record to that server.</li>
+</ol>
+<p>If you need a wildcard certificate, or if you can not or will not open
+the server to the Internet, you instead need:</p>
+<h3 id="dns-01">DNS-01<a href="#dns-01" class="hanchor" ariaLabel="Anchor">#</a> </h3>
+<p>When you pass a DNS-01 challenge, it&rsquo;s because you were given a token,
+and that token was then confirmed to exist in the DNS record for the
+domain in question.</p>
+<p>So if you are given <code>magic_token</code> after requesting a wildcard
+certificate for <code>example.org</code>, the following public DNS record must exist to pass
+validation:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-dns" data-lang="dns"><span class="line"><span class="cl"><span class="py">_acme-challenge.example.org. </span><span class="k">TXT</span><span class="w"> </span><span class="err">magic_token</span><span class="w">
+</span></span></span></code></pre></div><p>Since you have proven your ability to enter records into the public DNS
+for this domain, you have passed validation.</p>
+<h2 id="the-spooky-parts-of-dns-01">The spooky parts of DNS-01<a href="#the-spooky-parts-of-dns-01" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<p>DNS records are, to put it mildly, pretty important. They are also often
+non-trivial to update &ndash; maybe you&rsquo;re lucky enough to have a DNS
+provider that allows you to do this over an API, but this is not always
+the case. And even if you do, does that API have decent access
+restrictions, or have you just leaked an API key onto a bunch of
+machines that can now update <em>any</em> record in your DNS?</p>
+<p>Wouldn&rsquo;t it be nice if there was some way to simply delegate the ACME
+validation away to another DNS server, without having to touch your
+scary production records more than necessary? Well, you&rsquo;re in luck
+because you can, and someone already wrote a dedicated DNS server that
+does nothing but ACME validation, and has an API for automatic renewals,
+and it&rsquo;s called <code>acme-dns</code>.</p>
+<p>Before we jump into that, let&rsquo;s talk briefly about what &ldquo;delegating&rdquo;
+this responsibility actually means.</p>
+<h2 id="delegating-acme-validation-with-cname">Delegating ACME validation with CNAME<a href="#delegating-acme-validation-with-cname" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<p>As you now know <code>_acme-challenge</code> is a type of magic subdomain where
+ACME validation expects to find the token you were given, and in many
+cases this will be a <code>TXT</code> record that is then removed.</p>
+<p>Consider instead if this was not a record of type <code>TXT</code> but instead of
+type <code>CNAME</code> (i.e. an alias, or redirect):</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-dns" data-lang="dns"><span class="line"><span class="cl"><span class="py">_acme-challenge.example.org. </span><span class="k">CNAME</span><span class="w"> </span><span class="py">any.dns.server.com.</span><span class="w">
+</span></span></span></code></pre></div><p>If this record is left permanently in DNS, it would mean that every
+incoming DNS-01 challenge, now and in the future, would instead be
+redirected and possibly completed by a <code>TXT</code> record from
+<code>any.dns.server.com</code>, which is also under a completely different domain.</p>
+<p>This is still far from automatic though, the problem has really only
+moved from how annoying it is to update the DNS for <code>example.org</code> to how
+annoying it is to do the same for <code>any.dns.server.com</code>, and this is the
+problem that <code>acme-dns</code> solves.</p>
+<h2 id="acme-dns">acme-dns<a href="#acme-dns" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<p>acme-dns (<a href="https://github.com/joohoi/acme-dns">joohoi/acme-dns</a>) is a:</p>
+<blockquote>
+<p><em>limited DNS server with RESTful HTTP API to handle ACME DNS
+challenges easily and securely</em></p>
+</blockquote>
+<p>In other words, it&rsquo;s a single-binary DNS server that serves only one
+purpose: to respond to ACME DNS challenges, and to provide an API
+through which you can request certificates.</p>
+<p>By way of example, let&rsquo;s say you own <code>example.org</code> and you want to host
+acme-dns on <code>acme.example.org</code>. Since the following text will talk about
+two DNS servers, they will be referred to as the &ldquo;parent&rdquo; DNS (for
+<code>example.org</code>), and the &ldquo;child&rdquo; DNS (<code>acme.example.org</code>).</p>
+<p>Due to the variable times involved in DNS propagation, I would
+suggest that before doing anything else, adding the following records to
+the parent DNS, using whatever will be the external IP of acme-dns, is a
+good idea:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-dns" data-lang="dns"><span class="line"><span class="cl"><span class="nc">acme</span><span class="w">    </span><span class="k">A</span><span class="w">   </span><span class="mi">1.2.3.4</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nc">acme</span><span class="w">    </span><span class="k">NS</span><span class="w">  </span><span class="py">acme.example.org.</span><span class="w">
+</span></span></span></code></pre></div><p>In human language:</p>
+<ul>
+<li><code>A</code>: The IP of <code>acme.example.org</code> is <code>1.2.3.4</code></li>
+<li><code>NS</code>: The nameserver responsible for the <code>acme</code> subdomain in
+<code>example.org</code> is <code>acme.example.org</code></li>
+</ul>
+<p>Note that an NS record must not be dependent on a CNAME redirection.</p>
+<p>After applying these records, we can let them marinate while actually
+setting up acme-dns.</p>
+<p>Note that in some cases, NS records may take up to 24 hours to
+propagate. Web services like
+<a href="https://www.whatsmydns.net/#NS">whatsmydns</a> can be helpful here.</p>
+<h3 id="install-acme-dns">Install acme-dns<a href="#install-acme-dns" class="hanchor" ariaLabel="Anchor">#</a> </h3>
+<p>Follow the instructions in
+<a href="https://github.com/joohoi/acme-dns?tab=readme-ov-file#installation">README#installation</a>
+&ndash; like any golang binary, you just need to compile it and place it in
+your path. Set up a service with systemd, or whatever init system you
+prefer.</p>
+<p>Example of <code>config.cfg</code> used by acme-dns:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="line"><span class="cl"><span class="k">[general]</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># listen on port 53 (DNS) on any IP</span>
+</span></span><span class="line"><span class="cl"><span class="na">listen</span> <span class="o">=</span> <span class="s">&#34;0.0.0.0:53&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># listen on both tcp and udp, but only ipv4</span>
+</span></span><span class="line"><span class="cl"><span class="na">protocol</span> <span class="o">=</span> <span class="s">&#34;both4&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="na">domain</span> <span class="o">=</span> <span class="s">&#34;acme.example.org&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="na">nsname</span> <span class="o">=</span> <span class="s">&#34;acme.example.org&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># &#39;nsadmin&#39; takes an email, with @ replaced by .</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># for this reason, an email with dots cannot be used</span>
+</span></span><span class="line"><span class="cl"><span class="na">nsadmin</span> <span class="o">=</span> <span class="s">&#34;admin.example.org&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># A-record and NS-record, same as in parent dns</span>
+</span></span><span class="line"><span class="cl"><span class="na">records</span> <span class="o">=</span> <span class="s">[
+</span></span></span><span class="line"><span class="cl"><span class="s">    &#34;acme.example.org. A 1.2.3.4&#34;,
+</span></span></span><span class="line"><span class="cl"><span class="s">    &#34;acme.example.org. NS acme.example.org.&#34;,</span>
+</span></span><span class="line"><span class="cl"><span class="na">]</span>
+</span></span><span class="line"><span class="cl"><span class="na">debug</span> <span class="o">=</span> <span class="s">false</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">[database]</span>
+</span></span><span class="line"><span class="cl"><span class="na">engine</span> <span class="o">=</span> <span class="s">&#34;sqlite3&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="na">connection</span> <span class="o">=</span> <span class="s">&#34;/root/acme-dns.db&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">[api]</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># listen to incoming http api calls on any ip</span>
+</span></span><span class="line"><span class="cl"><span class="na">ip</span> <span class="o">=</span> <span class="s">&#34;0.0.0.0&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># disable new registrations, can be done after setup</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># is complete if no new registrations are expected</span>
+</span></span><span class="line"><span class="cl"><span class="na">disable_registration</span> <span class="o">=</span> <span class="s">false</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># http api listens on port 80</span>
+</span></span><span class="line"><span class="cl"><span class="na">port</span> <span class="o">=</span> <span class="s">&#34;80&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># do not use TLS, in this case because TLS termination</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># happens before acme-dns is hit</span>
+</span></span><span class="line"><span class="cl"><span class="na">tls</span> <span class="o">=</span> <span class="s">&#34;none&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="na">corsorigins</span> <span class="o">=</span> <span class="s">[
+</span></span></span><span class="line"><span class="cl"><span class="s">    &#34;*&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="na">]</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># use HTTP header to get the client ip, useful when</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># a reverse proxy is involved.</span>
+</span></span><span class="line"><span class="cl"><span class="na">use_header</span> <span class="o">=</span> <span class="s">true</span>
+</span></span><span class="line"><span class="cl"><span class="na">header_name</span> <span class="o">=</span> <span class="s">&#34;X-Forwarded-For&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">[logconfig]</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># logging level: &#34;error&#34;, &#34;warning&#34;, &#34;info&#34; or &#34;debug&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># this can be turned down from debug after initial setup</span>
+</span></span><span class="line"><span class="cl"><span class="na">loglevel</span> <span class="o">=</span> <span class="s">&#34;debug&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="na">logtype</span> <span class="o">=</span> <span class="s">&#34;stdout&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="na">logformat</span> <span class="o">=</span> <span class="s">&#34;text&#34;</span>
+</span></span></code></pre></div><p>Simply set up your service to run <code>/usr/bin/acme-dns</code> (or wherever you
+put it) pointing to the config file to use with something like <code>-c /root/config.cfg</code>.</p>
+<p>On Alpine for example <code>/etc/init.d/acme-dns</code> might look like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="cp">#!/sbin/openrc-run
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="nv">command</span><span class="o">=</span><span class="s2">&#34;/usr/bin/acme-dns&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">command_args</span><span class="o">=</span><span class="s2">&#34;-c /root/config.cfg&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">command_background</span><span class="o">=</span><span class="s2">&#34;yes&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">output_log</span><span class="o">=</span><span class="s2">&#34;/root/acmedns.log&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">error_log</span><span class="o">=</span><span class="s2">&#34;/root/acmedns.log&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">pidfile</span><span class="o">=</span><span class="s2">&#34;/run/acme-dns.pid&#34;</span>
+</span></span><span class="line"><span class="cl">depend<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    need net
+</span></span><span class="line"><span class="cl">    after firewall
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></div><p>Followed by:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">rc-update add acme-dns default
+</span></span><span class="line"><span class="cl">rc-service acme-dns start
+</span></span></code></pre></div><p>The DNS server is now running, so you should be able to query the
+<code>records = []</code> seen in the config above:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">dig @1.2.3.4 acme.example.org
+</span></span><span class="line"><span class="cl">dig @1.2.3.4 acme.example.org +tcp
+</span></span></code></pre></div><p>acme-dns is now installed, but cannot complete any certificate
+challenges yet.</p>
+<h3 id="register-with-acme-dns">Register with acme-dns<a href="#register-with-acme-dns" class="hanchor" ariaLabel="Anchor">#</a> </h3>
+<p>As long as <code>disable_registration = false</code>, anyone can register a new
+user with acme-dns &ndash; but apart from causing some kind of denial of
+service, this will not give any inherent permissions to do anything but
+trigger (failing) certificate requests. Still, after initial setup, it&rsquo;s
+a good idea to change this to <code>true</code>.</p>
+<p>Registration can be handled automatically by many clients, but for the
+purpose of understanding what&rsquo;s going on, we will be doing it manually.</p>
+<p>Simply send a <code>POST</code> request to the <code>/register</code> endpoint, optionally
+with an IP restriction on future requests for these credentials.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">curl -X POST <span class="s2">&#34;https://acme.example.org/register&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>     -H <span class="s2">&#34;Content-Type: application/json&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>     -d <span class="s1">&#39;{
+</span></span></span><span class="line"><span class="cl"><span class="s1">           &#34;allowfrom&#34;: [
+</span></span></span><span class="line"><span class="cl"><span class="s1">             &#34;10.1.1.0/24&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s1">           ]
+</span></span></span><span class="line"><span class="cl"><span class="s1">         }&#39;</span>
+</span></span></code></pre></div><p>acme-dns responds with something like:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;username&#34;</span><span class="p">:</span> <span class="s2">&#34;&lt;redacted&gt;&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;password&#34;</span><span class="p">:</span> <span class="s2">&#34;&lt;redacted&gt;&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;fulldomain&#34;</span><span class="p">:</span> <span class="s2">&#34;&lt;uuid&gt;.acme.example.org&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;subdomain&#34;</span><span class="p">:</span> <span class="s2">&#34;&lt;uuid&gt;&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;allowfrom&#34;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&#34;10.1.1.0/24&#34;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>Save this in a safe place, as it will be needed later. If you wish, you
+can now disable registration and restart acme-dns.</p>
+<p>This output can be interpreted as &ldquo;when authenticating with username
+<code>&lt;redacted&gt;</code> and password <code>&lt;redacted&gt;</code> from an IP in the
+<code>10.1.1.0/24</code> subnet, the challenge token will be added to
+<code>&lt;uuid&gt;.acme.example.org</code>&rdquo;.</p>
+<p>While we have already created an <code>A</code>-record and an <code>NS</code>-record, no
+actual <strong>delegation</strong> of the ACME challenge has been done yet. To do
+this, we need to add this third and final record to our parent DNS:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-dns" data-lang="dns"><span class="line"><span class="cl"><span class="py">_acme-challenge.example.org. </span><span class="k">CNAME</span><span class="w"> </span><span class="err">&lt;uuid&gt;</span><span class="nc">.acme.example.org.</span><span class="w">
+</span></span></span></code></pre></div><p>In other words, when an external ACME provider (like letsencrypt) looks
+up <code>_acme-challenge.example.org</code>, perhaps expecting a TXT record
+containing the token, it will instead be redirected to
+<code>&lt;uuid&gt;.acme.example.org</code>.</p>
+<p>Since we added an <code>NS</code> record stating that <code>acme.example.org</code> is itself
+the DNS responsible for anything under that subdomain, the question for
+the <code>&lt;uuid&gt;</code> record will go to acme-dns, which is exactly what we want.</p>
+<p>At this point, we should be ready to use our username and password in
+any client supporting acme-dns. In this example, we will use <code>acme.sh</code> (<a href="https://github.com/acmesh-official/acme.sh">acmesh-official/acme.sh</a>)</p>
+<h3 id="request-a-certificate">Request a certificate<a href="#request-a-certificate" class="hanchor" ariaLabel="Anchor">#</a> </h3>
+<p>Since we are no longer bound by the requirements of HTTP validation, the
+server requesting a certificate can be situated in any environment, as
+long as it can reach <code>acme.example.org</code> from an IP in the <code>allowfrom</code>
+list.</p>
+<p>Assuming you have all necessary packages, the installation of acme.sh is
+straight-forward:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">curl https://get.acme.sh <span class="p">|</span> sh -s <span class="nv">email</span><span class="o">=</span>my@example.com
+</span></span></code></pre></div><p>The shell script and all stateful data (credentials, certificates etc.)
+will be put in <code>~/.acme.sh/</code></p>
+<p>Before setting it up, let&rsquo;s do a sanity check of our DNS records from
+this &ldquo;client&rdquo; machine:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">dig CNAME _acme-challenge.example.org
+</span></span><span class="line"><span class="cl"><span class="c1"># should point to &lt;uuid&gt;.acme.example.org</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">dig NS acme.example.org
+</span></span><span class="line"><span class="cl"><span class="c1"># should show that acme-dns is the authoritative</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># name server for its own subdomain</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">dig A acme.example.org
+</span></span><span class="line"><span class="cl"><span class="c1"># should give us the external IP of acme-dns</span>
+</span></span></code></pre></div><p>Now, as shown in the <a href="https://github.com/acmesh-official/acme.sh/wiki/dnsapi#45-use-acme-dns-api">acme.sh docs for
+acme-dns</a>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">ACMEDNS_BASE_URL</span><span class="o">=</span><span class="s2">&#34;https://acme.example.org&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">ACMEDNS_USERNAME</span><span class="o">=</span><span class="s2">&#34;&lt;username&gt;&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">ACMEDNS_PASSWORD</span><span class="o">=</span><span class="s2">&#34;&lt;password&gt;&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">ACMEDNS_SUBDOMAIN</span><span class="o">=</span><span class="s2">&#34;&lt;uuid&gt;&#34;</span>
+</span></span></code></pre></div><p>When these are all set, just request a certificate by running the script:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">./acme.sh --issue --dns dns_acmedns -d example.org -d *.example.org --server letsencrypt
+</span></span></code></pre></div><p>acme.sh will use zerossl by default, this can be overridden with
+<code>--server</code>, or permanently changed with <code>--set-default-ca</code>.</p>
+<p>Hopefully, by now you will be met by a successful certificate request,
+with some information on where the certificate has been stored.</p>
+<p>Further things to look into if you&rsquo;re deploying certificate renewals
+with acme.sh:</p>
+<ul>
+<li><code>./acme.sh --help</code></li>
+<li>Use <code>./acme.sh --install-cronjob</code> to install the cronjob for automatic
+certificate renewal.</li>
+<li>Use <code>./acme.sh --list</code> to show all domains acme.sh knows about</li>
+<li>Use <code>--install-cert</code> to actually place the certificate, and
+<code>--reloadcmd</code> to reload the relevant service.</li>
+</ul>
+<p>Nginx example from the acme.sh README:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">acme.sh --install-cert -d example.com <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>--key-file       /path/to/keyfile/in/nginx/key.pem  <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>--fullchain-file /path/to/fullchain/nginx/cert.pem <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>--reloadcmd      <span class="s2">&#34;service nginx force-reload&#34;</span>
+</span></span></code></pre></div><p>There are of course other clients than acme.sh supporting acme-dns. From
+their own README, some examples are:</p>
+<ul>
+<li>Certify The Web: <a href="https://github.com/webprofusion/certify">https://github.com/webprofusion/certify</a></li>
+<li>cert-manager: <a href="https://github.com/jetstack/cert-manager">https://github.com/jetstack/cert-manager</a></li>
+<li>Lego: <a href="https://github.com/xenolf/lego">https://github.com/xenolf/lego</a></li>
+<li>Posh-ACME: <a href="https://github.com/rmbolger/Posh-ACME">https://github.com/rmbolger/Posh-ACME</a></li>
+<li>Sewer: <a href="https://github.com/komuw/sewer">https://github.com/komuw/sewer</a></li>
+<li>Traefik: <a href="https://github.com/containous/traefik">https://github.com/containous/traefik</a></li>
+<li>Windows ACME Simple (WACS): <a href="https://www.win-acme.com">https://www.win-acme.com</a></li>
+</ul>
+<p>Thoughts and feedback are welcome via
+<a href="https://telegrafverket.cc/@linus">@linus@telegrafverket.cc</a> &ndash; email
+works too.</p>
+
+      </div></div>
+
+  
+    
+<div class="pagination">
+  <div class="pagination__title">
+    <span class="pagination__title-h">Read other posts</span>
+    <hr />
+  </div>
+  <div class="pagination__buttons">
+    
+    
+    
+      <a href="https://agren.cc/p/opnsense-services/" class="button inline next">
+         [<span class="button__text">Manually set up services on OPNsense</span>] &gt;
+      </a>
+    
+  </div>
+</div>
+
+
+  
+
+  
+    
+
+  
+</article>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    <span style="font-size: small; margin: auto; text-align: center">
+      Text written by me is licensed under
+      <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>
+      - credit "agren.cc"
+      <br />
+      Rendered with
+      <a href="https://gohugo.io/">Hugo</a>
+      and the
+      <a href="https://github.com/panr/hugo-theme-terminal" target="_blank">
+        terminal theme
+      </a>
+    </span>
+  </div>
+  <a
+    href="https://www.metmuseum.org/art/collection/search/54642"
+    target="_BLANK">
+    <img
+      src="/corvid.png"
+      style="margin: auto; border: none; padding-top: 64px" />
+  </a>
+</footer>
+
+  
+
+<script type="text/javascript" src="/bundle.min.js"></script>
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>

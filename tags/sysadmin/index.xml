@@ -6,8 +6,15 @@
     <description>Recent content in Sysadmin on agren.cc</description>
     <generator>Hugo</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 30 Mar 2025 11:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Sat, 07 Jun 2025 22:00:00 +0200</lastBuildDate>
     <atom:link href="https://agren.cc/tags/sysadmin/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Automated DNS-01 certificates with acme-dns and letsencrypt</title>
+      <link>https://agren.cc/p/acme-dns/</link>
+      <pubDate>Sat, 07 Jun 2025 22:00:00 +0200</pubDate>
+      <guid>https://agren.cc/p/acme-dns/</guid>
+      <description>&lt;p&gt;The most common way to verify ownership of a hostname to receive a TLS&#xA;certificate is the HTTP-01 challenge on port 80, but DNS challenges not&#xA;only allows you to get wildcard certificates, they can also be used on&#xA;systems with no incoming internet access, with no manual intervention&#xA;required on renewals.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Manually set up services on OPNsense</title>
       <link>https://agren.cc/p/opnsense-services/</link>
