@@ -3,18 +3,24 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://agren.cc/</loc>
-    <lastmod>2025-06-07T22:00:00+02:00</lastmod>
+    <lastmod>2025-07-10T21:00:00+02:00</lastmod>
   </url><url>
-    <loc>https://agren.cc/p/acme-dns/</loc>
-    <lastmod>2025-06-07T22:00:00+02:00</lastmod>
+    <loc>https://agren.cc/p/ad-enroll/</loc>
+    <lastmod>2025-07-10T21:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://agren.cc/tags/linux/</loc>
+    <lastmod>2025-07-10T21:00:00+02:00</lastmod>
   </url><url>
     <loc>https://agren.cc/p/</loc>
-    <lastmod>2025-06-07T22:00:00+02:00</lastmod>
+    <lastmod>2025-07-10T21:00:00+02:00</lastmod>
   </url><url>
     <loc>https://agren.cc/tags/sysadmin/</loc>
-    <lastmod>2025-06-07T22:00:00+02:00</lastmod>
+    <lastmod>2025-07-10T21:00:00+02:00</lastmod>
   </url><url>
     <loc>https://agren.cc/tags/</loc>
+    <lastmod>2025-07-10T21:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://agren.cc/p/acme-dns/</loc>
     <lastmod>2025-06-07T22:00:00+02:00</lastmod>
   </url><url>
     <loc>https://agren.cc/tags/tls/</loc>
@@ -30,9 +36,6 @@
     <lastmod>2025-03-30T11:00:00+02:00</lastmod>
   </url><url>
     <loc>https://agren.cc/tags/javascript/</loc>
-    <lastmod>2025-03-02T11:00:00+02:00</lastmod>
-  </url><url>
-    <loc>https://agren.cc/tags/linux/</loc>
     <lastmod>2025-03-02T11:00:00+02:00</lastmod>
   </url><url>
     <loc>https://agren.cc/tags/lxc/</loc>
