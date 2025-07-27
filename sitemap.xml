@@ -3,21 +3,33 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://agren.cc/</loc>
-    <lastmod>2025-07-10T21:00:00+02:00</lastmod>
+    <lastmod>2025-07-27T12:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://agren.cc/tags/debian/</loc>
+    <lastmod>2025-07-27T12:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://agren.cc/tags/incus/</loc>
+    <lastmod>2025-07-27T12:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://agren.cc/p/rutorrent/</loc>
+    <lastmod>2025-07-27T12:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://agren.cc/p/</loc>
+    <lastmod>2025-07-27T12:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://agren.cc/tags/sysadmin/</loc>
+    <lastmod>2025-07-27T12:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://agren.cc/tags/</loc>
+    <lastmod>2025-07-27T12:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://agren.cc/tags/torrent/</loc>
+    <lastmod>2025-07-27T12:00:00+02:00</lastmod>
   </url><url>
     <loc>https://agren.cc/p/ad-enroll/</loc>
     <lastmod>2025-07-10T21:00:00+02:00</lastmod>
   </url><url>
     <loc>https://agren.cc/tags/linux/</loc>
-    <lastmod>2025-07-10T21:00:00+02:00</lastmod>
-  </url><url>
-    <loc>https://agren.cc/p/</loc>
-    <lastmod>2025-07-10T21:00:00+02:00</lastmod>
-  </url><url>
-    <loc>https://agren.cc/tags/sysadmin/</loc>
-    <lastmod>2025-07-10T21:00:00+02:00</lastmod>
-  </url><url>
-    <loc>https://agren.cc/tags/</loc>
     <lastmod>2025-07-10T21:00:00+02:00</lastmod>
   </url><url>
     <loc>https://agren.cc/p/acme-dns/</loc>
@@ -44,9 +56,6 @@
     <loc>https://agren.cc/p/umami-bun/</loc>
     <lastmod>2025-03-02T11:00:00+02:00</lastmod>
   </url><url>
-    <loc>https://agren.cc/tags/debian/</loc>
-    <lastmod>2025-03-01T09:45:00+02:00</lastmod>
-  </url><url>
     <loc>https://agren.cc/p/systemd-tailscale/</loc>
     <lastmod>2025-03-01T09:45:00+02:00</lastmod>
   </url><url>
@@ -69,9 +78,6 @@
     <lastmod>2024-12-09T15:01:00+02:00</lastmod>
   </url><url>
     <loc>https://agren.cc/p/flatcar-on-incus/</loc>
-    <lastmod>2024-12-09T15:01:00+02:00</lastmod>
-  </url><url>
-    <loc>https://agren.cc/tags/incus/</loc>
     <lastmod>2024-12-09T15:01:00+02:00</lastmod>
   </url><url>
     <loc>https://agren.cc/p/freebsd-vm-incus/</loc>

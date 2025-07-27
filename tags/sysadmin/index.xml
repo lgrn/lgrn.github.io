@@ -6,8 +6,15 @@
     <description>Recent content in Sysadmin on agren.cc</description>
     <generator>Hugo</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 10 Jul 2025 21:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Sun, 27 Jul 2025 12:00:00 +0200</lastBuildDate>
     <atom:link href="https://agren.cc/tags/sysadmin/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Installing the ruTorrent web UI on Debian</title>
+      <link>https://agren.cc/p/rutorrent/</link>
+      <pubDate>Sun, 27 Jul 2025 12:00:00 +0200</pubDate>
+      <guid>https://agren.cc/p/rutorrent/</guid>
+      <description>&lt;p&gt;ruTorrent is a popular web interface for the rtorrent client, here&amp;rsquo;s how&#xA;to set it up with lighttpd on Debian.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Enrolling Linux systems into Active Directory with SSSD</title>
       <link>https://agren.cc/p/ad-enroll/</link>

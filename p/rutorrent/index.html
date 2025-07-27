@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <title>Installing the ruTorrent web UI on Debian :: agren.cc</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="ruTorrent is a popular web interface for the rtorrent client, here&rsquo;s how to set it up with lighttpd on Debian.
+" />
+<meta name="keywords" content="" />
+
+  <meta name="robots" content="noodp" />
+
+<link rel="canonical" href="https://agren.cc/p/rutorrent/" />
+
+
+
+
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/fonts.min.e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/main.min.f45962ce6ffdd2247db17a705d0190d5ca08e6b0757015b1061b0594e50b535b.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/prism.min.3080cbc8607b8ded79eec60a46295119aef4486a3a2d88c9ddc57ee285ca19ca.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/syntax.min.e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/terminal.min.b5a18d6c426c8c0231887a3ca76227afb156bc4314a3ef4c2bd27b2309b6ffb4.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/buttons.min.86f6b4c106b6c6eb690ae5203d36b442c1f66f718ff4e8164fa86cf6c61ad641.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/code.min.d529ea4b2fb8d34328d7d31afc5466d5f7bc2f0bc9abdd98b69385335d7baee4.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/footer.min.eb8dfc2c6a7eafa36cd3ba92d63e69e849e2200e0002a228d137f236b09ecd75.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/gist.min.a751e8b0abe1ba8bc53ced52a38b19d8950fe78ca29454ea8c2595cf26aad5c0.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/header.min.75c7eb0e2872d95ff48109c6647d0223a38db52e2561dd87966eb5fc7c6bdac6.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/menu.min.3c17467ebeb3d38663dce68f71f519901124fa5cbb4519b2fb0667a21e9aca39.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/pagination.min.bbb986dbce00a5ce5aca0504b7925fc1c581992a4bf57f163e5d69cc1db7d836.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/post.min.e6dddd258e64c83e05cec0cd49c05216742d42fc8ecbfbe6b67083412b609bd3.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/terms.min.b81791663c3790e738e571cdbf802312390d30e4b1d8dc9d814a5b5454d0ac11.css">
+
+
+
+
+
+
+
+<link rel="shortcut icon" href="https://agren.cc/favicon.png">
+<link rel="apple-touch-icon" href="https://agren.cc/apple-touch-icon.png">
+
+
+<meta name="twitter:card" content="summary" />
+
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Installing the ruTorrent web UI on Debian">
+<meta property="og:description" content="ruTorrent is a popular web interface for the rtorrent client, here&rsquo;s how to set it up with lighttpd on Debian.
+" />
+<meta property="og:url" content="https://agren.cc/p/rutorrent/" />
+<meta property="og:site_name" content="agren.cc" />
+
+  <meta property="og:image" content="https://agren.cc/og-image.png">
+
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+
+
+  <meta property="article:published_time" content="2025-07-27 12:00:00 &#43;0200 CEST" />
+
+
+
+
+
+
+
+
+
+<meta name="fediverse:creator" content="@linus@telegrafverket.cc" />
+<link rel="me" href="https://telegrafverket.cc/@linus" />
+
+
+<script defer src="https://umami.telegrafverket.cc/script.js" data-website-id="243279d9-ab6f-4575-a481-988858fdbb61"></script>
+
+
+</head>
+<body>
+
+
+<div class="container center">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="/">
+  <div class="logo">
+    agren.cc
+  </div>
+</a>
+
+    </div>
+    
+      <ul class="menu menu--mobile">
+  <li class="menu__trigger">Menu&nbsp;▾</li>
+  <li>
+    <ul class="menu__dropdown">
+      
+        
+          <li><a href="/about/index.html">about</a></li>
+        
+      
+        
+          <li><a href="https://telegrafverket.cc/@linus">mastodon</a></li>
+        
+      
+      
+    </ul>
+  </li>
+</ul>
+
+    
+    
+  </div>
+  
+    <nav class="navigation-menu">
+  <ul class="navigation-menu__inner menu--desktop">
+    
+      
+        
+          <li><a href="/about/index.html" >about</a></li>
+        
+      
+        
+          <li><a href="https://telegrafverket.cc/@linus" >mastodon</a></li>
+        
+      
+    
+  </ul>
+</nav>
+
+  
+</header>
+
+
+  <div class="content">
+    
+<article class="post">
+  <h1 class="post-title">
+    <a href="https://agren.cc/p/rutorrent/">Installing the ruTorrent web UI on Debian</a>
+  </h1>
+  <div class="post-meta"><time class="post-date">2025-07-27</time></div>
+
+  
+    <span class="post-tags">
+      
+      #<a href="https://agren.cc/tags/sysadmin/">sysadmin</a>&nbsp;
+      
+      #<a href="https://agren.cc/tags/debian/">debian</a>&nbsp;
+      
+      #<a href="https://agren.cc/tags/torrent/">torrent</a>&nbsp;
+      
+      #<a href="https://agren.cc/tags/incus/">incus</a>&nbsp;
+      
+    </span>
+  
+  
+
+
+  
+
+  <div class="post-content"><div>
+        <p>ruTorrent is a popular web interface for the rtorrent client, here&rsquo;s how
+to set it up with lighttpd on Debian.</p>
+<h2 id="incus">Incus<a href="#incus" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<p>In this example, we will set up ruTorrent and rtorrent in an incus
+container. If you just want to set it up on a regular Debian server,
+just skip the Incus specific parts, and make sure you don&rsquo;t run any
+application as root.</p>
+<p>Start by launching a container:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">incus launch images:debian/bookworm torrent
+</span></span></code></pre></div><p>If you want a shared mount for this container, add it with <code>incus config edit</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">share</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/share</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">readonly</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;false&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l">/mnt/share/</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">disk</span><span class="w">
+</span></span></span></code></pre></div><p>For &ldquo;consumer&rdquo; containers, you may want <code>readonly: &quot;true&quot;</code>.</p>
+<p>&ldquo;Container root&rdquo; is uid <code>1000000</code>, so any disk shared like this needs to
+have its permissions changed to allow write access. In this case, we&rsquo;ll
+go with an ownership change from <code>root:root</code> to <code>1000000:root</code>
+recursively, but you should pick something suitable for your setup:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">chown -Rv 1000000:root /mnt/share
+</span></span></code></pre></div><p>Now, let&rsquo;s move into the container with <code>exec bash</code>.</p>
+<h2 id="installation-steps">Installation steps<a href="#installation-steps" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">apt install rtorrent lighttpd php-fpm php-cli php-curl php-xmlrpc git curl
+</span></span></code></pre></div><p>In <code>/var/www</code> we&rsquo;re going to clone the ruTorrent web UI repo, choose a
+tagged release of your preference:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">git clone --branch v5.2.10 --depth <span class="m">1</span> https://github.com/Novik/ruTorrent.git
+</span></span></code></pre></div><p>We need to fix permissions so that lighttpd can access these files:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">chown -Rv root:www-data /var/www/ruTorrent/
+</span></span><span class="line"><span class="cl">chmod -Rv <span class="m">770</span> /var/www/ruTorrent/
+</span></span></code></pre></div><p>Let&rsquo;s create our first systemd service:</p>
+<h3 id="rtorrent">rtorrent<a href="#rtorrent" class="hanchor" ariaLabel="Anchor">#</a> </h3>
+<p>Create <code>/etc/systemd/system/rtorrent.service</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="line"><span class="cl"><span class="k">[Unit]</span>
+</span></span><span class="line"><span class="cl"><span class="na">Description</span><span class="o">=</span><span class="s">rTorrent BitTorrent Client</span>
+</span></span><span class="line"><span class="cl"><span class="na">After</span><span class="o">=</span><span class="s">network.target</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">[Service]</span>
+</span></span><span class="line"><span class="cl"><span class="na">ExecStart</span><span class="o">=</span><span class="s">/usr/bin/rtorrent -n -o import=/root/.rtorrent.rc</span>
+</span></span><span class="line"><span class="cl"><span class="na">Type</span><span class="o">=</span><span class="s">simple</span>
+</span></span><span class="line"><span class="cl"><span class="na">Restart</span><span class="o">=</span><span class="s">on-failure</span>
+</span></span><span class="line"><span class="cl"><span class="na">RestartSec</span><span class="o">=</span><span class="s">10</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">[Install]</span>
+</span></span><span class="line"><span class="cl"><span class="na">WantedBy</span><span class="o">=</span><span class="s">multi-user.target</span>
+</span></span></code></pre></div><p>All configuration is done in <code>/root/.rtorrent.rc</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="line"><span class="cl"><span class="c1"># see https://github.com/rakshasa/rtorrent/wiki/Performance-Tuning</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 90-ish percent of total bandwidth to avoid latency spikes</span>
+</span></span><span class="line"><span class="cl"><span class="na">throttle.global_down.max_rate.set_kb</span> <span class="o">=</span> <span class="s">52000</span>
+</span></span><span class="line"><span class="cl"><span class="na">throttle.global_up.max_rate.set_kb</span>   <span class="o">=</span> <span class="s">10000</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="na">pieces.memory.max.set</span> <span class="o">=</span> <span class="s">2048M</span>
+</span></span><span class="line"><span class="cl"><span class="na">network.max_open_sockets.set</span> <span class="o">=</span> <span class="s">1024</span>
+</span></span><span class="line"><span class="cl"><span class="na">network.max_open_files.set</span> <span class="o">=</span> <span class="s">1024</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="na">directory.default.set</span> <span class="o">=</span> <span class="s">/root/rtorrent/data</span>
+</span></span><span class="line"><span class="cl"><span class="na">session.path.set</span> <span class="o">=</span> <span class="s">/root/rtorrent/session</span>
+</span></span><span class="line"><span class="cl"><span class="na">network.scgi.open_local</span> <span class="o">=</span> <span class="s">/run/rtorrent.sock</span>
+</span></span><span class="line"><span class="cl"><span class="na">execute.nothrow</span> <span class="o">=</span> <span class="s">chown,root:www-data,/run/rtorrent.sock</span>
+</span></span><span class="line"><span class="cl"><span class="na">execute.nothrow</span> <span class="o">=</span> <span class="s">chmod,770,/run/rtorrent.sock</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># make sure port 50000 below can be reached</span>
+</span></span><span class="line"><span class="cl"><span class="na">network.port_range.set</span> <span class="o">=</span> <span class="s">50000-50000</span>
+</span></span><span class="line"><span class="cl"><span class="na">network.port_random.set</span> <span class="o">=</span> <span class="s">no</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="na">dht.mode.set</span> <span class="o">=</span> <span class="s">auto</span>
+</span></span><span class="line"><span class="cl"><span class="na">protocol.pex.set</span> <span class="o">=</span> <span class="s">yes</span>
+</span></span><span class="line"><span class="cl"><span class="na">system.umask.set</span> <span class="o">=</span> <span class="s">0007</span>
+</span></span><span class="line"><span class="cl"><span class="na">system.daemon.set</span> <span class="o">=</span> <span class="s">true</span>
+</span></span></code></pre></div><p>Create the folders we just referred to:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">mkdir -p /root/rtorrent/session
+</span></span><span class="line"><span class="cl">mkdir /root/rtorrent/data
+</span></span></code></pre></div><p>Enable and start rtorrent:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">systemctl <span class="nb">enable</span> rtorrent --now
+</span></span></code></pre></div><h3 id="rutorrent">ruTorrent<a href="#rutorrent" class="hanchor" ariaLabel="Anchor">#</a> </h3>
+<p>ruTorrent comes with a bunch of plugins, some of which require external
+dependencies that may not be available. If you don&rsquo;t want these plugins,
+simply remove them:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">cd</span> /var/www/ruTorrent/plugins
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">rm -rfv _cloudflare rss rssurlrewrite rutracker_check spectrogram mediainfo screenshots dump unpack
+</span></span></code></pre></div><p>The only config change that needs to be done in regards to ruTorrent is
+to point it to the correct socket, i.e. the one we specified in the
+rtorrent configuration. In <code>conf/config.php</code> set:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nv">$scgi_port</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$scgi_host</span> <span class="o">=</span> <span class="s2">&#34;unix:///run/rtorrent.sock&#34;</span><span class="p">;</span>
+</span></span></code></pre></div><p>Optionally, you may also want to change
+<code>/var/www/ruTorrent/plugins/theme/conf.php</code> and set:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nv">$defaultTheme</span> <span class="o">=</span> <span class="s2">&#34;MaterialDesign&#34;</span><span class="p">;</span>
+</span></span></code></pre></div><h3 id="lighttpd">lighttpd<a href="#lighttpd" class="hanchor" ariaLabel="Anchor">#</a> </h3>
+<p>There&rsquo;s a few things we need to do to make lighttpd serve this PHP code
+correctly &ndash; it has the concept of &ldquo;modules&rdquo; which are what you may
+recognize from something like nginx etc as the <code>available</code> and <code>enabled</code>
+directories. Let&rsquo;s start by disabling the &ldquo;unconfigured&rdquo; module that is
+enabled by default:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">lighty-disable-mod unconfigured
+</span></span></code></pre></div><p>Now, create <code>/etc/lighttpd/conf-available/90-rutorrent.conf</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-plain" data-lang="plain"><span class="line"><span class="cl">server.modules += ( &#34;mod_scgi&#34; )
+</span></span><span class="line"><span class="cl">server.document-root = &#34;/var/www/ruTorrent&#34;
+</span></span><span class="line"><span class="cl">scgi.server = (
+</span></span><span class="line"><span class="cl">  &#34;/RPC2&#34; =&gt; (
+</span></span><span class="line"><span class="cl">    &#34;/&#34; =&gt; (
+</span></span><span class="line"><span class="cl">      &#34;socket&#34; =&gt; &#34;/run/rtorrent.sock&#34;,
+</span></span><span class="line"><span class="cl">      &#34;check-local&#34; =&gt; &#34;disable&#34;
+</span></span><span class="line"><span class="cl">    )
+</span></span><span class="line"><span class="cl">  )
+</span></span><span class="line"><span class="cl">)
+</span></span></code></pre></div><p>We can now enable this as well as the required php module at the same
+time:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">lighty-enable-mod rutorrent fastcgi-php-fpm
+</span></span></code></pre></div><p>To avoid a crash, we must also in <code>/etc/lighttpd/lighttpd.conf</code> comment
+out the <code>server.document-root</code> value, since we changed it above.</p>
+<p>You can now:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">systemctl restart lighttpd
+</span></span></code></pre></div><h3 id="reverse-proxy">Reverse proxy<a href="#reverse-proxy" class="hanchor" ariaLabel="Anchor">#</a> </h3>
+<p>lighttpd is configured to serve normal http on port 80, because the
+expectation here is that a reverse proxy is used for TLS termination.
+Configure one of your choice to forward traffic to the container.</p>
+<h3 id="networking">Networking<a href="#networking" class="hanchor" ariaLabel="Anchor">#</a> </h3>
+<p>We previously configured rtorrent to use port 50000, if that&rsquo;s open then
+everything is fine. If not, and this is an incus container, we need to
+add a port forward. First:</p>
+<ul>
+<li>create a forward list on the bridge for the host ip, if not done already</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">incus network forward list incusbr0
+</span></span><span class="line"><span class="cl">incus network forward create incusbr0 192.168.1.10
+</span></span></code></pre></div><p>Where <code>192.168.1.10</code> is the ip of your host system on its network.</p>
+<ul>
+<li>edit the forward list and add a descriptive entry in &ldquo;ports&rdquo; to the container ip</li>
+</ul>
+<p>incus network forward edit incusbr0 192.168.1.10</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl">- <span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l">rtorrent_tcp</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l">tcp</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">listen_port</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;50000&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">target_port</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;50000&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">target_address</span><span class="p">:</span><span class="w"> </span><span class="m">10.191.32.229</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l">rtorrent_udp</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l">udp</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">listen_port</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;50000&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">target_port</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;50000&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">target_address</span><span class="p">:</span><span class="w"> </span><span class="m">10.191.32.229</span><span class="w">
+</span></span></span></code></pre></div><p>Where <code>10.191.32.229</code> is the ip of your container. Now, as long as
+traffic hits <code>192.168.1.10:5000</code>, it should be forwarded correctly.</p>
+<p>Thoughts and feedback are welcome via
+<a href="https://telegrafverket.cc/@linus">@linus@telegrafverket.cc</a> &ndash; email
+works too.</p>
+
+      </div></div>
+
+  
+    
+<div class="pagination">
+  <div class="pagination__title">
+    <span class="pagination__title-h">Read other posts</span>
+    <hr />
+  </div>
+  <div class="pagination__buttons">
+    
+    
+    
+      <a href="https://agren.cc/p/ad-enroll/" class="button inline next">
+         [<span class="button__text">Enrolling Linux systems into Active Directory with SSSD</span>] &gt;
+      </a>
+    
+  </div>
+</div>
+
+
+  
+
+  
+    
+
+  
+</article>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    <span style="font-size: small; margin: auto; text-align: center">
+      Text written by me is licensed under
+      <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>
+      - credit "agren.cc"
+      <br />
+      Rendered with
+      <a href="https://gohugo.io/">Hugo</a>
+      and the
+      <a href="https://github.com/panr/hugo-theme-terminal" target="_blank">
+        terminal theme
+      </a>
+    </span>
+  </div>
+  <a
+    href="https://www.metmuseum.org/art/collection/search/54642"
+    target="_BLANK">
+    <img
+      src="/corvid.png"
+      style="margin: auto; border: none; padding-top: 64px" />
+  </a>
+</footer>
+
+  
+
+<script type="text/javascript" src="/bundle.min.js"></script>
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>
