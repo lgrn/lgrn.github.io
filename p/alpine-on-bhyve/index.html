@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <title>Alpine Linux VM cloud images on FreeBSD :: agren.cc</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="You can get almost anything running on most hypervisors if you&rsquo;re OK with mounting an ISO and running through an installation, but VM cloud images are essential for repeat deployments, so I wanted to explore what the support is like on FreeBSD. Turns out, it&rsquo;s not terrible.
+" />
+<meta name="keywords" content="" />
+
+  <meta name="robots" content="noodp" />
+
+<link rel="canonical" href="https://agren.cc/p/alpine-on-bhyve/" />
+
+
+
+
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/fonts.min.e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/main.min.f45962ce6ffdd2247db17a705d0190d5ca08e6b0757015b1061b0594e50b535b.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/prism.min.3080cbc8607b8ded79eec60a46295119aef4486a3a2d88c9ddc57ee285ca19ca.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/syntax.min.e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/terminal.min.b5a18d6c426c8c0231887a3ca76227afb156bc4314a3ef4c2bd27b2309b6ffb4.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/buttons.min.86f6b4c106b6c6eb690ae5203d36b442c1f66f718ff4e8164fa86cf6c61ad641.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/code.min.d529ea4b2fb8d34328d7d31afc5466d5f7bc2f0bc9abdd98b69385335d7baee4.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/footer.min.eb8dfc2c6a7eafa36cd3ba92d63e69e849e2200e0002a228d137f236b09ecd75.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/gist.min.a751e8b0abe1ba8bc53ced52a38b19d8950fe78ca29454ea8c2595cf26aad5c0.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/header.min.75c7eb0e2872d95ff48109c6647d0223a38db52e2561dd87966eb5fc7c6bdac6.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/menu.min.3c17467ebeb3d38663dce68f71f519901124fa5cbb4519b2fb0667a21e9aca39.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/pagination.min.bbb986dbce00a5ce5aca0504b7925fc1c581992a4bf57f163e5d69cc1db7d836.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/post.min.e6dddd258e64c83e05cec0cd49c05216742d42fc8ecbfbe6b67083412b609bd3.css">
+
+  
+  <link rel="stylesheet" href="https://agren.cc/css/terms.min.b81791663c3790e738e571cdbf802312390d30e4b1d8dc9d814a5b5454d0ac11.css">
+
+
+
+
+
+
+
+<link rel="shortcut icon" href="https://agren.cc/favicon.png">
+<link rel="apple-touch-icon" href="https://agren.cc/apple-touch-icon.png">
+
+
+<meta name="twitter:card" content="summary" />
+
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Alpine Linux VM cloud images on FreeBSD">
+<meta property="og:description" content="You can get almost anything running on most hypervisors if you&rsquo;re OK with mounting an ISO and running through an installation, but VM cloud images are essential for repeat deployments, so I wanted to explore what the support is like on FreeBSD. Turns out, it&rsquo;s not terrible.
+" />
+<meta property="og:url" content="https://agren.cc/p/alpine-on-bhyve/" />
+<meta property="og:site_name" content="agren.cc" />
+
+  <meta property="og:image" content="https://agren.cc/og-image.png">
+
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+
+
+  <meta property="article:published_time" content="2025-07-31 12:00:00 &#43;0200 CEST" />
+
+
+
+
+
+
+
+
+
+<meta name="fediverse:creator" content="@linus@telegrafverket.cc" />
+<link rel="me" href="https://telegrafverket.cc/@linus" />
+
+
+<script defer src="https://umami.telegrafverket.cc/script.js" data-website-id="243279d9-ab6f-4575-a481-988858fdbb61"></script>
+
+
+</head>
+<body>
+
+
+<div class="container center">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="/">
+  <div class="logo">
+    agren.cc
+  </div>
+</a>
+
+    </div>
+    
+      <ul class="menu menu--mobile">
+  <li class="menu__trigger">Menu&nbsp;▾</li>
+  <li>
+    <ul class="menu__dropdown">
+      
+        
+          <li><a href="/about/index.html">about</a></li>
+        
+      
+        
+          <li><a href="https://telegrafverket.cc/@linus">mastodon</a></li>
+        
+      
+      
+    </ul>
+  </li>
+</ul>
+
+    
+    
+  </div>
+  
+    <nav class="navigation-menu">
+  <ul class="navigation-menu__inner menu--desktop">
+    
+      
+        
+          <li><a href="/about/index.html" >about</a></li>
+        
+      
+        
+          <li><a href="https://telegrafverket.cc/@linus" >mastodon</a></li>
+        
+      
+    
+  </ul>
+</nav>
+
+  
+</header>
+
+
+  <div class="content">
+    
+<article class="post">
+  <h1 class="post-title">
+    <a href="https://agren.cc/p/alpine-on-bhyve/">Alpine Linux VM cloud images on FreeBSD</a>
+  </h1>
+  <div class="post-meta"><time class="post-date">2025-07-31</time></div>
+
+  
+    <span class="post-tags">
+      
+      #<a href="https://agren.cc/tags/sysadmin/">sysadmin</a>&nbsp;
+      
+      #<a href="https://agren.cc/tags/freebsd/">freebsd</a>&nbsp;
+      
+      #<a href="https://agren.cc/tags/linux/">linux</a>&nbsp;
+      
+      #<a href="https://agren.cc/tags/cloud-init/">cloud-init</a>&nbsp;
+      
+    </span>
+  
+  
+
+
+  
+
+  <div class="post-content"><div>
+        <p>You can get almost anything running on most hypervisors if you&rsquo;re OK
+with mounting an ISO and running through an installation, but VM cloud
+images are essential for repeat deployments, so I wanted to explore
+what the support is like on FreeBSD. Turns out, it&rsquo;s not terrible.</p>
+<p>I got interested in this after reading <em><a href="https://it-notes.dragas.net/2022/11/01/creating-an-alpine-vm-on-bhyve-with-root-on-zfs-optionally-encrypted/">Creating an Alpine Linux VM on
+bhyve</a></em>
+(shout-out to Stefano Marinelli). Installing an operating system from an
+ISO and then making it into a template of your own is completely valid,
+especially if you&rsquo;re doing something exotic, but there are also many
+use-cases for when you <em>really</em> want vanilla cloud images that you can
+easily update for new deployments, while still being able to
+continuously apply some kind of semi-agnostic boostrapping on top of
+them. So, this post will investigate how far you can get with Alpine
+Linux cloud images that come prepared with <code>cloud-init</code> on a FreeBSD
+host.</p>
+<h2 id="the-basics">The basics<a href="#the-basics" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<p>This is being done on FreeBSD 14.3 with the <code>vm-bhyve</code> tool. Installing
+it is not difficult, they have a short <a href="https://github.com/freebsd/vm-bhyve?tab=readme-ov-file#quick-start">quick-start
+list</a>
+in their repo. I&rsquo;m using ZFS with a pretty standard <code>zroot/vm</code> dataset
+where everything (config and data) is stored.</p>
+<p>In addition to <code>vm-bhyve</code> you also need:</p>
+<ul>
+<li><code>grub2-bhyve</code> (for non-BSD virtual machines)</li>
+<li><code>bhyve-firmware</code> (for UEFI boot)</li>
+<li><code>qemu-tools</code> (to work with qemu files, unsurprisingly)</li>
+</ul>
+<h2 id="template">Template<a href="#template" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<p>The <code>vm-bhyve</code> tool comes with templates, and there is one for Alpine
+that I have never really had much luck with. In fact, most posts I&rsquo;ve
+seen have been about how it needs to be changed, and this one will be no
+different. Turns out that no extra hacking is needed here, we can just
+uefi boot the raw image. I&rsquo;ll create a new one called <code>alp.conf</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="line"><span class="cl"><span class="na">loader</span><span class="o">=</span><span class="s">&#34;uefi&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="na">cpu</span><span class="o">=</span><span class="s">&#34;2&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="na">memory</span><span class="o">=</span><span class="s">&#34;2G&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="na">network0_type</span><span class="o">=</span><span class="s">&#34;virtio-net&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="na">network0_switch</span><span class="o">=</span><span class="s">&#34;public&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="na">disk0_type</span><span class="o">=</span><span class="s">&#34;virtio-blk&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="na">disk0_name</span><span class="o">=</span><span class="s">&#34;disk0.img&#34;</span>
+</span></span></code></pre></div><p>As someone who has spent an inordinate amount of time searching for
+different configurations for Linux VMs on FreeBSD, this configuration is
+almost suspicious in how simple it is, but it actually works.</p>
+<h2 id="image">Image<a href="#image" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<p>Alpine cloud images can be fetched from <a href="https://alpinelinux.org/cloud/">https://alpinelinux.org/cloud/</a>
+&ndash; the one we want is the <code>uefi • cloudinit • vm</code> of type <code>nocloud</code>.</p>
+<p>Grab it in whatever way you prefer:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">axel https://dl-cdn.alpinelinux.org/alpine/v3.22/releases/cloud/nocloud_alpine-3.22.1-x86_64-uefi-cloudinit-r0.qcow2
+</span></span></code></pre></div><p>We won&rsquo;t be able to do much with a <code>qcow2</code> file here, so we need to
+convert it to a raw disk file:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">qemu-img convert -f qcow2 -O raw nocloud_alpine-3.22.1-x86_64-uefi-cloudinit-r0.qcow2 alpine.raw
+</span></span></code></pre></div><p>Simply move <code>alpine.raw</code> into <code>.img</code> and <code>vm img</code> will show it.</p>
+<h2 id="deploy">Deploy<a href="#deploy" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<p>To deploy using our template and image file, run:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">vm create -t alp -i alpine.raw -C -k ~/.ssh/authorized_keys berg
+</span></span></code></pre></div><p>This will deploy the VM &ldquo;berg&rdquo; with <code>t</code>emplate &ldquo;alp&rdquo;, <code>i</code>mage
+&ldquo;alpine.raw&rdquo;, enabling <code>C</code>loud-init and passing SSH <code>k</code>eys from the
+hosts &ldquo;authorized_keys&rdquo; file.</p>
+<p>You can also pass <code>-n</code>, an example is given in the documentation, but we
+won&rsquo;t be doing that:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">-n <span class="s2">&#34;interface=;ip=;gateway=;nameservers=;searchdomains=;hostname=&#34;</span>
+</span></span></code></pre></div><p>When creating a VM, it will not be started automatically, and from the
+perspective of cloud-init this is a very good thing. Before starting the
+VM, let&rsquo;s inspect the VM dataset that was created:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># ls -alh /zroot/vm/berg</span>
+</span></span><span class="line"><span class="cl">total <span class="m">114748</span>
+</span></span><span class="line"><span class="cl"><span class="o">(</span>...<span class="o">)</span>  .
+</span></span><span class="line"><span class="cl"><span class="o">(</span>...<span class="o">)</span>  ..
+</span></span><span class="line"><span class="cl"><span class="o">(</span>...<span class="o">)</span>  .cloud-init
+</span></span><span class="line"><span class="cl"><span class="o">(</span>...<span class="o">)</span>  berg.conf
+</span></span><span class="line"><span class="cl"><span class="o">(</span>...<span class="o">)</span>  disk0.img
+</span></span><span class="line"><span class="cl"><span class="o">(</span>...<span class="o">)</span>  seed.iso
+</span></span><span class="line"><span class="cl"><span class="o">(</span>...<span class="o">)</span>  vm-bhyve.log
+</span></span></code></pre></div><p>To better understand what is happening here, let&rsquo;s go through what we
+are looking at:</p>
+<ul>
+<li><code>.cloud-init</code> is a folder containing YAML files like <code>user-data</code>,
+which you will recognize if you&rsquo;ve worked with cloud-init in the past.
+These files are not, in strict terms, what is consumed by the VM,
+as this folder is concatenated first into:</li>
+<li><code>seed.iso</code> by vm-bhyve, and if we look at:</li>
+<li><code>berg.conf</code> we can see that our template configuration has been
+amended due to us adding <code>-C</code> with:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="line"><span class="cl"><span class="na">disk1_type</span><span class="o">=</span><span class="s">&#34;ahci-cd&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="na">disk1_name</span><span class="o">=</span><span class="s">&#34;seed.iso&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="na">disk1_dev</span><span class="o">=</span><span class="s">&#34;file&#34;</span>
+</span></span></code></pre></div><p>In other words, the <code>seed.iso</code> file gets passed to the VM, where
+cloud-init sneakily lies in wait to parse it on first boot.</p>
+<p>What&rsquo;s interesting about this is that even though the vm-bhyve support
+for cloud-init is rudimentary, there is nothing stopping us from just
+creating our own ISO file before the VM starts for the first time.</p>
+<p>Let&rsquo;s create a <code>vendor-data</code> file in the <code>.cloud-init</code> folder, being a
+shell script instead of yaml:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="cp">#!/bin/sh
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>touch /home/alpine/VENDOR_SAYS_HELLO
+</span></span></code></pre></div><p>&hellip;then in the &ldquo;berg&rdquo; directory just do manually <a href="https://github.com/churchers/vm-bhyve/blob/6e91ff54e7a00f2b57c77c930e7ccc5090f68ba6/lib/vm-core#L320">what vm-bhyve
+does</a> when it creates the iso:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">makefs -t cd9660 -o R,L<span class="o">=</span>cidata <span class="s2">&#34;seed.iso&#34;</span> <span class="s2">&#34;.cloud-init&#34;</span>
+</span></span></code></pre></div><p>Now let&rsquo;s start up the VM for the first time with our modified ISO file:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">vm start berg
+</span></span></code></pre></div><p>From the console we can see the IP received over DHCP, and since we
+passed the key we can SSH to it:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ssh alpine@192.168.1.120
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">$ ls -alh
+</span></span><span class="line"><span class="cl">total 4K
+</span></span><span class="line"><span class="cl"><span class="o">(</span>...<span class="o">)</span>  .
+</span></span><span class="line"><span class="cl"><span class="o">(</span>...<span class="o">)</span>  ..
+</span></span><span class="line"><span class="cl"><span class="o">(</span>...<span class="o">)</span>  .ash_history
+</span></span><span class="line"><span class="cl"><span class="o">(</span>...<span class="o">)</span>  .ssh
+</span></span><span class="line"><span class="cl"><span class="o">(</span>...<span class="o">)</span>  VENDOR_SAYS_HELLO
+</span></span></code></pre></div><p>Nice!</p>
+<h2 id="potential-use-cases">Potential use cases<a href="#potential-use-cases" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<p>Using what we have learned above, there are many exciting things you
+could do in theory, since this opens up every possibility that
+cloud-init offers.</p>
+<p>If you have read previous posts of mine, you will know that my opinion
+is that the so-called &ldquo;vendor agnosticism&rdquo; of cloud-init that in theory
+should allow you to specify things like what gateway to use rarely are
+very agnostic &ndash; in the very basic sense they don&rsquo;t actually work and
+will make you angry, sad, confused, and much more depending on how long
+you take to give up and simply pass a shell script.</p>
+<p>But since we can now pass a shell script, we could:</p>
+<ul>
+<li>Mass deploy virtual machines pre-configured with certain SSH keys or
+network configurations.</li>
+<li>In addition to bhyve-vm templates, also create &ldquo;shell script
+templates&rdquo; that actually install and configure software for us in a
+dynamic way.</li>
+</ul>
+<p>If one could dream, it would be nice if vm-bhyve itself simply offered
+the option to pass in complete cloud-init configuration and/or shell
+scripts, but even if that never happens, the workaround above is good
+enough for anyone with some scripting knowledge to build something cool.</p>
+<p>Thoughts and feedback are welcome via
+<a href="https://telegrafverket.cc/@linus">@linus@telegrafverket.cc</a> &ndash; email
+works too.</p>
+
+      </div></div>
+
+  
+    
+<div class="pagination">
+  <div class="pagination__title">
+    <span class="pagination__title-h">Read other posts</span>
+    <hr />
+  </div>
+  <div class="pagination__buttons">
+    
+    
+    
+      <a href="https://agren.cc/p/rutorrent/" class="button inline next">
+         [<span class="button__text">Installing the ruTorrent web UI on Debian</span>] &gt;
+      </a>
+    
+  </div>
+</div>
+
+
+  
+
+  
+    
+
+  
+</article>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    <span style="font-size: small; margin: auto; text-align: center">
+      Text written by me is licensed under
+      <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>
+      - credit "agren.cc"
+      <br />
+      Rendered with
+      <a href="https://gohugo.io/">Hugo</a>
+      and the
+      <a href="https://github.com/panr/hugo-theme-terminal" target="_blank">
+        terminal theme
+      </a>
+    </span>
+  </div>
+  <a
+    href="https://www.metmuseum.org/art/collection/search/54642"
+    target="_BLANK">
+    <img
+      src="/corvid.png"
+      style="margin: auto; border: none; padding-top: 64px" />
+  </a>
+</footer>
+
+  
+
+<script type="text/javascript" src="/bundle.min.js"></script>
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>

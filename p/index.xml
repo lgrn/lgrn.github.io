@@ -6,8 +6,15 @@
     <description>Recent content in Ps on agren.cc</description>
     <generator>Hugo</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 27 Jul 2025 12:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Thu, 31 Jul 2025 12:00:00 +0200</lastBuildDate>
     <atom:link href="https://agren.cc/p/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Alpine Linux VM cloud images on FreeBSD</title>
+      <link>https://agren.cc/p/alpine-on-bhyve/</link>
+      <pubDate>Thu, 31 Jul 2025 12:00:00 +0200</pubDate>
+      <guid>https://agren.cc/p/alpine-on-bhyve/</guid>
+      <description>&lt;p&gt;You can get almost anything running on most hypervisors if you&amp;rsquo;re OK&#xA;with mounting an ISO and running through an installation, but VM cloud&#xA;images are essential for repeat deployments, so I wanted to explore&#xA;what the support is like on FreeBSD. Turns out, it&amp;rsquo;s not terrible.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Installing the ruTorrent web UI on Debian</title>
       <link>https://agren.cc/p/rutorrent/</link>

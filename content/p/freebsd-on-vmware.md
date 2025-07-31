@@ -7,6 +7,7 @@ tags:
   - vmware
   - sysadmin
   - linux
+  - cloud-init
 ---
 
 This post is about multiple components involved in deploying FreeBSD to

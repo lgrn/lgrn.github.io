@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Cloud-Init on agren.cc</title>
+    <link>https://agren.cc/tags/cloud-init/</link>
+    <description>Recent content in Cloud-Init on agren.cc</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Thu, 31 Jul 2025 12:00:00 +0200</lastBuildDate>
+    <atom:link href="https://agren.cc/tags/cloud-init/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Alpine Linux VM cloud images on FreeBSD</title>
+      <link>https://agren.cc/p/alpine-on-bhyve/</link>
+      <pubDate>Thu, 31 Jul 2025 12:00:00 +0200</pubDate>
+      <guid>https://agren.cc/p/alpine-on-bhyve/</guid>
+      <description>&lt;p&gt;You can get almost anything running on most hypervisors if you&amp;rsquo;re OK&#xA;with mounting an ISO and running through an installation, but VM cloud&#xA;images are essential for repeat deployments, so I wanted to explore&#xA;what the support is like on FreeBSD. Turns out, it&amp;rsquo;s not terrible.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Deploying FreeBSD on VMware</title>
+      <link>https://agren.cc/p/freebsd-on-vmware/</link>
+      <pubDate>Mon, 23 Sep 2024 11:45:00 +0200</pubDate>
+      <guid>https://agren.cc/p/freebsd-on-vmware/</guid>
+      <description>&lt;p&gt;This post is about multiple components involved in deploying FreeBSD to&#xA;a VMware environment. Since there are many moving parts this may also be&#xA;interesting in general to anyone doing &amp;ldquo;infrastructure as code&amp;rdquo; and&#xA;cloud deployments, the process is quite similar for Linux.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
