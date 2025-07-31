@@ -54,7 +54,7 @@ cpu="2"
 memory="2G"
 network0_type="virtio-net"
 network0_switch="public"
-disk0_type="virtio-blk"
+disk0_type="nvme"
 disk0_name="disk0.img"
 ```
 
