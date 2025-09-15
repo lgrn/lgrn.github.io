@@ -6,8 +6,29 @@
     <description>Recent content in Tags on agren.cc</description>
     <generator>Hugo</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 31 Jul 2025 12:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Sun, 14 Sep 2025 22:00:00 +0200</lastBuildDate>
     <atom:link href="https://agren.cc/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Gnome</title>
+      <link>https://agren.cc/tags/gnome/</link>
+      <pubDate>Sun, 14 Sep 2025 22:00:00 +0200</pubDate>
+      <guid>https://agren.cc/tags/gnome/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Linux</title>
+      <link>https://agren.cc/tags/linux/</link>
+      <pubDate>Sun, 14 Sep 2025 22:00:00 +0200</pubDate>
+      <guid>https://agren.cc/tags/linux/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Sysadmin</title>
+      <link>https://agren.cc/tags/sysadmin/</link>
+      <pubDate>Sun, 14 Sep 2025 22:00:00 +0200</pubDate>
+      <guid>https://agren.cc/tags/sysadmin/</guid>
+      <description></description>
+    </item>
     <item>
       <title>Cloud-Init</title>
       <link>https://agren.cc/tags/cloud-init/</link>
@@ -20,20 +41,6 @@
       <link>https://agren.cc/tags/freebsd/</link>
       <pubDate>Thu, 31 Jul 2025 12:00:00 +0200</pubDate>
       <guid>https://agren.cc/tags/freebsd/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Linux</title>
-      <link>https://agren.cc/tags/linux/</link>
-      <pubDate>Thu, 31 Jul 2025 12:00:00 +0200</pubDate>
-      <guid>https://agren.cc/tags/linux/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Sysadmin</title>
-      <link>https://agren.cc/tags/sysadmin/</link>
-      <pubDate>Thu, 31 Jul 2025 12:00:00 +0200</pubDate>
-      <guid>https://agren.cc/tags/sysadmin/</guid>
       <description></description>
     </item>
     <item>

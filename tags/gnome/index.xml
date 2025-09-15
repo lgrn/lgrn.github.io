@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Gnome on agren.cc</title>
+    <link>https://agren.cc/tags/gnome/</link>
+    <description>Recent content in Gnome on agren.cc</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 14 Sep 2025 22:00:00 +0200</lastBuildDate>
+    <atom:link href="https://agren.cc/tags/gnome/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Sandboxing Linux applications with firejail</title>
+      <link>https://agren.cc/p/sandbox-app/</link>
+      <pubDate>Sun, 14 Sep 2025 22:00:00 +0200</pubDate>
+      <guid>https://agren.cc/p/sandbox-app/</guid>
+      <description>&lt;p&gt;If you have an application that you know should never need to access&#xA;anything outside its own folder, sandboxing with firejail is both easy&#xA;and a useful way to increase your security posture.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
