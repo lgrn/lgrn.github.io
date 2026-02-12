@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Zfs on agren.cc</title>
+    <link>https://agren.cc/tags/zfs/</link>
+    <description>Recent content in Zfs on agren.cc</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 11 Feb 2026 21:00:00 +0200</lastBuildDate>
+    <atom:link href="https://agren.cc/tags/zfs/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Re-compressing ZFS datasets used by incus</title>
+      <link>https://agren.cc/p/zfs-recompression/</link>
+      <pubDate>Wed, 11 Feb 2026 21:00:00 +0200</pubDate>
+      <guid>https://agren.cc/p/zfs-recompression/</guid>
+      <description>&lt;p&gt;If you have an existing ZFS dataset with no compression, enabling it will not&#xA;compress existing data. That makes sense if you think about it, but how can we&#xA;make it happen if we want to?&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

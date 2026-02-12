@@ -4,8 +4,6 @@ date: 2025-03-01T09:45:00+02:00
 draft: false
 tags:
   - linux
-  - debian
-  - ubuntu
   - sysadmin
   - systemd
   - tailscale

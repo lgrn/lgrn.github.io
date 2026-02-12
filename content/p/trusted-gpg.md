@@ -4,8 +4,6 @@ date: 2024-05-05T17:45:00+02:00
 draft: false
 tags:
   - linux
-  - debian
-  - ubuntu
   - sysadmin
 ---
 

@@ -2,31 +2,31 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Debian on agren.cc</title>
-    <link>https://agren.cc/tags/debian/</link>
+    <link>http://localhost:1313/tags/debian/</link>
     <description>Recent content in Debian on agren.cc</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 27 Jul 2025 12:00:00 +0200</lastBuildDate>
-    <atom:link href="https://agren.cc/tags/debian/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/tags/debian/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Installing the ruTorrent web UI on Debian</title>
-      <link>https://agren.cc/p/rutorrent/</link>
+      <link>http://localhost:1313/p/rutorrent/</link>
       <pubDate>Sun, 27 Jul 2025 12:00:00 +0200</pubDate>
-      <guid>https://agren.cc/p/rutorrent/</guid>
+      <guid>http://localhost:1313/p/rutorrent/</guid>
       <description>&lt;p&gt;ruTorrent is a popular web interface for the rtorrent client, here&amp;rsquo;s how&#xA;to set it up with lighttpd on Debian.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Making tailscaled dependable for sshd and other services</title>
-      <link>https://agren.cc/p/systemd-tailscale/</link>
+      <link>http://localhost:1313/p/systemd-tailscale/</link>
       <pubDate>Sat, 01 Mar 2025 09:45:00 +0200</pubDate>
-      <guid>https://agren.cc/p/systemd-tailscale/</guid>
+      <guid>http://localhost:1313/p/systemd-tailscale/</guid>
       <description>&lt;p&gt;If you use Tailscale on your server, you may have services that should&#xA;only listen on that IP. Unfortunately, the tailscaled service often goes&#xA;active before it&amp;rsquo;s actually done, breaking dependencies: here&amp;rsquo;s how to&#xA;fix it.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Using signed-by in Debian repository configuration</title>
-      <link>https://agren.cc/p/trusted-gpg/</link>
+      <link>http://localhost:1313/p/trusted-gpg/</link>
       <pubDate>Sun, 05 May 2024 17:45:00 +0200</pubDate>
-      <guid>https://agren.cc/p/trusted-gpg/</guid>
+      <guid>http://localhost:1313/p/trusted-gpg/</guid>
       <description>&lt;p&gt;On newer versions of Debian and Ubuntu, the way repos are authenticated&#xA;through public keys has changed somewhat. Here&amp;rsquo;s what I&amp;rsquo;ve found.&lt;/p&gt;</description>
     </item>
   </channel>

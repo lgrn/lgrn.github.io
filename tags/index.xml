@@ -6,27 +6,41 @@
     <description>Recent content in Tags on agren.cc</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 14 Sep 2025 22:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Wed, 11 Feb 2026 21:00:00 +0200</lastBuildDate>
     <atom:link href="https://agren.cc/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Gnome</title>
-      <link>https://agren.cc/tags/gnome/</link>
-      <pubDate>Sun, 14 Sep 2025 22:00:00 +0200</pubDate>
-      <guid>https://agren.cc/tags/gnome/</guid>
+      <title>Incus</title>
+      <link>https://agren.cc/tags/incus/</link>
+      <pubDate>Wed, 11 Feb 2026 21:00:00 +0200</pubDate>
+      <guid>https://agren.cc/tags/incus/</guid>
       <description></description>
     </item>
     <item>
       <title>Linux</title>
       <link>https://agren.cc/tags/linux/</link>
-      <pubDate>Sun, 14 Sep 2025 22:00:00 +0200</pubDate>
+      <pubDate>Wed, 11 Feb 2026 21:00:00 +0200</pubDate>
       <guid>https://agren.cc/tags/linux/</guid>
       <description></description>
     </item>
     <item>
       <title>Sysadmin</title>
       <link>https://agren.cc/tags/sysadmin/</link>
-      <pubDate>Sun, 14 Sep 2025 22:00:00 +0200</pubDate>
+      <pubDate>Wed, 11 Feb 2026 21:00:00 +0200</pubDate>
       <guid>https://agren.cc/tags/sysadmin/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Zfs</title>
+      <link>https://agren.cc/tags/zfs/</link>
+      <pubDate>Wed, 11 Feb 2026 21:00:00 +0200</pubDate>
+      <guid>https://agren.cc/tags/zfs/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Gnome</title>
+      <link>https://agren.cc/tags/gnome/</link>
+      <pubDate>Sun, 14 Sep 2025 22:00:00 +0200</pubDate>
+      <guid>https://agren.cc/tags/gnome/</guid>
       <description></description>
     </item>
     <item>
@@ -41,20 +55,6 @@
       <link>https://agren.cc/tags/freebsd/</link>
       <pubDate>Thu, 31 Jul 2025 12:00:00 +0200</pubDate>
       <guid>https://agren.cc/tags/freebsd/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Debian</title>
-      <link>https://agren.cc/tags/debian/</link>
-      <pubDate>Sun, 27 Jul 2025 12:00:00 +0200</pubDate>
-      <guid>https://agren.cc/tags/debian/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Incus</title>
-      <link>https://agren.cc/tags/incus/</link>
-      <pubDate>Sun, 27 Jul 2025 12:00:00 +0200</pubDate>
-      <guid>https://agren.cc/tags/incus/</guid>
       <description></description>
     </item>
     <item>
@@ -104,13 +104,6 @@
       <link>https://agren.cc/tags/tailscale/</link>
       <pubDate>Sat, 01 Mar 2025 09:45:00 +0200</pubDate>
       <guid>https://agren.cc/tags/tailscale/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Ubuntu</title>
-      <link>https://agren.cc/tags/ubuntu/</link>
-      <pubDate>Sat, 01 Mar 2025 09:45:00 +0200</pubDate>
-      <guid>https://agren.cc/tags/ubuntu/</guid>
       <description></description>
     </item>
     <item>

@@ -6,8 +6,15 @@
     <description>Recent content in Linux on agren.cc</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 14 Sep 2025 22:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Wed, 11 Feb 2026 21:00:00 +0200</lastBuildDate>
     <atom:link href="https://agren.cc/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Re-compressing ZFS datasets used by incus</title>
+      <link>https://agren.cc/p/zfs-recompression/</link>
+      <pubDate>Wed, 11 Feb 2026 21:00:00 +0200</pubDate>
+      <guid>https://agren.cc/p/zfs-recompression/</guid>
+      <description>&lt;p&gt;If you have an existing ZFS dataset with no compression, enabling it will not&#xA;compress existing data. That makes sense if you think about it, but how can we&#xA;make it happen if we want to?&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Sandboxing Linux applications with firejail</title>
       <link>https://agren.cc/p/sandbox-app/</link>
@@ -21,6 +28,13 @@
       <pubDate>Thu, 31 Jul 2025 12:00:00 +0200</pubDate>
       <guid>https://agren.cc/p/alpine-on-bhyve/</guid>
       <description>&lt;p&gt;You can get almost anything running on most hypervisors if you&amp;rsquo;re OK&#xA;with mounting an ISO and running through an installation, but VM cloud&#xA;images are essential for repeat deployments, so I wanted to explore&#xA;what the support is like on FreeBSD. Turns out, it&amp;rsquo;s not terrible.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Installing the ruTorrent web UI on Debian</title>
+      <link>https://agren.cc/p/rutorrent/</link>
+      <pubDate>Sun, 27 Jul 2025 12:00:00 +0200</pubDate>
+      <guid>https://agren.cc/p/rutorrent/</guid>
+      <description>&lt;p&gt;ruTorrent is a popular web interface for the rtorrent client, here&amp;rsquo;s how&#xA;to set it up with lighttpd on Debian.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Enrolling Linux systems into Active Directory with SSSD</title>
