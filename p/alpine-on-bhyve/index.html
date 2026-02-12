@@ -286,7 +286,7 @@ creating our own ISO file before the VM starts for the first time.</p>
 <p>Let&rsquo;s create a <code>vendor-data</code> file in the <code>.cloud-init</code> folder, being a
 shell script instead of yaml:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="cp">#!/bin/sh
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span>touch /home/alpine/VENDOR_SAYS_HELLO
+</span></span></span><span class="line"><span class="cl">touch /home/alpine/VENDOR_SAYS_HELLO
 </span></span></code></pre></div><p>&hellip;then in the &ldquo;berg&rdquo; directory just do manually <a href="https://github.com/churchers/vm-bhyve/blob/6e91ff54e7a00f2b57c77c930e7ccc5090f68ba6/lib/vm-core#L320">what vm-bhyve
 does</a> when it creates the iso:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">makefs -t cd9660 -o R,L<span class="o">=</span>cidata <span class="s2">&#34;seed.iso&#34;</span> <span class="s2">&#34;.cloud-init&#34;</span>

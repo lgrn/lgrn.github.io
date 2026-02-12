@@ -289,10 +289,10 @@ restart of the service.</p>
 <p>I do this via <code>/etc/periodic/daily/900.dnscrypt-blocklist</code> (executable)
 which looks something like this:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="cp">#!/bin/sh
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span>/usr/local/bin/curl <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/wildcard/pro-onlydomains.txt <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>-o /usr/local/etc/dnscrypt-proxy/blocked-names.txt <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span><span class="o">&amp;&amp;</span> /usr/sbin/service dnscrypt-proxy restart
+</span></span></span><span class="line"><span class="cl">/usr/local/bin/curl <span class="se">\
+</span></span></span><span class="line"><span class="cl">https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/wildcard/pro-onlydomains.txt <span class="se">\
+</span></span></span><span class="line"><span class="cl">-o /usr/local/etc/dnscrypt-proxy/blocked-names.txt <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="o">&amp;&amp;</span> /usr/sbin/service dnscrypt-proxy restart
 </span></span></code></pre></div><p>This simply grabs the latest version of
 <a href="https://github.com/hagezi/dns-blocklists">hagezi/dns-blocklists</a> and
 overwrites <code>blocked-names.txt</code> with it, followed by a service restart.</p>

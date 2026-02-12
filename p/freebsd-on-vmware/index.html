@@ -824,19 +824,19 @@ in a different order just to keep things confusing.</li>
 <code>guestinfo.metadata</code> in the VM creation.</p>
 <p>Here&rsquo;s what <code>user-data.tftpl</code> might look like:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;${hostname}&#34;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">keyboard</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">keyboard</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">layout</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;se&#34;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">locale</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;en_US.UTF-8&#34;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">users</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">locale</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;en_US.UTF-8&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">users</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="l">default</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;foo&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">lock_passwd</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># passwd: echo &#34;something&#34; | mkpasswd -m sha-512 -s</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">passwd</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;$6$15(...)&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">sudo</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;ALL=(ALL) NOPASSWD:ALL&#34;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="l">%{ if server_os != &#34;freebsd14&#34; ~}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="l">%{ if server_os != &#34;freebsd14&#34; ~}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">shell</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;/bin/bash&#34;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="l">%{ endif ~}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="l">%{ endif ~}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">ssh_authorized_keys</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s2">&#34;ssh-ed25519 AAAAC3N(...)&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s2">&#34;ssh-ed25519 AAAAC3N(...)&#34;</span><span class="w">
@@ -863,7 +863,7 @@ preferred form of nicotine is.</p>
 <p>We&rsquo;re doing shell scripts. Here&rsquo;s an example of how
 <code>bootstrap.sh_freebsd14.tftpl</code> might look:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="cp">#!/bin/sh
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span>log<span class="o">()</span> <span class="o">{</span>
+</span></span></span><span class="line"><span class="cl">log<span class="o">()</span> <span class="o">{</span>
 </span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;[</span><span class="k">$(</span>date +<span class="s1">&#39;%Y-%m-%dT%H:%M:%S%z&#39;</span><span class="k">)</span><span class="s2">]: </span><span class="nv">$*</span><span class="s2">&#34;</span> <span class="p">|</span> tee -a /var/log/bootstrap.log
 </span></span><span class="line"><span class="cl"><span class="o">}</span>
 </span></span><span class="line"><span class="cl">err<span class="o">()</span> <span class="o">{</span>
@@ -1068,12 +1068,12 @@ with at least 5G:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">qemu-img resize FreeBSD-14.1-RELEASE-amd64-zfs.qcow2 +5G
 </span></span></code></pre></div><p>Now we can boot it:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">qemu-system-x86_64 <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span> -drive <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span> <span class="nv">file</span><span class="o">=</span>FreeBSD-14.1-RELEASE-amd64-zfs.qcow2,if<span class="o">=</span>virtio <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span> -m 4G <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span> -enable-kvm <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span> -smp <span class="m">4</span> <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span> -cpu host
+</span></span></span><span class="line"><span class="cl"> -drive <span class="se">\
+</span></span></span><span class="line"><span class="cl"> <span class="nv">file</span><span class="o">=</span>FreeBSD-14.1-RELEASE-amd64-zfs.qcow2,if<span class="o">=</span>virtio <span class="se">\
+</span></span></span><span class="line"><span class="cl"> -m 4G <span class="se">\
+</span></span></span><span class="line"><span class="cl"> -enable-kvm <span class="se">\
+</span></span></span><span class="line"><span class="cl"> -smp <span class="m">4</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl"> -cpu host
 </span></span></code></pre></div><p>Then login as &ldquo;root&rdquo; without a password. At this point we will do
 whatever preparations we want in our template:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># you might want to change your keyboard layout</span>

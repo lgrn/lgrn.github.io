@@ -249,8 +249,8 @@ some useful examples, here are some that I use with descriptions:</p>
 
 <p>An invocation might therefore look like:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">firejail --caps.drop<span class="o">=</span>all --net<span class="o">=</span>none --seccomp --private <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>--cpu<span class="o">=</span>0,1,2 --whitelist<span class="o">=</span>/mnt/disk/app/ <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>/mnt/disk/app/run.sh
+</span></span></span><span class="line"><span class="cl">--cpu<span class="o">=</span>0,1,2 --whitelist<span class="o">=</span>/mnt/disk/app/ <span class="se">\
+</span></span></span><span class="line"><span class="cl">/mnt/disk/app/run.sh
 </span></span></code></pre></div><p>If you use GNOME and you want to modify graphical launchers, you may find these in <code>/home/USER/.local/share/applications/</code>, find the
 relevant <code>.desktop</code> file and then replace <code>Exec=</code>, <code>Name=</code> or whatever
 else you wish followed by:</p>
@@ -260,7 +260,7 @@ probably system-wide and should therefore be overridden by being copied
 to your user folder first before editing and updating the database, for
 example:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">cp -v /usr/share/applications/librewolf.desktop <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>/home/USER/.local/share/applications/
+</span></span></span><span class="line"><span class="cl">/home/USER/.local/share/applications/
 </span></span></code></pre></div><p>Thoughts and feedback are welcome via
 <a href="https://telegrafverket.cc/@linus">@linus@telegrafverket.cc</a> &ndash; email
 works too.</p>

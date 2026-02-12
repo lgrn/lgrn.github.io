@@ -243,8 +243,8 @@ personal preference of editor.</p>
 </span></span></code></pre></div><p>In my case, I&rsquo;m using a shared Postgres instance, so I&rsquo;ll set up a user
 and database for umami to use:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">CREATE</span><span class="w"> </span><span class="k">DATABASE</span><span class="w"> </span><span class="n">umami</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">umami</span><span class="w"> </span><span class="k">WITH</span><span class="w"> </span><span class="n">PASSWORD</span><span class="w"> </span><span class="s1">&#39;something&#39;</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">GRANT</span><span class="w"> </span><span class="k">ALL</span><span class="w"> </span><span class="k">PRIVILEGES</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">DATABASE</span><span class="w"> </span><span class="n">umami</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="n">umami</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="n">umami</span><span class="w"> </span><span class="k">WITH</span><span class="w"> </span><span class="n">PASSWORD</span><span class="w"> </span><span class="s1">&#39;something&#39;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">GRANT</span><span class="w"> </span><span class="k">ALL</span><span class="w"> </span><span class="k">PRIVILEGES</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">DATABASE</span><span class="w"> </span><span class="n">umami</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="n">umami</span><span class="p">;</span><span class="w">
 </span></span></span></code></pre></div><p>Access is restricted by the Postgres <code>listen_addresses</code> as well as
 <code>pg_hba</code> specifying that these password connections can only come from
 the local network:</p>
@@ -265,7 +265,7 @@ how it might look on Alpine:</p>
 <details class="collapsable-code" >
     <summary title="Click to interact"><span class="collapsable-code__title">/etc/init.d/umami</span></summary>
     <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="cp">#!/sbin/openrc-run
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="nv">name</span><span class="o">=</span><span class="s2">&#34;umami&#34;</span>
 </span></span><span class="line"><span class="cl"><span class="nv">BUN_PATH</span><span class="o">=</span><span class="s2">&#34;/root/.bun/bin/bun&#34;</span>
 </span></span><span class="line"><span class="cl"><span class="nv">WORKING_DIR</span><span class="o">=</span><span class="s2">&#34;/root/umami&#34;</span>

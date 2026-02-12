@@ -245,10 +245,10 @@ them with <code>$(cat /proc/sys/kernel/random/uuid)</code> for example.</li>
 </ul>
 <p>The response is assumed to be JSON and piped for formatting.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="k">for</span> i in <span class="k">$(</span>seq <span class="m">1</span> 1001<span class="k">)</span><span class="p">;</span> <span class="k">do</span>
+</span></span></span><span class="line"><span class="cl"><span class="k">for</span> i in <span class="k">$(</span>seq <span class="m">1</span> 1001<span class="k">)</span><span class="p">;</span> <span class="k">do</span>
 </span></span><span class="line"><span class="cl">   curl -sk -H <span class="s1">&#39;content-type: application/json&#39;</span> <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>   -d <span class="s1">&#39;JSON_DATA_OBJECT&#39;</span> <span class="s1">&#39;https://url/api&#39;</span> <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>   -u <span class="s1">&#39;user:password&#39;</span> <span class="p">|</span> python -m json.tool
+</span></span></span><span class="line"><span class="cl">   -d <span class="s1">&#39;JSON_DATA_OBJECT&#39;</span> <span class="s1">&#39;https://url/api&#39;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">   -u <span class="s1">&#39;user:password&#39;</span> <span class="p">|</span> python -m json.tool
 </span></span><span class="line"><span class="cl"><span class="k">done</span>
 </span></span></code></pre></div><p>If you need to do a <code>POST</code> or some other type of request with no data to
 apply the change, just pass <code>-X POST</code> instead of <code>-d</code>ata.</p>
@@ -256,7 +256,7 @@ apply the change, just pass <code>-X POST</code> instead of <code>-d</code>ata.<
 <p>To create a bunch of blocks with the expected syntax (here it&rsquo;s nagios),
 you can do this to simply test lots of hosts:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="k">for</span> i in <span class="k">$(</span>seq <span class="m">1</span> 10001<span class="k">)</span><span class="p">;</span> <span class="k">do</span>
 </span></span><span class="line"><span class="cl">    <span class="nv">UUID</span><span class="o">=</span><span class="k">$(</span>cat /proc/sys/kernel/random/uuid<span class="k">)</span>
 </span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;define host {
@@ -301,7 +301,7 @@ the command is running.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">read</span> -s sudopass
 </span></span><span class="line"><span class="cl">ssh you@host <span class="s2">&#34;echo </span><span class="nv">$sudopass</span><span class="s2"> | \
 </span></span></span><span class="line"><span class="cl"><span class="s2">sudo -S tar cf - /dir&#34;</span> 2&gt;/dev/null <span class="p">|</span> <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span><span class="nv">XZ_OPT</span><span class="o">=</span><span class="s1">&#39;-9 -T0 -v&#39;</span> xz &gt; dir.txz
+</span></span></span><span class="line"><span class="cl"><span class="nv">XZ_OPT</span><span class="o">=</span><span class="s1">&#39;-9 -T0 -v&#39;</span> xz &gt; dir.txz
 </span></span></code></pre></div><p>Verify that the file has contents:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">tar tvf dir.txz <span class="p">|</span> head
 </span></span></code></pre></div><p>You can also do the same only for a specific subset of files, for
@@ -309,16 +309,16 @@ example all log files:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ssh you@host <span class="s2">&#34;echo </span><span class="nv">$sudopass</span><span class="s2"> | \
 </span></span></span><span class="line"><span class="cl"><span class="s2">sudo -S find &#39;/dir&#39; -name &#39;*.log&#39; | \
 </span></span></span><span class="line"><span class="cl"><span class="s2">sudo tar -cf- -T-&#34;</span> <span class="p">|</span> <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span><span class="nv">XZ_OPT</span><span class="o">=</span><span class="s1">&#39;-9 -T0 -v&#39;</span> xz &gt; logs.txz
+</span></span></span><span class="line"><span class="cl"><span class="nv">XZ_OPT</span><span class="o">=</span><span class="s1">&#39;-9 -T0 -v&#39;</span> xz &gt; logs.txz
 </span></span></code></pre></div><h2 id="encrypt-a-file-with-openssl">Encrypt a file with OpenSSL<a href="#encrypt-a-file-with-openssl" class="hanchor" ariaLabel="Anchor">#</a> </h2>
 <p>If you&rsquo;re going to be throwing logs across the internet, it&rsquo;s probably a
 good idea to encrypt the file. One way to do this is:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">openssl enc -e -aes-256-cbc -md sha512 -pbkdf2 <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>-iter <span class="m">10000</span> -in PLAIN_FILE -out ENCRYPTED_FILE
+</span></span></span><span class="line"><span class="cl">-iter <span class="m">10000</span> -in PLAIN_FILE -out ENCRYPTED_FILE
 </span></span></code></pre></div><p>It will ask you for a passphrase. To decrypt, use the <code>-d</code> flag in an
 otherwise very similar command:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ openssl enc -d -aes-256-cbc -md sha512 -pbkdf2 <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>-iter <span class="m">10000</span> -in ENCRYPTED_FILE -out PLAIN_FILE
+</span></span></span><span class="line"><span class="cl">-iter <span class="m">10000</span> -in ENCRYPTED_FILE -out PLAIN_FILE
 </span></span></code></pre></div><p>Enter your passphrase and you&rsquo;ll have the decrypted file ready for
 decompression.</p>
 <h2 id="bash">Bash<a href="#bash" class="hanchor" ariaLabel="Anchor">#</a> </h2>
@@ -349,8 +349,8 @@ can disregard this section.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">salt <span class="s1">&#39;prefix-*&#39;</span> state.show_lowstate --out<span class="o">=</span>json &gt; out.json
 </span></span></code></pre></div><p>Use <code>jq</code> to only return nodes that have a specific <code>state</code>:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">cat out.json <span class="p">|</span> <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>jq -r <span class="s1">&#39;select(.[][].__sls__ == &#34;state&#34;) | keys[]&#39;</span> <span class="p">|</span> <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>sort -u
+</span></span></span><span class="line"><span class="cl">jq -r <span class="s1">&#39;select(.[][].__sls__ == &#34;state&#34;) | keys[]&#39;</span> <span class="p">|</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">sort -u
 </span></span></code></pre></div><p>Wrangle this string to make it into a salt-compatible list
 (comma-separated), and then use that, ping to check before trying
 <code>state.apply</code>:</p>

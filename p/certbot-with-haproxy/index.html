@@ -234,9 +234,9 @@ readable by root and contains something like:</p>
 <p>Now that certbot has access to modifying your DNS records, you can run
 something like:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">certbot certonly --dry-run --dns-cloudflare <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>--dns-cloudflare-credentials /root/.secrets/cloudflare.ini <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>-d <span class="s2">&#34;my.domain,*.my.domain&#34;</span> <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>--agree-tos --email foo@my.domain --preferred-challenges dns-01 -v
+</span></span></span><span class="line"><span class="cl">--dns-cloudflare-credentials /root/.secrets/cloudflare.ini <span class="se">\
+</span></span></span><span class="line"><span class="cl">-d <span class="s2">&#34;my.domain,*.my.domain&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">--agree-tos --email foo@my.domain --preferred-challenges dns-01 -v
 </span></span></code></pre></div><p>This will use your Cloudflare credentials and the <code>--dns-cloudflare</code>
 plugin to make DNS changes on your behalf, validating your ownership of
 the domain. The certificate will be issued to both <code>my.domain</code> and
@@ -253,8 +253,8 @@ like:</p>
 the private key must be contained in one single PEM file. This is easily
 achieved by doing:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">cat /etc/letsencrypt/live/my.domain/fullchain.pem <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>/etc/letsencrypt/live/my.domain/privkey.pem &gt; <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>/etc/ssl/haproxy/my_cert.pem
+</span></span></span><span class="line"><span class="cl">/etc/letsencrypt/live/my.domain/privkey.pem &gt; <span class="se">\
+</span></span></span><span class="line"><span class="cl">/etc/ssl/haproxy/my_cert.pem
 </span></span></code></pre></div><h2 id="step-5-configure-haproxy">Step 5: Configure HAProxy<a href="#step-5-configure-haproxy" class="hanchor" ariaLabel="Anchor">#</a> </h2>
 <p>You&rsquo;ll only need to do this once, if you keep using the same path for
 the certificate:</p>

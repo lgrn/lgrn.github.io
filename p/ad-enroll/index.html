@@ -223,15 +223,15 @@ actually able to reach, and using the expected DNS:</p>
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ignore_errors</span><span class="p">:</span><span class="w"> </span><span class="kc">yes</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">changed_when</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Internal DNS ping failed</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Internal DNS ping failed</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">debug</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
 </span></span></span><span class="line"><span class="cl"><span class="sd">      INTERNAL DNS PING FAILED
 </span></span></span><span class="line"><span class="cl"><span class="sd">      This system cannot reach our internal DNS servers, AD enrollment
-</span></span></span><span class="line"><span class="cl"><span class="sd">      will not work.</span><span class="w">      
+</span></span></span><span class="line"><span class="cl"><span class="sd">      will not work.</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l">ping_result.rc != 0</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">INTERNAL DNS PING FAILED, END PLAY FOR HOST IMMEDIATELY</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">INTERNAL DNS PING FAILED, END PLAY FOR HOST IMMEDIATELY</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">meta</span><span class="p">:</span><span class="w"> </span><span class="l">end_host</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l">ping_result.rc != 0</span><span class="w">
 </span></span></span></code></pre></div><p>Then try checking that they&rsquo;re actually being used:</p>
@@ -243,9 +243,9 @@ actually able to reach, and using the expected DNS:</p>
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">failed_when</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l">ansible_os_family == &#34;Debian&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># similar for rocky, or whatever else might be encountered</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># similar for rocky, or whatever else might be encountered</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Incorrect DNS configuration</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Incorrect DNS configuration</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">debug</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
 </span></span></span><span class="line"><span class="cl"><span class="sd">      INCORRECT DNS CONFIGURATION
@@ -253,14 +253,14 @@ actually able to reach, and using the expected DNS:</p>
 </span></span></span><span class="line"><span class="cl"><span class="sd">      configured to use them. This must be fixed manually.
 </span></span></span><span class="line"><span class="cl"><span class="sd">      This play will now abort.
 </span></span></span><span class="line"><span class="cl"><span class="sd">
-</span></span></span><span class="line"><span class="cl"><span class="sd">      Useful instructions on how to fix this goes here.</span><span class="w">      
+</span></span></span><span class="line"><span class="cl"><span class="sd">      Useful instructions on how to fix this goes here.</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="p">&gt;</span><span class="sd">
 </span></span></span><span class="line"><span class="cl"><span class="sd">    (ping_result.rc == 0 and ping_result is defined) and
 </span></span></span><span class="line"><span class="cl"><span class="sd">    (
 </span></span></span><span class="line"><span class="cl"><span class="sd">      (ansible_os_family == &#34;Debian&#34; and grep_result_ubuntu.rc != 0)
 </span></span></span><span class="line"><span class="cl"><span class="sd">      or
 </span></span></span><span class="line"><span class="cl"><span class="sd">      (ansible_os_family == &#34;RedHat&#34; and grep_result_rocky.rc != 0)
-</span></span></span><span class="line"><span class="cl"><span class="sd">    )</span><span class="w">    
+</span></span></span><span class="line"><span class="cl"><span class="sd">    )</span><span class="w">
 </span></span></span></code></pre></div><h3 id="installing-packages">Installing packages<a href="#installing-packages" class="hanchor" ariaLabel="Anchor">#</a> </h3>
 <p>Now that you know DNS is set up correctly, you can install the required
 packages for your distro. This might take some experimenting, and
@@ -269,9 +269,9 @@ there&rsquo;s no guarantees this list is by any means perfect.</p>
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">debug</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
 </span></span></span><span class="line"><span class="cl"><span class="sd">      INSTALLING PACKAGES
-</span></span></span><span class="line"><span class="cl"><span class="sd">      Slow if package operations are required. Please wait.</span><span class="w">      
+</span></span></span><span class="line"><span class="cl"><span class="sd">      Slow if package operations are required. Please wait.</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Install necessary APT packages (Ubuntu/Debian)</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Install necessary APT packages (Ubuntu/Debian)</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">apt</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">update_cache</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w">
@@ -290,7 +290,7 @@ there&rsquo;s no guarantees this list is by any means perfect.</p>
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l">sssd_packages</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l">ansible_os_family == &#34;Debian&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Install necessary DNF packages (Enterprise Linux)</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Install necessary DNF packages (Enterprise Linux)</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">dnf</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">update_cache</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l">present</span><span class="w">
@@ -313,7 +313,7 @@ there&rsquo;s no guarantees this list is by any means perfect.</p>
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l">sssd_packages</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l">ansible_os_family == &#34;RedHat&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">SELinux booleans</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">SELinux booleans</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">seboolean</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;{{ item }}&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
@@ -334,12 +334,12 @@ skip the enroll and move on to config validation:</p>
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">failed_when</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">changed_when</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">System already enrolled</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">System already enrolled</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">debug</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
 </span></span></span><span class="line"><span class="cl"><span class="sd">      SYSTEM ALREADY ENROLLED
 </span></span></span><span class="line"><span class="cl"><span class="sd">      No enrollment attempt will be done.
-</span></span></span><span class="line"><span class="cl"><span class="sd">      Play will continue and perform config validation, if it exists.</span><span class="w">      
+</span></span></span><span class="line"><span class="cl"><span class="sd">      Play will continue and perform config validation, if it exists.</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l">ad_enrolled.rc == 0</span><span class="w">
 </span></span></span></code></pre></div><p>Config validation examples are shown later.</p>
 <h3 id="enroll-the-system">Enroll the system<a href="#enroll-the-system" class="hanchor" ariaLabel="Anchor">#</a> </h3>
@@ -361,7 +361,7 @@ the imported Ansible vault.</p>
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c">#      Use searchbase as the starting point for the search instead of the default.</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
 </span></span></span><span class="line"><span class="cl"><span class="sd">      ldapsearch -H ldap://internal.your.ad -x -D &#34;{{ credentials.ad_enrollment.user }}@internal.your.ad&#34; \
-</span></span></span><span class="line"><span class="cl"><span class="sd">      -w &#39;{{ credentials.ad_enrollment.pass }}&#39; -b &#34;OU=Linux,OU=Servers,DC=internal,DC=your,DC=ad&#34; &#34;(ou={{ tenant_id | lower }})&#34;</span><span class="w">      
+</span></span></span><span class="line"><span class="cl"><span class="sd">      -w &#39;{{ credentials.ad_enrollment.pass }}&#39; -b &#34;OU=Linux,OU=Servers,DC=internal,DC=your,DC=ad&#34; &#34;(ou={{ tenant_id | lower }})&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l">(sssd_packages is succeeded) and (ad_enrolled.rc != 0)</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># DO NOT LOG -- DO NOT COMMENT OUT IN PRODUCTION!</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># THIS COMMAND CONTAINS ENROLLMENT CREDENTIALS</span><span class="w">
@@ -369,26 +369,26 @@ the imported Ansible vault.</p>
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ignore_errors</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l">ou_exists</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">OU lookup failed</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">OU lookup failed</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">debug</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
 </span></span></span><span class="line"><span class="cl"><span class="sd">      OU LOOKUP FAILED. STDERR BELOW
-</span></span></span><span class="line"><span class="cl"><span class="sd">      {{ ou_exists.stderr }}</span><span class="w">      
+</span></span></span><span class="line"><span class="cl"><span class="sd">      {{ ou_exists.stderr }}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l">ou_exists.failed | default(false)</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">OU lookup failed, end play for host immediately.</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">OU lookup failed, end play for host immediately.</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">meta</span><span class="p">:</span><span class="w"> </span><span class="l">end_host</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l">ou_exists.failed | default(false)</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">OU lookup OK, but OU is missing</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">OU lookup OK, but OU is missing</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">debug</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
 </span></span></span><span class="line"><span class="cl"><span class="sd">      OU IS MISSING IN AD
 </span></span></span><span class="line"><span class="cl"><span class="sd">      AD query response does not contain &#39;numEntries&#39;, this indicates
-</span></span></span><span class="line"><span class="cl"><span class="sd">      the OU does not exist. We will attempt to create it!</span><span class="w">      
+</span></span></span><span class="line"><span class="cl"><span class="sd">      the OU does not exist. We will attempt to create it!</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#39;numEntries&#39; not in ou_exists.stdout | default(&#39;numEntries&#39;)&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Create OU &#39;{{ tenant_id | lower }}&#39;.</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Create OU &#39;{{ tenant_id | lower }}&#39;.</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">shell</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
 </span></span></span><span class="line"><span class="cl"><span class="sd">      ldapadd -H ldap://internal.your.ad -x -D &#34;svc_user@internal.your.ad&#34; \
@@ -396,7 +396,7 @@ the imported Ansible vault.</p>
 </span></span></span><span class="line"><span class="cl"><span class="sd">      dn: OU={{ tenant_id | lower }},OU=Linux,OU=Servers,DC=internal,DC=your,DC=ad
 </span></span></span><span class="line"><span class="cl"><span class="sd">      objectClass: organizationalUnit
 </span></span></span><span class="line"><span class="cl"><span class="sd">      ou: {{ tenant_id | lower }}
-</span></span></span><span class="line"><span class="cl"><span class="sd">      EOF</span><span class="w">      
+</span></span></span><span class="line"><span class="cl"><span class="sd">      EOF</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#39;numEntries&#39; not in ou_exists.stdout | default(&#39;numEntries&#39;)&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># DO NOT LOG -- DO NOT COMMENT OUT IN PRODUCTION!</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># THIS COMMAND CONTAINS ENROLLMENT CREDENTIALS</span><span class="w">
@@ -404,42 +404,42 @@ the imported Ansible vault.</p>
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ignore_errors</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l">ou_created</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">OU creation failed</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">OU creation failed</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">debug</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
 </span></span></span><span class="line"><span class="cl"><span class="sd">      OU CREATION FAILED. STDERR BELOW
-</span></span></span><span class="line"><span class="cl"><span class="sd">      {{ ou_created.stderr }}</span><span class="w">      
+</span></span></span><span class="line"><span class="cl"><span class="sd">      {{ ou_created.stderr }}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l">ou_created.failed | default(false)</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">OU creation failed, end play for host immediately.</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">OU creation failed, end play for host immediately.</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">meta</span><span class="p">:</span><span class="w"> </span><span class="l">end_host</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l">ou_created.failed | default(false)</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">OU created!</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">OU created!</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">debug</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
 </span></span></span><span class="line"><span class="cl"><span class="sd">      OU CREATED OK. STDOUT BELOW
-</span></span></span><span class="line"><span class="cl"><span class="sd">      {{ ou_created.stdout }}</span><span class="w">      
+</span></span></span><span class="line"><span class="cl"><span class="sd">      {{ ou_created.stdout }}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l">ou_created.succeeded | default(false)</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Pre-enroll | Cut hostname and convert to uppercase</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Pre-enroll | Cut hostname and convert to uppercase</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">set_fact</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">short_hostname</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;{{ ansible_hostname[:10] | upper }}&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l">ad_enrolled.rc != 0</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Pre-enroll | Generate 4 random alphanumeric characters and convert to uppercase</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Pre-enroll | Generate 4 random alphanumeric characters and convert to uppercase</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">set_fact</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">random_suffix</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;{{ lookup(&#39;password&#39;, &#39;/dev/null length=4 chars=ascii_letters,digits&#39;) | upper }}&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l">ad_enrolled.rc != 0</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Pre-enroll | Combine short hostname with random suffix as hostname for enroll</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Pre-enroll | Combine short hostname with random suffix as hostname for enroll</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">set_fact</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">new_hostname</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;{{ short_hostname }}-{{ random_suffix }}&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l">ad_enrolled.rc != 0</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Pre-enroll | Hostname generated</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Pre-enroll | Hostname generated</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">debug</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;System will attempt to enroll into AD as &#39;{{ new_hostname }}&#39;.&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l">ad_enrolled.rc != 0</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Ensure rdns is disabled in krb5.conf</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Ensure rdns is disabled in krb5.conf</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ini_file</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/etc/krb5.conf</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">section</span><span class="p">:</span><span class="w"> </span><span class="l">libdefaults</span><span class="w">
@@ -447,17 +447,17 @@ the imported Ansible vault.</p>
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">no_extra_spaces</span><span class="p">:</span><span class="w"> </span><span class="kc">yes</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># computer-name: random generated as 10 characters of hostname + random</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c">#           alphanumeric, so superlonghostname01 -&gt; SUPERLONGH-7EB2</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c">#           this is due to the 15 char limit in AD. note from realm</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c">#           doc: &#34;The system&#39;s FQDN will still be saved in the</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c">#           dNSHostName attribute.&#34;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># computer-ou: places the device under linux systems in a OU named as the</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c">#           tenant_id</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c">#</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># &#39;credentials&#39; comes from .ansible_vault</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># computer-name: random generated as 10 characters of hostname + random</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c">#           alphanumeric, so superlonghostname01 -&gt; SUPERLONGH-7EB2</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c">#           this is due to the 15 char limit in AD. note from realm</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c">#           doc: &#34;The system&#39;s FQDN will still be saved in the</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c">#           dNSHostName attribute.&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># computer-ou: places the device under linux systems in a OU named as the</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c">#           tenant_id</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c">#</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># &#39;credentials&#39; comes from .ansible_vault</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Enroll this device with &#39;realm join&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Enroll this device with &#39;realm join&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">shell</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
 </span></span></span><span class="line"><span class="cl"><span class="sd">      echo &#39;{{ credentials.ad_enrollment.pass }}&#39; | \
@@ -465,7 +465,7 @@ the imported Ansible vault.</p>
 </span></span></span><span class="line"><span class="cl"><span class="sd">      --computer-ou=OU={{ tenant_id | lower }},OU=Linux,OU=Servers,DC=internal,DC=your,DC=ad \
 </span></span></span><span class="line"><span class="cl"><span class="sd">      --computer-name={{ new_hostname }} \
 </span></span></span><span class="line"><span class="cl"><span class="sd">      --user={{ credentials.ad_enrollment.user }} \
-</span></span></span><span class="line"><span class="cl"><span class="sd">      internal.your.ad</span><span class="w">      
+</span></span></span><span class="line"><span class="cl"><span class="sd">      internal.your.ad</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l">(sssd_packages is succeeded) and (ad_enrolled.rc != 0)</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># DO NOT LOG -- DO NOT COMMENT OUT IN PRODUCTION!</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># THIS COMMAND CONTAINS ENROLLMENT CREDENTIALS</span><span class="w">
@@ -474,13 +474,13 @@ the imported Ansible vault.</p>
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ignore_errors</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l">realm_join</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Enroll failed, STDERR</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Enroll failed, STDERR</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">debug</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
 </span></span></span><span class="line"><span class="cl"><span class="sd">      ENROLLMENT FAILED. STDERR BELOW
 </span></span></span><span class="line"><span class="cl"><span class="sd">      &#34;{{ realm_join.stderr }}&#34;
 </span></span></span><span class="line"><span class="cl"><span class="sd">
-</span></span></span><span class="line"><span class="cl"><span class="sd">      Play will continue if sssd.conf already exists to validate config.</span><span class="w">      
+</span></span></span><span class="line"><span class="cl"><span class="sd">      Play will continue if sssd.conf already exists to validate config.</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l">realm_join.failed | default(false)</span><span class="w">
 </span></span></span></code></pre></div><h3 id="config-validation">Config validation<a href="#config-validation" class="hanchor" ariaLabel="Anchor">#</a> </h3>
 <p>If enrollment succeeded, or the system is already enrolled, we move on
@@ -495,115 +495,115 @@ think it makes sense. Here&rsquo;s my list of values to assert:</p>
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/etc/sssd/sssd.conf</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l">conf_stat</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">assert sssd.conf exists</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">assert sssd.conf exists</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">assert</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">that</span><span class="p">:</span><span class="w"> </span><span class="l">conf_stat.stat.exists</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">fail_msg</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;/etc/sssd/sssd.conf does not exist, can&#39;t perform config validation. Bailing out.&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># override_homedir: Sets the default user home directory path, with %u</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># replaced by the username.</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">set &#39;override_homedir&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># override_homedir: Sets the default user home directory path, with %u</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># replaced by the username.</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">set &#39;override_homedir&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ini_file</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;/etc/sssd/sssd.conf&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">section</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;domain/internal.your.ad&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">option</span><span class="p">:</span><span class="w"> </span><span class="l">override_homedir</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;/home/%u&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># fallback_homedir: Specifies fallback home directory if</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># override_homedir isn&#39;t used (or taken, probably)</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">set &#39;fallback_homedir&#39; (_internal_your_ad)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># fallback_homedir: Specifies fallback home directory if</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># override_homedir isn&#39;t used (or taken, probably)</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">set &#39;fallback_homedir&#39; (_internal_your_ad)</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ini_file</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;/etc/sssd/sssd.conf&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">section</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;domain/internal.your.ad&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">option</span><span class="p">:</span><span class="w"> </span><span class="l">fallback_homedir</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;/home/%u_internal_your_ad&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># ldap_user_ssh_public_key: Specifies the LDAP attribute used to store</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># SSH public keys for users.</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">set &#39;ldap_user_ssh_public_key&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># ldap_user_ssh_public_key: Specifies the LDAP attribute used to store</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># SSH public keys for users.</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">set &#39;ldap_user_ssh_public_key&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ini_file</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;/etc/sssd/sssd.conf&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">section</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;domain/internal.your.ad&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">option</span><span class="p">:</span><span class="w"> </span><span class="l">ldap_user_ssh_public_key</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;sshPublicKey&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># ldap_use_tokengroups: Enables use of Active Directory tokenGroups for</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># efficient group membership retrieval.</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">set &#39;ldap_use_tokengroups&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># ldap_use_tokengroups: Enables use of Active Directory tokenGroups for</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># efficient group membership retrieval.</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">set &#39;ldap_use_tokengroups&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ini_file</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;/etc/sssd/sssd.conf&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">section</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;domain/internal.your.ad&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">option</span><span class="p">:</span><span class="w"> </span><span class="l">ldap_use_tokengroups</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;true&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># use_fully_qualified_names: Disables the use of domain-qualified user</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># names (e.g., user@domain).</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">set &#39;use_fully_qualified_names&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># use_fully_qualified_names: Disables the use of domain-qualified user</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># names (e.g., user@domain).</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">set &#39;use_fully_qualified_names&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ini_file</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;/etc/sssd/sssd.conf&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">section</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;domain/internal.your.ad&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">option</span><span class="p">:</span><span class="w"> </span><span class="l">use_fully_qualified_names</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;false&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># ad_gpo_access_control: Disables the use of Active Directory GPO (Group</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># Policy Object) for access control.</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">set &#39;ad_gpo_access_control&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># ad_gpo_access_control: Disables the use of Active Directory GPO (Group</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># Policy Object) for access control.</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">set &#39;ad_gpo_access_control&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ini_file</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;/etc/sssd/sssd.conf&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">section</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;domain/internal.your.ad&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">option</span><span class="p">:</span><span class="w"> </span><span class="l">ad_gpo_access_control</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;disabled&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># sudo_provider: Disables SSSD&#39;s sudo integration, we set this in the</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># sudo file itself</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">set &#39;sudo_provider&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># sudo_provider: Disables SSSD&#39;s sudo integration, we set this in the</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># sudo file itself</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">set &#39;sudo_provider&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ini_file</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;/etc/sssd/sssd.conf&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">section</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;domain/internal.your.ad&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">option</span><span class="p">:</span><span class="w"> </span><span class="l">sudo_provider</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;none&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># ad_gpo_map_remote_interactive: Removes the option for mapping remote</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># interactive sessions with GPO. this crashes sssd, probably since</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># ad_gpo_access_control is disabled :)</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">ensure &#39;ad_gpo_map_remote_interactive&#39; does not exist</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># ad_gpo_map_remote_interactive: Removes the option for mapping remote</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># interactive sessions with GPO. this crashes sssd, probably since</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># ad_gpo_access_control is disabled :)</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">ensure &#39;ad_gpo_map_remote_interactive&#39; does not exist</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ini_file</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;/etc/sssd/sssd.conf&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">section</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;domain/internal.your.ad&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">option</span><span class="p">:</span><span class="w"> </span><span class="l">ad_gpo_map_remote_interactive</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l">absent</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># entry_cache_timeout: Sets the SSSD entry cache timeout to 60 seconds.</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">set &#39;entry_cache_timeout&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># entry_cache_timeout: Sets the SSSD entry cache timeout to 60 seconds.</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">set &#39;entry_cache_timeout&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ini_file</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;/etc/sssd/sssd.conf&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">section</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;domain/internal.your.ad&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">option</span><span class="p">:</span><span class="w"> </span><span class="l">entry_cache_timeout</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;60&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># subdomain_inherit: Ignores group members when inheriting</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># configurations for subdomains.</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">set &#39;subdomain_inherit&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># subdomain_inherit: Ignores group members when inheriting</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># configurations for subdomains.</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">set &#39;subdomain_inherit&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ini_file</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;/etc/sssd/sssd.conf&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">section</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;domain/internal.your.ad&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">option</span><span class="p">:</span><span class="w"> </span><span class="l">subdomain_inherit</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;ignore_group_members&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># ldap_network_timeout: Sets LDAP network timeout for connections to 10</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># seconds.</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">set &#39;ldap_network_timeout&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># ldap_network_timeout: Sets LDAP network timeout for connections to 10</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># seconds.</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">set &#39;ldap_network_timeout&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ini_file</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;/etc/sssd/sssd.conf&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">section</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;domain/internal.your.ad&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">option</span><span class="p">:</span><span class="w"> </span><span class="l">ldap_network_timeout</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;10&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># https://sssd.io/design-pages/active_directory_access_control.html</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># https://sssd.io/design-pages/active_directory_access_control.html</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># ad_access_filter: Sets LDAP filter for AD group membership to control</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># access.</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">set &#39;ad_access_filter&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># ad_access_filter: Sets LDAP filter for AD group membership to control</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># access.</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">set &#39;ad_access_filter&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ini_file</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;/etc/sssd/sssd.conf&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">section</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;domain/internal.your.ad&#39;</span><span class="w">
@@ -613,87 +613,87 @@ think it makes sense. Here&rsquo;s my list of values to assert:</p>
 </span></span></span><span class="line"><span class="cl"><span class="sd">      (memberOf:1.2.840.113556.1.4.1941:=CN=USERS_SSH_{{ tenant_id | lower }},OU=UserGroups,OU=Rules,OU=Groups,DC=internal,DC=your,DC=ad)
 </span></span></span><span class="line"><span class="cl"><span class="sd">      (memberOf:1.2.840.113556.1.4.1941:=CN=SUPERUSERS_SSH_{{ tenant_id | lower }},OU=SuperuserGroups,OU=Rules,OU=Groups,DC=internal,DC=your,DC=ad)
 </span></span></span><span class="line"><span class="cl"><span class="sd">      (memberOf:1.2.840.113556.1.4.1941:=CN=ADMINS_SSH,OU=AdminGroups,OU=Rules,OU=Groups,DC=internal,DC=your,DC=ad)
-</span></span></span><span class="line"><span class="cl"><span class="sd">      )</span><span class="w">      
+</span></span></span><span class="line"><span class="cl"><span class="sd">      )</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">set &#39;ldap_user_name&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">set &#39;ldap_user_name&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ini_file</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;/etc/sssd/sssd.conf&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">section</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;domain/internal.your.ad&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">option</span><span class="p">:</span><span class="w"> </span><span class="l">ldap_user_name</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;sAMAccountName&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">set &#39;ldap_group_name&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">set &#39;ldap_group_name&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ini_file</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;/etc/sssd/sssd.conf&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">section</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;domain/internal.your.ad&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">option</span><span class="p">:</span><span class="w"> </span><span class="l">ldap_group_name</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;sAMAccountName&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># cache_credentials: Disables caching credentials on disk.</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">set &#39;cache_credentials&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># cache_credentials: Disables caching credentials on disk.</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">set &#39;cache_credentials&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ini_file</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;/etc/sssd/sssd.conf&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">section</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;domain/internal.your.ad&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">option</span><span class="p">:</span><span class="w"> </span><span class="l">cache_credentials</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;false&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># memcache_timeout: Sets memory cache timeout for NSS to 60 seconds.</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">set &#39;memcache_timeout&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># memcache_timeout: Sets memory cache timeout for NSS to 60 seconds.</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">set &#39;memcache_timeout&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ini_file</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;/etc/sssd/sssd.conf&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">section</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;nss&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">option</span><span class="p">:</span><span class="w"> </span><span class="l">memcache_timeout</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;60&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># If the OU has been created by us (using ldapadd), which it probably</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># has, by default users will be denied because of some missing</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># attributes in AD that I have no idea how to create or if they are</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># even necessary. The error is:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># If the OU has been created by us (using ldapadd), which it probably</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># has, by default users will be denied because of some missing</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># attributes in AD that I have no idea how to create or if they are</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># even necessary. The error is:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># Group Policy Container with DN (...)</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># is unreadable or has unreadable or missing attributes. In order to</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># fix this make sure that this AD object has following attributes</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># readable: nTSecurityDescriptor, cn, gPCFileSysPath,</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># gPCMachineExtensionNames, gPCFunctionalityVersion, flags.</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># Group Policy Container with DN (...)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># is unreadable or has unreadable or missing attributes. In order to</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># fix this make sure that this AD object has following attributes</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># readable: nTSecurityDescriptor, cn, gPCFileSysPath,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># gPCMachineExtensionNames, gPCFunctionalityVersion, flags.</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># Probably this has something to do with permissions on the enrolled</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># system object itself being different due to how the OU was created</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># (from Linux CLI) -- the assumption is we don&#39;t really care about</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># system permissions, because access is decided by &#39;ad_access_filter&#39;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># which looks for user group membership.</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># Probably this has something to do with permissions on the enrolled</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># system object itself being different due to how the OU was created</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># (from Linux CLI) -- the assumption is we don&#39;t really care about</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># system permissions, because access is decided by &#39;ad_access_filter&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># which looks for user group membership.</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># This issue is bypassed by setting &#39;ad_gpo_ignore_unreadable&#39;. Doc:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c">#</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c">#     &#34;Normally when some group policy containers (AD object) of</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c">#     applicable group policy objects are not readable by SSSD then</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c">#     users are denied access. This option allows to ignore group</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c">#     policy containers and with them associated policies if their</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c">#     attributes in group policy containers are not readable for SSSD.&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># This issue is bypassed by setting &#39;ad_gpo_ignore_unreadable&#39;. Doc:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c">#</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c">#     &#34;Normally when some group policy containers (AD object) of</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c">#     applicable group policy objects are not readable by SSSD then</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c">#     users are denied access. This option allows to ignore group</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c">#     policy containers and with them associated policies if their</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c">#     attributes in group policy containers are not readable for SSSD.&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">set &#39;ad_gpo_ignore_unreadable&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">set &#39;ad_gpo_ignore_unreadable&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ini_file</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;/etc/sssd/sssd.conf&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">section</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;domain/internal.your.ad&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">option</span><span class="p">:</span><span class="w"> </span><span class="l">ad_gpo_ignore_unreadable</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;true&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># full_name_format: Sets the format of full user names.</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">set &#39;full_name_format&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># full_name_format: Sets the format of full user names.</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">set &#39;full_name_format&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ini_file</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;/etc/sssd/sssd.conf&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">section</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;sssd&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">option</span><span class="p">:</span><span class="w"> </span><span class="l">full_name_format</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;%1$s&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># override_space: Replaces spaces with dashes in groups for example</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">set &#39;override_space&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># override_space: Replaces spaces with dashes in groups for example</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">set &#39;override_space&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ini_file</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;/etc/sssd/sssd.conf&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">section</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;sssd&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">option</span><span class="p">:</span><span class="w"> </span><span class="l">override_space</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;-&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">set &#39;services&#39; to EMPTY (socket activated on Debian/Ubuntu)</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">set &#39;services&#39; to EMPTY (socket activated on Debian/Ubuntu)</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ini_file</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;/etc/sssd/sssd.conf&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">section</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;sssd&#39;</span><span class="w">
@@ -701,7 +701,7 @@ think it makes sense. Here&rsquo;s my list of values to assert:</p>
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l">ansible_os_family == &#34;Debian&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">set &#39;services&#39; (Enterprise Linux)</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">set &#39;services&#39; (Enterprise Linux)</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ini_file</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;/etc/sssd/sssd.conf&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">section</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;sssd&#39;</span><span class="w">
@@ -709,11 +709,11 @@ think it makes sense. Here&rsquo;s my list of values to assert:</p>
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;nss, pam, ssh&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l">ansible_os_family == &#34;RedHat&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Restore SELinux context for SSSD configuration</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Restore SELinux context for SSSD configuration</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l">restorecon -v /etc/sssd/sssd.conf</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l">ansible_os_family == &#34;RedHat&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">restarting sssd</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">restarting sssd</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">systemd</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">sssd</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l">restarted</span><span class="w">
@@ -724,21 +724,21 @@ sshd configuration you already have:</p>
 </span></span></span><span class="line"><span class="cl"><span class="x"># ad-enroll: </span><span class="cp">{{</span> <span class="nv">ad_enrolled</span> <span class="cp">}}</span><span class="x"> -- use PAM, allow sssd to validate pubkeys
 </span></span></span><span class="line"><span class="cl"><span class="x">UsePAM yes
 </span></span></span><span class="line"><span class="cl"><span class="x">AuthorizedKeysCommand /usr/bin/sss_ssh_authorizedkeys
-</span></span></span><span class="line"><span class="cl"><span class="x"></span><span class="cp">{%</span> <span class="k">if</span> <span class="nv">ansible_os_family</span> <span class="o">==</span> <span class="s2">&#34;Debian&#34;</span> <span class="cp">%}</span><span class="x">
+</span></span></span><span class="line"><span class="cl"><span class="cp">{%</span> <span class="k">if</span> <span class="nv">ansible_os_family</span> <span class="o">==</span> <span class="s2">&#34;Debian&#34;</span> <span class="cp">%}</span><span class="x">
 </span></span></span><span class="line"><span class="cl"><span class="x">AuthorizedKeysCommandUser root
-</span></span></span><span class="line"><span class="cl"><span class="x"></span><span class="cp">{%</span> <span class="k">elif</span> <span class="nv">ansible_os_family</span> <span class="o">==</span> <span class="s2">&#34;RedHat&#34;</span> <span class="cp">%}</span><span class="x">
+</span></span></span><span class="line"><span class="cl"><span class="cp">{%</span> <span class="k">elif</span> <span class="nv">ansible_os_family</span> <span class="o">==</span> <span class="s2">&#34;RedHat&#34;</span> <span class="cp">%}</span><span class="x">
 </span></span></span><span class="line"><span class="cl"><span class="x">AuthorizedKeysCommandUser nobody
-</span></span></span><span class="line"><span class="cl"><span class="x"></span><span class="cp">{%</span> <span class="k">endif</span> <span class="cp">%}</span><span class="x">
-</span></span></span><span class="line"><span class="cl"><span class="x"></span><span class="cp">{%</span> <span class="k">else</span> <span class="cp">%}</span><span class="x">
+</span></span></span><span class="line"><span class="cl"><span class="cp">{%</span> <span class="k">endif</span> <span class="cp">%}</span><span class="x">
+</span></span></span><span class="line"><span class="cl"><span class="cp">{%</span> <span class="k">else</span> <span class="cp">%}</span><span class="x">
 </span></span></span><span class="line"><span class="cl"><span class="x"># ad_enroll: </span><span class="cp">{{</span> <span class="nv">ad_enrolled</span> <span class="cp">}}</span><span class="x">
 </span></span></span><span class="line"><span class="cl"><span class="x">UsePAM no
-</span></span></span><span class="line"><span class="cl"><span class="x"></span><span class="cp">{%</span> <span class="k">endif</span> <span class="cp">%}</span><span class="x">
+</span></span></span><span class="line"><span class="cl"><span class="cp">{%</span> <span class="k">endif</span> <span class="cp">%}</span><span class="x">
 </span></span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># configure sshd</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Configure SSH daemon</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Configure SSH daemon</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ansible.builtin.import_tasks</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;tasks/configure-sshd.yml&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># these templates currently hold no logic, but they might in the future.</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">push pam.d/sshd template (Ubuntu/Debian)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># these templates currently hold no logic, but they might in the future.</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">push pam.d/sshd template (Ubuntu/Debian)</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">template</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">src</span><span class="p">:</span><span class="w"> </span><span class="l">pam_d_sshd_ubuntu.j2</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">dest</span><span class="p">:</span><span class="w"> </span><span class="l">/etc/pam.d/sshd</span><span class="w">
@@ -747,7 +747,7 @@ sshd configuration you already have:</p>
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">group</span><span class="p">:</span><span class="w"> </span><span class="l">root</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l">ansible_os_family == &#34;Debian&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">push pam.d/sshd template (Enterprise Linux)</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">push pam.d/sshd template (Enterprise Linux)</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">template</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">src</span><span class="p">:</span><span class="w"> </span><span class="l">pam_d_sshd_rocky.j2</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">dest</span><span class="p">:</span><span class="w"> </span><span class="l">/etc/pam.d/sshd</span><span class="w">
@@ -852,12 +852,12 @@ this:</p>
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">copy</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
 </span></span></span><span class="line"><span class="cl"><span class="sd">      %superusers_ssh_{{ tenant_id | lower }} ALL=(ALL) NOPASSWD: ALL
-</span></span></span><span class="line"><span class="cl"><span class="sd">      %admins_ssh ALL=(ALL) NOPASSWD: ALL</span><span class="w">      
+</span></span></span><span class="line"><span class="cl"><span class="sd">      %admins_ssh ALL=(ALL) NOPASSWD: ALL</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">dest</span><span class="p">:</span><span class="w"> </span><span class="l">/etc/sudoers.d/internal_your_ad</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;0440&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># not sure if this is necessary, but it won&#39;t hurt</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Restore SELinux context for sshd, pam.d, sudo</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># not sure if this is necessary, but it won&#39;t hurt</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Restore SELinux context for sshd, pam.d, sudo</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l">restorecon -v {{ item }}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">loop</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">/etc/ssh/sshd_config</span><span class="w">
@@ -865,7 +865,7 @@ this:</p>
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">/etc/sudoers.d/internal_your_ad</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l">ansible_os_family == &#34;RedHat&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">restarting ssh daemon</span><span class="w">
+</span></span></span><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">restarting ssh daemon</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">systemd</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">sshd</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l">restarted</span><span class="w">

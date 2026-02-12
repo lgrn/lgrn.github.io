@@ -219,8 +219,8 @@ created with it, known to ZFS as <code>default/virtual-machines/freebsd</code>.<
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">incus config edit freebsd
 </span></span></code></pre></div><p>Some suggestions on what to add:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># cpu and memory limits</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">config</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="l">(...)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">config</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="l">(...)</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">security.secureboot</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;false&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">limits.cpu</span><span class="p">:</span><span class="w"> </span><span class="m">2</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">limits.memory</span><span class="p">:</span><span class="w"> </span><span class="l">2GB</span><span class="w">
@@ -325,11 +325,11 @@ want to use when running init, for example:</p>
 </span></span><span class="line"><span class="cl">incus init freebsd-image cheese-burger --vm &lt; freebsd.yml
 </span></span></code></pre></div><p>Where the file contains:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">architecture</span><span class="p">:</span><span class="w"> </span><span class="l">x86_64</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">config</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">config</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">limits.cpu</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;2&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">limits.memory</span><span class="p">:</span><span class="w"> </span><span class="l">2GB</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">security.secureboot</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;false&#39;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">devices</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">devices</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">root</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">pool</span><span class="p">:</span><span class="w"> </span><span class="l">default</span><span class="w">
@@ -339,7 +339,7 @@ want to use when running init, for example:</p>
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">vtnet0</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">network</span><span class="p">:</span><span class="w"> </span><span class="l">macvlan</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">nic</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">profiles</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">profiles</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
 </span></span></span></code></pre></div><p>The first init may be a bit slow, but they&rsquo;ll be much faster once the
 initial move into the data pool is completed, which means you can also
 find it by its fingerprint:</p>

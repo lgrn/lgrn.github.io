@@ -223,11 +223,11 @@ it. &ldquo;Network&rdquo; under the developer console (F12) in Firefox is helpfu
 for this, and can export <code>POST</code> requests as curl which is convenient. It
 might look something like this:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">curl <span class="s2">&#34;</span><span class="nv">$URL</span><span class="s2">&#34;</span> -X POST -H <span class="s1">&#39;Accept: */*&#39;</span> -H <span class="s1">&#39;Accept-Language: en-US,en;q=0.5&#39;</span> <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>-H <span class="s1">&#39;Accept-Encoding: gzip, deflate, br&#39;</span> <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>-H <span class="s1">&#39;Referer: https://www.example.com/en/online-booking/Customer/EmailLogin?context=default&#39;</span> <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>-H <span class="s1">&#39;Content-Type: application/json&#39;</span> -H <span class="s1">&#39;Origin: https://www.example.com&#39;</span> <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>--cookie-jar <span class="s1">&#39;/tmp/cookiejar&#39;</span> <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>--data-raw <span class="s1">&#39;{&#34;Email&#34;:&#34;foo@foo.foo&#34;,&#34;Password&#34;:&#34;f00b4r&#34;,&#34;PersistentLogin&#34;:true,&#34;IsModal&#34;:false}&#39;</span>
+</span></span></span><span class="line"><span class="cl">-H <span class="s1">&#39;Accept-Encoding: gzip, deflate, br&#39;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">-H <span class="s1">&#39;Referer: https://www.example.com/en/online-booking/Customer/EmailLogin?context=default&#39;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">-H <span class="s1">&#39;Content-Type: application/json&#39;</span> -H <span class="s1">&#39;Origin: https://www.example.com&#39;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">--cookie-jar <span class="s1">&#39;/tmp/cookiejar&#39;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">--data-raw <span class="s1">&#39;{&#34;Email&#34;:&#34;foo@foo.foo&#34;,&#34;Password&#34;:&#34;f00b4r&#34;,&#34;PersistentLogin&#34;:true,&#34;IsModal&#34;:false}&#39;</span>
 </span></span></code></pre></div><p>If there&rsquo;s multiple steps required, like also accepting terms of usage
 after a login, the <code>--cookie-jar</code> flag is crucial here to allow the use
 of <code>--cookie</code> in your next command:</p>

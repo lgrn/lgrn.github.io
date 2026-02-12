@@ -267,7 +267,7 @@ suggest that before doing anything else, adding the following records to
 the parent DNS, using whatever will be the external IP of acme-dns, is a
 good idea:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-dns" data-lang="dns"><span class="line"><span class="cl"><span class="nc">acme</span><span class="w">    </span><span class="k">A</span><span class="w">   </span><span class="mi">1.2.3.4</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nc">acme</span><span class="w">    </span><span class="k">NS</span><span class="w">  </span><span class="py">acme.example.org.</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nc">acme</span><span class="w">    </span><span class="k">NS</span><span class="w">  </span><span class="py">acme.example.org.</span><span class="w">
 </span></span></span></code></pre></div><p>In human language:</p>
 <ul>
 <li><code>A</code>: The IP of <code>acme.example.org</code> is <code>1.2.3.4</code></li>
@@ -337,7 +337,7 @@ prefer.</p>
 put it) pointing to the config file to use with something like <code>-c /root/config.cfg</code>.</p>
 <p>On Alpine for example <code>/etc/init.d/acme-dns</code> might look like this:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="cp">#!/sbin/openrc-run
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="nv">command</span><span class="o">=</span><span class="s2">&#34;/usr/bin/acme-dns&#34;</span>
+</span></span></span><span class="line"><span class="cl"><span class="nv">command</span><span class="o">=</span><span class="s2">&#34;/usr/bin/acme-dns&#34;</span>
 </span></span><span class="line"><span class="cl"><span class="nv">command_args</span><span class="o">=</span><span class="s2">&#34;-c /root/config.cfg&#34;</span>
 </span></span><span class="line"><span class="cl"><span class="nv">command_background</span><span class="o">=</span><span class="s2">&#34;yes&#34;</span>
 </span></span><span class="line"><span class="cl"><span class="nv">output_log</span><span class="o">=</span><span class="s2">&#34;/root/acmedns.log&#34;</span>
@@ -367,8 +367,8 @@ purpose of understanding what&rsquo;s going on, we will be doing it manually.</p
 <p>Simply send a <code>POST</code> request to the <code>/register</code> endpoint, optionally
 with an IP restriction on future requests for these credentials.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">curl -X POST <span class="s2">&#34;https://acme.example.org/register&#34;</span> <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>     -H <span class="s2">&#34;Content-Type: application/json&#34;</span> <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>     -d <span class="s1">&#39;{
+</span></span></span><span class="line"><span class="cl">     -H <span class="s2">&#34;Content-Type: application/json&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">     -d <span class="s1">&#39;{
 </span></span></span><span class="line"><span class="cl"><span class="s1">           &#34;allowfrom&#34;: [
 </span></span></span><span class="line"><span class="cl"><span class="s1">             &#34;10.1.1.0/24&#34;
 </span></span></span><span class="line"><span class="cl"><span class="s1">           ]
@@ -445,9 +445,9 @@ certificate renewal.</li>
 </ul>
 <p>Nginx example from the acme.sh README:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">acme.sh --install-cert -d example.com <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>--key-file       /path/to/keyfile/in/nginx/key.pem  <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>--fullchain-file /path/to/fullchain/nginx/cert.pem <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>--reloadcmd      <span class="s2">&#34;service nginx force-reload&#34;</span>
+</span></span></span><span class="line"><span class="cl">--key-file       /path/to/keyfile/in/nginx/key.pem  <span class="se">\
+</span></span></span><span class="line"><span class="cl">--fullchain-file /path/to/fullchain/nginx/cert.pem <span class="se">\
+</span></span></span><span class="line"><span class="cl">--reloadcmd      <span class="s2">&#34;service nginx force-reload&#34;</span>
 </span></span></code></pre></div><p>There are of course other clients than acme.sh supporting acme-dns. From
 their own README, some examples are:</p>
 <ul>
