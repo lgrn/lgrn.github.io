@@ -1,152 +1,164 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Linux on agren.cc</title>
-    <link>https://agren.cc/tags/linux/</link>
-    <description>Recent content in Linux on agren.cc</description>
-    <generator>Hugo</generator>
-    <language>en-us</language>
-    <lastBuildDate>Wed, 11 Feb 2026 21:00:00 +0200</lastBuildDate>
-    <atom:link href="https://agren.cc/tags/linux/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Re-compressing ZFS datasets used by incus</title>
-      <link>https://agren.cc/p/zfs-recompression/</link>
-      <pubDate>Wed, 11 Feb 2026 21:00:00 +0200</pubDate>
-      <guid>https://agren.cc/p/zfs-recompression/</guid>
-      <description>&lt;p&gt;If you have an existing ZFS dataset with no compression, enabling it will not&#xA;compress existing data. That makes sense if you think about it, but how can we&#xA;make it happen if we want to?&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Sandboxing Linux applications with firejail</title>
-      <link>https://agren.cc/p/sandbox-app/</link>
-      <pubDate>Sun, 14 Sep 2025 22:00:00 +0200</pubDate>
-      <guid>https://agren.cc/p/sandbox-app/</guid>
-      <description>&lt;p&gt;If you have an application that you know should never need to access&#xA;anything outside its own folder, sandboxing with firejail is both easy&#xA;and a useful way to increase your security posture.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Alpine Linux VM cloud images on FreeBSD</title>
-      <link>https://agren.cc/p/alpine-on-bhyve/</link>
-      <pubDate>Thu, 31 Jul 2025 12:00:00 +0200</pubDate>
-      <guid>https://agren.cc/p/alpine-on-bhyve/</guid>
-      <description>&lt;p&gt;You can get almost anything running on most hypervisors if you&amp;rsquo;re OK&#xA;with mounting an ISO and running through an installation, but VM cloud&#xA;images are essential for repeat deployments, so I wanted to explore&#xA;what the support is like on FreeBSD. Turns out, it&amp;rsquo;s not terrible.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Installing the ruTorrent web UI on Debian</title>
-      <link>https://agren.cc/p/rutorrent/</link>
-      <pubDate>Sun, 27 Jul 2025 12:00:00 +0200</pubDate>
-      <guid>https://agren.cc/p/rutorrent/</guid>
-      <description>&lt;p&gt;ruTorrent is a popular web interface for the rtorrent client, here&amp;rsquo;s how&#xA;to set it up with lighttpd on Debian.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Enrolling Linux systems into Active Directory with SSSD</title>
-      <link>https://agren.cc/p/ad-enroll/</link>
-      <pubDate>Thu, 10 Jul 2025 21:00:00 +0200</pubDate>
-      <guid>https://agren.cc/p/ad-enroll/</guid>
-      <description>&lt;p&gt;If you already have Active Directory in your environment, it might make&#xA;sense to use that directly for SSH authentication, here&amp;rsquo;s an example of&#xA;how it can be done.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Umami analytics with bun instead of npm</title>
-      <link>https://agren.cc/p/umami-bun/</link>
-      <pubDate>Sun, 02 Mar 2025 11:00:00 +0200</pubDate>
-      <guid>https://agren.cc/p/umami-bun/</guid>
-      <description>&lt;p&gt;Node.js and &lt;code&gt;npm&lt;/code&gt; has been the standard for a long time when it comes to&#xA;running web applications written in server-side javascript. Here&amp;rsquo;s how&#xA;to set up the Umami analytics application with Bun instead.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Making tailscaled dependable for sshd and other services</title>
-      <link>https://agren.cc/p/systemd-tailscale/</link>
-      <pubDate>Sat, 01 Mar 2025 09:45:00 +0200</pubDate>
-      <guid>https://agren.cc/p/systemd-tailscale/</guid>
-      <description>&lt;p&gt;If you use Tailscale on your server, you may have services that should&#xA;only listen on that IP. Unfortunately, the tailscaled service often goes&#xA;active before it&amp;rsquo;s actually done, breaking dependencies: here&amp;rsquo;s how to&#xA;fix it.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Using and configuring WeeChat, making IRC mostly painless</title>
-      <link>https://agren.cc/p/using-weechat/</link>
-      <pubDate>Sat, 18 Jan 2025 12:00:00 +0200</pubDate>
-      <guid>https://agren.cc/p/using-weechat/</guid>
-      <description>&lt;p&gt;There&amp;rsquo;s a simplicity to IRC compared to most &amp;ldquo;modern&amp;rdquo; alternatives that&#xA;is easy to love. This article is about how to set up the basics of&#xA;the WeeChat IRC client.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Flatcar Linux VM under Incus on Debian</title>
-      <link>https://agren.cc/p/flatcar-on-incus/</link>
-      <pubDate>Mon, 09 Dec 2024 15:01:00 +0200</pubDate>
-      <guid>https://agren.cc/p/flatcar-on-incus/</guid>
-      <description>&lt;p&gt;Flatcar Linux is a fork of the now defunct CoreOS, specifically designed&#xA;to run container workloads. It has an immutable root file system and&#xA;automatic updates, and here&amp;rsquo;s how you can run it as a VM under Incus.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>FreeBSD VM under Incus on Debian</title>
-      <link>https://agren.cc/p/freebsd-vm-incus/</link>
-      <pubDate>Sun, 24 Nov 2024 11:45:00 +0200</pubDate>
-      <guid>https://agren.cc/p/freebsd-vm-incus/</guid>
-      <description>&lt;p&gt;Incus helps you manage both containers (LXC) and virtual machines&#xA;(QEMU), and while many images come prepared, FreeBSD is not one of them:&#xA;here&amp;rsquo;s how to set it up.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Roundcube with FrankenPHP on Debian</title>
-      <link>https://agren.cc/p/frankenphp/</link>
-      <pubDate>Sat, 09 Nov 2024 16:00:00 +0100</pubDate>
-      <guid>https://agren.cc/p/frankenphp/</guid>
-      <description>&lt;p&gt;FrankenPHP is a &amp;ldquo;modern application server for PHP built on top of the&#xA;Caddy web server&amp;rdquo;, which in its simplest form lets you serve PHP apps&#xA;without the nginx/apache config salad you may be used to. Here&amp;rsquo;s how to&#xA;set it up as a service on Debian.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Deploying FreeBSD on VMware</title>
-      <link>https://agren.cc/p/freebsd-on-vmware/</link>
-      <pubDate>Mon, 23 Sep 2024 11:45:00 +0200</pubDate>
-      <guid>https://agren.cc/p/freebsd-on-vmware/</guid>
-      <description>&lt;p&gt;This post is about multiple components involved in deploying FreeBSD to&#xA;a VMware environment. Since there are many moving parts this may also be&#xA;interesting in general to anyone doing &amp;ldquo;infrastructure as code&amp;rdquo; and&#xA;cloud deployments, the process is quite similar for Linux.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Using signed-by in Debian repository configuration</title>
-      <link>https://agren.cc/p/trusted-gpg/</link>
-      <pubDate>Sun, 05 May 2024 17:45:00 +0200</pubDate>
-      <guid>https://agren.cc/p/trusted-gpg/</guid>
-      <description>&lt;p&gt;On newer versions of Debian and Ubuntu, the way repos are authenticated&#xA;through public keys has changed somewhat. Here&amp;rsquo;s what I&amp;rsquo;ve found.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>LetsEncrypt DNS wildcard certificates with HAProxy</title>
-      <link>https://agren.cc/p/certbot-with-haproxy/</link>
-      <pubDate>Tue, 12 Mar 2024 12:00:00 +0200</pubDate>
-      <guid>https://agren.cc/p/certbot-with-haproxy/</guid>
-      <description>&lt;p&gt;Wildcard certificates are really useful, especially in cases where you&#xA;are using a load balancer like HAProxy that targets multiple backends&#xA;serving separate subdomains.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Using curl to pass videos to VLC on Apple TV</title>
-      <link>https://agren.cc/p/curl-to-vlc/</link>
-      <pubDate>Wed, 13 Sep 2023 19:08:00 +0200</pubDate>
-      <guid>https://agren.cc/p/curl-to-vlc/</guid>
-      <description>&lt;p&gt;VLC has always been a great piece of software, but one place where is&#xA;really shines is on iOS/tvOS since it allows you to play pretty much any&#xA;video file, and you can send that file over curl.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>MAC spoofing on Wi-Fi with captive portals</title>
-      <link>https://agren.cc/p/mac-spoofing-captive-wifi/</link>
-      <pubDate>Sun, 25 Dec 2022 14:00:00 +0200</pubDate>
-      <guid>https://agren.cc/p/mac-spoofing-captive-wifi/</guid>
-      <description>&lt;p&gt;Not all devices are capable of handling &lt;a href=&#34;https://en.wikipedia.org/wiki/Captive_portal&#34;&gt;captive&#xA;portals&lt;/a&gt;. Problematic&#xA;devices usually include older hardware with outdated browsers, such as&#xA;&amp;ldquo;smart&amp;rdquo; TVs, gaming consoles and the like.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Manual disk encryption on Ubuntu</title>
-      <link>https://agren.cc/p/manual-disk-encryption/</link>
-      <pubDate>Sat, 03 Dec 2022 15:00:00 +0200</pubDate>
-      <guid>https://agren.cc/p/manual-disk-encryption/</guid>
-      <description>&lt;p&gt;Ubuntu makes it very easy to set up full disk encryption, but it&#xA;requires you to wipe the entire disk if you want the wizard to do it for&#xA;you, so this is how you can set it up manually.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Encrypted LUKS file container</title>
-      <link>https://agren.cc/p/luks-file/</link>
-      <pubDate>Fri, 28 Oct 2022 15:59:51 +0200</pubDate>
-      <guid>https://agren.cc/p/luks-file/</guid>
-      <description>&lt;p&gt;While &lt;a href=&#34;https://en.wikipedia.org/wiki/Linux_Unified_Key_Setup&#34;&gt;Linux Unified Key Setup&lt;/a&gt; — &lt;code&gt;LUKS&lt;/code&gt; — is mostly used to encrypt entire disks under Linux, it can also be used to easily create an encrypted file container. This can be used as an alternative to encrypting something like a &lt;code&gt;.tar.gz&lt;/code&gt; file directly, and will be easier to mount and read, without having to write decrypted data to disk.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Linux Sysadmin Scratchpad</title>
-      <link>https://agren.cc/p/scratchpad/</link>
-      <pubDate>Sat, 24 Sep 2022 12:51:00 +0200</pubDate>
-      <guid>https://agren.cc/p/scratchpad/</guid>
-      <description>&lt;p&gt;This page is a collection of useful commands or one-liners collected&#xA;through the years. They are sorted in general categories, but I&amp;rsquo;ve&#xA;attempted to describe them as well as I can so hopefully CTRL+F will&#xA;work decently if you know what you&amp;rsquo;re looking for.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>fail2ban on EL8</title>
-      <link>https://agren.cc/p/fail2ban-on-el8/</link>
-      <pubDate>Fri, 08 Oct 2021 15:30:51 +0200</pubDate>
-      <guid>https://agren.cc/p/fail2ban-on-el8/</guid>
-      <description>&lt;p&gt;fail2ban is commonly used to take a certain action, such as automatically blocking an IP, after repeated authentication failures or other generally bad behavior against applications, as detected by regex matching against log output.&lt;/p&gt;</description>
-    </item>
-  </channel>
+	<channel>
+		<title>Linux on agren.cc</title>
+		<link>https://agren.cc/tags/linux/</link>
+		<description>Recent content in Linux on agren.cc</description>
+		<generator>Hugo</generator>
+		<language>en-us</language>
+		
+		
+		
+		
+			<lastBuildDate>Fri, 20 Nov 2026 22:01:00 +0200</lastBuildDate>
+		
+			<atom:link href="https://agren.cc/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+			<item>
+				<title>Migrating VM from Incus to Proxmox (QCOW2)</title>
+				<link>https://agren.cc/p/incus-to-qcow-prox/</link>
+				<pubDate>Fri, 20 Nov 2026 22:01:00 +0200</pubDate>
+				<guid>https://agren.cc/p/incus-to-qcow-prox/</guid>
+				<description>&lt;p&gt;Migrating a VM from Incus to Proxmox is relatively easy, this post will detail how a block device is exported to a QCOW2 file and attached to a VM.&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>Re-compressing ZFS datasets used by incus</title>
+				<link>https://agren.cc/p/zfs-recompression/</link>
+				<pubDate>Wed, 11 Feb 2026 21:00:00 +0200</pubDate>
+				<guid>https://agren.cc/p/zfs-recompression/</guid>
+				<description>&lt;p&gt;If you have an existing ZFS dataset with no compression, enabling it will not&#xA;compress existing data. That makes sense if you think about it, but how can we&#xA;make it happen if we want to?&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>Sandboxing Linux applications with firejail</title>
+				<link>https://agren.cc/p/sandbox-app/</link>
+				<pubDate>Sun, 14 Sep 2025 22:00:00 +0200</pubDate>
+				<guid>https://agren.cc/p/sandbox-app/</guid>
+				<description>&lt;p&gt;If you have an application that you know should never need to access&#xA;anything outside its own folder, sandboxing with firejail is both easy&#xA;and a useful way to increase your security posture.&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>Alpine Linux VM cloud images on FreeBSD</title>
+				<link>https://agren.cc/p/alpine-on-bhyve/</link>
+				<pubDate>Thu, 31 Jul 2025 12:00:00 +0200</pubDate>
+				<guid>https://agren.cc/p/alpine-on-bhyve/</guid>
+				<description>&lt;p&gt;You can get almost anything running on most hypervisors if you&amp;rsquo;re OK&#xA;with mounting an ISO and running through an installation, but VM cloud&#xA;images are essential for repeat deployments, so I wanted to explore&#xA;what the support is like on FreeBSD. Turns out, it&amp;rsquo;s not terrible.&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>Installing the ruTorrent web UI on Debian</title>
+				<link>https://agren.cc/p/rutorrent/</link>
+				<pubDate>Sun, 27 Jul 2025 12:00:00 +0200</pubDate>
+				<guid>https://agren.cc/p/rutorrent/</guid>
+				<description>&lt;p&gt;ruTorrent is a popular web interface for the rtorrent client, here&amp;rsquo;s how&#xA;to set it up with lighttpd on Debian.&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>Enrolling Linux systems into Active Directory with SSSD</title>
+				<link>https://agren.cc/p/ad-enroll/</link>
+				<pubDate>Thu, 10 Jul 2025 21:00:00 +0200</pubDate>
+				<guid>https://agren.cc/p/ad-enroll/</guid>
+				<description>&lt;p&gt;If you already have Active Directory in your environment, it might make&#xA;sense to use that directly for SSH authentication, here&amp;rsquo;s an example of&#xA;how it can be done.&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>Umami analytics with bun instead of npm</title>
+				<link>https://agren.cc/p/umami-bun/</link>
+				<pubDate>Sun, 02 Mar 2025 11:00:00 +0200</pubDate>
+				<guid>https://agren.cc/p/umami-bun/</guid>
+				<description>&lt;p&gt;Node.js and &lt;code&gt;npm&lt;/code&gt; has been the standard for a long time when it comes to&#xA;running web applications written in server-side javascript. Here&amp;rsquo;s how&#xA;to set up the Umami analytics application with Bun instead.&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>Making tailscaled dependable for sshd and other services</title>
+				<link>https://agren.cc/p/systemd-tailscale/</link>
+				<pubDate>Sat, 01 Mar 2025 09:45:00 +0200</pubDate>
+				<guid>https://agren.cc/p/systemd-tailscale/</guid>
+				<description>&lt;p&gt;If you use Tailscale on your server, you may have services that should&#xA;only listen on that IP. Unfortunately, the tailscaled service often goes&#xA;active before it&amp;rsquo;s actually done, breaking dependencies: here&amp;rsquo;s how to&#xA;fix it.&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>Using and configuring WeeChat, making IRC mostly painless</title>
+				<link>https://agren.cc/p/using-weechat/</link>
+				<pubDate>Sat, 18 Jan 2025 12:00:00 +0200</pubDate>
+				<guid>https://agren.cc/p/using-weechat/</guid>
+				<description>&lt;p&gt;There&amp;rsquo;s a simplicity to IRC compared to most &amp;ldquo;modern&amp;rdquo; alternatives that&#xA;is easy to love. This article is about how to set up the basics of&#xA;the WeeChat IRC client.&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>Flatcar Linux VM under Incus on Debian</title>
+				<link>https://agren.cc/p/flatcar-on-incus/</link>
+				<pubDate>Mon, 09 Dec 2024 15:01:00 +0200</pubDate>
+				<guid>https://agren.cc/p/flatcar-on-incus/</guid>
+				<description>&lt;p&gt;Flatcar Linux is a fork of the now defunct CoreOS, specifically designed&#xA;to run container workloads. It has an immutable root file system and&#xA;automatic updates, and here&amp;rsquo;s how you can run it as a VM under Incus.&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>FreeBSD VM under Incus on Debian</title>
+				<link>https://agren.cc/p/freebsd-vm-incus/</link>
+				<pubDate>Sun, 24 Nov 2024 11:45:00 +0200</pubDate>
+				<guid>https://agren.cc/p/freebsd-vm-incus/</guid>
+				<description>&lt;p&gt;Incus helps you manage both containers (LXC) and virtual machines&#xA;(QEMU), and while many images come prepared, FreeBSD is not one of them:&#xA;here&amp;rsquo;s how to set it up.&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>Roundcube with FrankenPHP on Debian</title>
+				<link>https://agren.cc/p/frankenphp/</link>
+				<pubDate>Sat, 09 Nov 2024 16:00:00 +0100</pubDate>
+				<guid>https://agren.cc/p/frankenphp/</guid>
+				<description>&lt;p&gt;FrankenPHP is a &amp;ldquo;modern application server for PHP built on top of the&#xA;Caddy web server&amp;rdquo;, which in its simplest form lets you serve PHP apps&#xA;without the nginx/apache config salad you may be used to. Here&amp;rsquo;s how to&#xA;set it up as a service on Debian.&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>Deploying FreeBSD on VMware</title>
+				<link>https://agren.cc/p/freebsd-on-vmware/</link>
+				<pubDate>Mon, 23 Sep 2024 11:45:00 +0200</pubDate>
+				<guid>https://agren.cc/p/freebsd-on-vmware/</guid>
+				<description>&lt;p&gt;This post is about multiple components involved in deploying FreeBSD to&#xA;a VMware environment. Since there are many moving parts this may also be&#xA;interesting in general to anyone doing &amp;ldquo;infrastructure as code&amp;rdquo; and&#xA;cloud deployments, the process is quite similar for Linux.&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>Using signed-by in Debian repository configuration</title>
+				<link>https://agren.cc/p/trusted-gpg/</link>
+				<pubDate>Sun, 05 May 2024 17:45:00 +0200</pubDate>
+				<guid>https://agren.cc/p/trusted-gpg/</guid>
+				<description>&lt;p&gt;On newer versions of Debian and Ubuntu, the way repos are authenticated&#xA;through public keys has changed somewhat. Here&amp;rsquo;s what I&amp;rsquo;ve found.&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>LetsEncrypt DNS wildcard certificates with HAProxy</title>
+				<link>https://agren.cc/p/certbot-with-haproxy/</link>
+				<pubDate>Tue, 12 Mar 2024 12:00:00 +0200</pubDate>
+				<guid>https://agren.cc/p/certbot-with-haproxy/</guid>
+				<description>&lt;p&gt;Wildcard certificates are really useful, especially in cases where you&#xA;are using a load balancer like HAProxy that targets multiple backends&#xA;serving separate subdomains.&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>Using curl to pass videos to VLC on Apple TV</title>
+				<link>https://agren.cc/p/curl-to-vlc/</link>
+				<pubDate>Wed, 13 Sep 2023 19:08:00 +0200</pubDate>
+				<guid>https://agren.cc/p/curl-to-vlc/</guid>
+				<description>&lt;p&gt;VLC has always been a great piece of software, but one place where is&#xA;really shines is on iOS/tvOS since it allows you to play pretty much any&#xA;video file, and you can send that file over curl.&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>MAC spoofing on Wi-Fi with captive portals</title>
+				<link>https://agren.cc/p/mac-spoofing-captive-wifi/</link>
+				<pubDate>Sun, 25 Dec 2022 14:00:00 +0200</pubDate>
+				<guid>https://agren.cc/p/mac-spoofing-captive-wifi/</guid>
+				<description>&lt;p&gt;Not all devices are capable of handling &lt;a href=&#34;https://en.wikipedia.org/wiki/Captive_portal&#34;&gt;captive&#xA;portals&lt;/a&gt;. Problematic&#xA;devices usually include older hardware with outdated browsers, such as&#xA;&amp;ldquo;smart&amp;rdquo; TVs, gaming consoles and the like.&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>Manual disk encryption on Ubuntu</title>
+				<link>https://agren.cc/p/manual-disk-encryption/</link>
+				<pubDate>Sat, 03 Dec 2022 15:00:00 +0200</pubDate>
+				<guid>https://agren.cc/p/manual-disk-encryption/</guid>
+				<description>&lt;p&gt;Ubuntu makes it very easy to set up full disk encryption, but it&#xA;requires you to wipe the entire disk if you want the wizard to do it for&#xA;you, so this is how you can set it up manually.&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>Encrypted LUKS file container</title>
+				<link>https://agren.cc/p/luks-file/</link>
+				<pubDate>Fri, 28 Oct 2022 15:59:51 +0200</pubDate>
+				<guid>https://agren.cc/p/luks-file/</guid>
+				<description>&lt;p&gt;While &lt;a href=&#34;https://en.wikipedia.org/wiki/Linux_Unified_Key_Setup&#34;&gt;Linux Unified Key Setup&lt;/a&gt; — &lt;code&gt;LUKS&lt;/code&gt; — is mostly used to encrypt entire disks under Linux, it can also be used to easily create an encrypted file container. This can be used as an alternative to encrypting something like a &lt;code&gt;.tar.gz&lt;/code&gt; file directly, and will be easier to mount and read, without having to write decrypted data to disk.&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>Linux Sysadmin Scratchpad</title>
+				<link>https://agren.cc/p/scratchpad/</link>
+				<pubDate>Sat, 24 Sep 2022 12:51:00 +0200</pubDate>
+				<guid>https://agren.cc/p/scratchpad/</guid>
+				<description>&lt;p&gt;This page is a collection of useful commands or one-liners collected&#xA;through the years. They are sorted in general categories, but I&amp;rsquo;ve&#xA;attempted to describe them as well as I can so hopefully CTRL+F will&#xA;work decently if you know what you&amp;rsquo;re looking for.&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>fail2ban on EL8</title>
+				<link>https://agren.cc/p/fail2ban-on-el8/</link>
+				<pubDate>Fri, 08 Oct 2021 15:30:51 +0200</pubDate>
+				<guid>https://agren.cc/p/fail2ban-on-el8/</guid>
+				<description>&lt;p&gt;fail2ban is commonly used to take a certain action, such as automatically blocking an IP, after repeated authentication failures or other generally bad behavior against applications, as detected by regex matching against log output.&lt;/p&gt;</description>
+			</item>
+	</channel>
 </rss>

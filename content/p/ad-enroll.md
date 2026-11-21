@@ -763,5 +763,5 @@ With all of this done, you should hopefully have:
   the system by SSSD, you may have sudo rights.
 
 Thoughts and feedback are welcome via
-[@linus@telegrafverket.cc](https://telegrafverket.cc/@linus) -- email
-works too.
+[@linus@mastodon.acc.sunet.se](https://mastodon.acc.sunet.se/@linus)
+

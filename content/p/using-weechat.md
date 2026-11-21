@@ -281,4 +281,4 @@ We have:
 
 There's obviously a lot more you can do with WeeChat, if you have any
 suggestions or feedback feel free to get back to me via Mastodon
-[@linus@telegrafverket.cc](https://telegrafverket.cc/@linus) or e-mail.
+[@linus@mastodon.acc.sunet.se](https://mastodon.acc.sunet.se/@linus) or e-mail.

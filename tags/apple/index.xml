@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Apple on agren.cc</title>
-    <link>https://agren.cc/tags/apple/</link>
-    <description>Recent content in Apple on agren.cc</description>
-    <generator>Hugo</generator>
-    <language>en-us</language>
-    <lastBuildDate>Wed, 13 Sep 2023 19:08:00 +0200</lastBuildDate>
-    <atom:link href="https://agren.cc/tags/apple/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Using curl to pass videos to VLC on Apple TV</title>
-      <link>https://agren.cc/p/curl-to-vlc/</link>
-      <pubDate>Wed, 13 Sep 2023 19:08:00 +0200</pubDate>
-      <guid>https://agren.cc/p/curl-to-vlc/</guid>
-      <description>&lt;p&gt;VLC has always been a great piece of software, but one place where is&#xA;really shines is on iOS/tvOS since it allows you to play pretty much any&#xA;video file, and you can send that file over curl.&lt;/p&gt;</description>
-    </item>
-  </channel>
+	<channel>
+		<title>Apple on agren.cc</title>
+		<link>https://agren.cc/tags/apple/</link>
+		<description>Recent content in Apple on agren.cc</description>
+		<generator>Hugo</generator>
+		<language>en-us</language>
+		
+		
+		
+		
+			<lastBuildDate>Wed, 13 Sep 2023 19:08:00 +0200</lastBuildDate>
+		
+			<atom:link href="https://agren.cc/tags/apple/index.xml" rel="self" type="application/rss+xml" />
+			<item>
+				<title>Using curl to pass videos to VLC on Apple TV</title>
+				<link>https://agren.cc/p/curl-to-vlc/</link>
+				<pubDate>Wed, 13 Sep 2023 19:08:00 +0200</pubDate>
+				<guid>https://agren.cc/p/curl-to-vlc/</guid>
+				<description>&lt;p&gt;VLC has always been a great piece of software, but one place where is&#xA;really shines is on iOS/tvOS since it allows you to play pretty much any&#xA;video file, and you can send that file over curl.&lt;/p&gt;</description>
+			</item>
+	</channel>
 </rss>

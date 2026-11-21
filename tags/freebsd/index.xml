@@ -1,47 +1,52 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Freebsd on agren.cc</title>
-    <link>https://agren.cc/tags/freebsd/</link>
-    <description>Recent content in Freebsd on agren.cc</description>
-    <generator>Hugo</generator>
-    <language>en-us</language>
-    <lastBuildDate>Thu, 31 Jul 2025 12:00:00 +0200</lastBuildDate>
-    <atom:link href="https://agren.cc/tags/freebsd/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Alpine Linux VM cloud images on FreeBSD</title>
-      <link>https://agren.cc/p/alpine-on-bhyve/</link>
-      <pubDate>Thu, 31 Jul 2025 12:00:00 +0200</pubDate>
-      <guid>https://agren.cc/p/alpine-on-bhyve/</guid>
-      <description>&lt;p&gt;You can get almost anything running on most hypervisors if you&amp;rsquo;re OK&#xA;with mounting an ISO and running through an installation, but VM cloud&#xA;images are essential for repeat deployments, so I wanted to explore&#xA;what the support is like on FreeBSD. Turns out, it&amp;rsquo;s not terrible.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Manually set up services on OPNsense</title>
-      <link>https://agren.cc/p/opnsense-services/</link>
-      <pubDate>Sun, 30 Mar 2025 11:00:00 +0200</pubDate>
-      <guid>https://agren.cc/p/opnsense-services/</guid>
-      <description>&lt;p&gt;One of the main benefits of OPNsense is obviously the web interface, but&#xA;if you just want to set up a service manually like on FreeBSD, here&amp;rsquo;s how you can&#xA;do it. In this case, we&amp;rsquo;re setting up dnscrypt-proxy.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Using and configuring WeeChat, making IRC mostly painless</title>
-      <link>https://agren.cc/p/using-weechat/</link>
-      <pubDate>Sat, 18 Jan 2025 12:00:00 +0200</pubDate>
-      <guid>https://agren.cc/p/using-weechat/</guid>
-      <description>&lt;p&gt;There&amp;rsquo;s a simplicity to IRC compared to most &amp;ldquo;modern&amp;rdquo; alternatives that&#xA;is easy to love. This article is about how to set up the basics of&#xA;the WeeChat IRC client.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>FreeBSD VM under Incus on Debian</title>
-      <link>https://agren.cc/p/freebsd-vm-incus/</link>
-      <pubDate>Sun, 24 Nov 2024 11:45:00 +0200</pubDate>
-      <guid>https://agren.cc/p/freebsd-vm-incus/</guid>
-      <description>&lt;p&gt;Incus helps you manage both containers (LXC) and virtual machines&#xA;(QEMU), and while many images come prepared, FreeBSD is not one of them:&#xA;here&amp;rsquo;s how to set it up.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Deploying FreeBSD on VMware</title>
-      <link>https://agren.cc/p/freebsd-on-vmware/</link>
-      <pubDate>Mon, 23 Sep 2024 11:45:00 +0200</pubDate>
-      <guid>https://agren.cc/p/freebsd-on-vmware/</guid>
-      <description>&lt;p&gt;This post is about multiple components involved in deploying FreeBSD to&#xA;a VMware environment. Since there are many moving parts this may also be&#xA;interesting in general to anyone doing &amp;ldquo;infrastructure as code&amp;rdquo; and&#xA;cloud deployments, the process is quite similar for Linux.&lt;/p&gt;</description>
-    </item>
-  </channel>
+	<channel>
+		<title>Freebsd on agren.cc</title>
+		<link>https://agren.cc/tags/freebsd/</link>
+		<description>Recent content in Freebsd on agren.cc</description>
+		<generator>Hugo</generator>
+		<language>en-us</language>
+		
+		
+		
+		
+			<lastBuildDate>Thu, 31 Jul 2025 12:00:00 +0200</lastBuildDate>
+		
+			<atom:link href="https://agren.cc/tags/freebsd/index.xml" rel="self" type="application/rss+xml" />
+			<item>
+				<title>Alpine Linux VM cloud images on FreeBSD</title>
+				<link>https://agren.cc/p/alpine-on-bhyve/</link>
+				<pubDate>Thu, 31 Jul 2025 12:00:00 +0200</pubDate>
+				<guid>https://agren.cc/p/alpine-on-bhyve/</guid>
+				<description>&lt;p&gt;You can get almost anything running on most hypervisors if you&amp;rsquo;re OK&#xA;with mounting an ISO and running through an installation, but VM cloud&#xA;images are essential for repeat deployments, so I wanted to explore&#xA;what the support is like on FreeBSD. Turns out, it&amp;rsquo;s not terrible.&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>Manually set up services on OPNsense</title>
+				<link>https://agren.cc/p/opnsense-services/</link>
+				<pubDate>Sun, 30 Mar 2025 11:00:00 +0200</pubDate>
+				<guid>https://agren.cc/p/opnsense-services/</guid>
+				<description>&lt;p&gt;One of the main benefits of OPNsense is obviously the web interface, but&#xA;if you just want to set up a service manually like on FreeBSD, here&amp;rsquo;s how you can&#xA;do it. In this case, we&amp;rsquo;re setting up dnscrypt-proxy.&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>Using and configuring WeeChat, making IRC mostly painless</title>
+				<link>https://agren.cc/p/using-weechat/</link>
+				<pubDate>Sat, 18 Jan 2025 12:00:00 +0200</pubDate>
+				<guid>https://agren.cc/p/using-weechat/</guid>
+				<description>&lt;p&gt;There&amp;rsquo;s a simplicity to IRC compared to most &amp;ldquo;modern&amp;rdquo; alternatives that&#xA;is easy to love. This article is about how to set up the basics of&#xA;the WeeChat IRC client.&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>FreeBSD VM under Incus on Debian</title>
+				<link>https://agren.cc/p/freebsd-vm-incus/</link>
+				<pubDate>Sun, 24 Nov 2024 11:45:00 +0200</pubDate>
+				<guid>https://agren.cc/p/freebsd-vm-incus/</guid>
+				<description>&lt;p&gt;Incus helps you manage both containers (LXC) and virtual machines&#xA;(QEMU), and while many images come prepared, FreeBSD is not one of them:&#xA;here&amp;rsquo;s how to set it up.&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>Deploying FreeBSD on VMware</title>
+				<link>https://agren.cc/p/freebsd-on-vmware/</link>
+				<pubDate>Mon, 23 Sep 2024 11:45:00 +0200</pubDate>
+				<guid>https://agren.cc/p/freebsd-on-vmware/</guid>
+				<description>&lt;p&gt;This post is about multiple components involved in deploying FreeBSD to&#xA;a VMware environment. Since there are many moving parts this may also be&#xA;interesting in general to anyone doing &amp;ldquo;infrastructure as code&amp;rdquo; and&#xA;cloud deployments, the process is quite similar for Linux.&lt;/p&gt;</description>
+			</item>
+	</channel>
 </rss>

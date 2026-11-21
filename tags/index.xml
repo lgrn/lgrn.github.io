@@ -1,159 +1,171 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Tags on agren.cc</title>
-    <link>https://agren.cc/tags/</link>
-    <description>Recent content in Tags on agren.cc</description>
-    <generator>Hugo</generator>
-    <language>en-us</language>
-    <lastBuildDate>Wed, 11 Feb 2026 21:00:00 +0200</lastBuildDate>
-    <atom:link href="https://agren.cc/tags/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Incus</title>
-      <link>https://agren.cc/tags/incus/</link>
-      <pubDate>Wed, 11 Feb 2026 21:00:00 +0200</pubDate>
-      <guid>https://agren.cc/tags/incus/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Linux</title>
-      <link>https://agren.cc/tags/linux/</link>
-      <pubDate>Wed, 11 Feb 2026 21:00:00 +0200</pubDate>
-      <guid>https://agren.cc/tags/linux/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Sysadmin</title>
-      <link>https://agren.cc/tags/sysadmin/</link>
-      <pubDate>Wed, 11 Feb 2026 21:00:00 +0200</pubDate>
-      <guid>https://agren.cc/tags/sysadmin/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Zfs</title>
-      <link>https://agren.cc/tags/zfs/</link>
-      <pubDate>Wed, 11 Feb 2026 21:00:00 +0200</pubDate>
-      <guid>https://agren.cc/tags/zfs/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Gnome</title>
-      <link>https://agren.cc/tags/gnome/</link>
-      <pubDate>Sun, 14 Sep 2025 22:00:00 +0200</pubDate>
-      <guid>https://agren.cc/tags/gnome/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Cloud-Init</title>
-      <link>https://agren.cc/tags/cloud-init/</link>
-      <pubDate>Thu, 31 Jul 2025 12:00:00 +0200</pubDate>
-      <guid>https://agren.cc/tags/cloud-init/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Freebsd</title>
-      <link>https://agren.cc/tags/freebsd/</link>
-      <pubDate>Thu, 31 Jul 2025 12:00:00 +0200</pubDate>
-      <guid>https://agren.cc/tags/freebsd/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Torrent</title>
-      <link>https://agren.cc/tags/torrent/</link>
-      <pubDate>Sun, 27 Jul 2025 12:00:00 +0200</pubDate>
-      <guid>https://agren.cc/tags/torrent/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Tls</title>
-      <link>https://agren.cc/tags/tls/</link>
-      <pubDate>Sat, 07 Jun 2025 22:00:00 +0200</pubDate>
-      <guid>https://agren.cc/tags/tls/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Opnsense</title>
-      <link>https://agren.cc/tags/opnsense/</link>
-      <pubDate>Sun, 30 Mar 2025 11:00:00 +0200</pubDate>
-      <guid>https://agren.cc/tags/opnsense/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Javascript</title>
-      <link>https://agren.cc/tags/javascript/</link>
-      <pubDate>Sun, 02 Mar 2025 11:00:00 +0200</pubDate>
-      <guid>https://agren.cc/tags/javascript/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Lxc</title>
-      <link>https://agren.cc/tags/lxc/</link>
-      <pubDate>Sun, 02 Mar 2025 11:00:00 +0200</pubDate>
-      <guid>https://agren.cc/tags/lxc/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Systemd</title>
-      <link>https://agren.cc/tags/systemd/</link>
-      <pubDate>Sat, 01 Mar 2025 09:45:00 +0200</pubDate>
-      <guid>https://agren.cc/tags/systemd/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Tailscale</title>
-      <link>https://agren.cc/tags/tailscale/</link>
-      <pubDate>Sat, 01 Mar 2025 09:45:00 +0200</pubDate>
-      <guid>https://agren.cc/tags/tailscale/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Docker</title>
-      <link>https://agren.cc/tags/docker/</link>
-      <pubDate>Mon, 09 Dec 2024 15:01:00 +0200</pubDate>
-      <guid>https://agren.cc/tags/docker/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Flatcar</title>
-      <link>https://agren.cc/tags/flatcar/</link>
-      <pubDate>Mon, 09 Dec 2024 15:01:00 +0200</pubDate>
-      <guid>https://agren.cc/tags/flatcar/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Mail</title>
-      <link>https://agren.cc/tags/mail/</link>
-      <pubDate>Sat, 09 Nov 2024 16:00:00 +0100</pubDate>
-      <guid>https://agren.cc/tags/mail/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Php</title>
-      <link>https://agren.cc/tags/php/</link>
-      <pubDate>Sat, 09 Nov 2024 16:00:00 +0100</pubDate>
-      <guid>https://agren.cc/tags/php/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Vmware</title>
-      <link>https://agren.cc/tags/vmware/</link>
-      <pubDate>Mon, 23 Sep 2024 11:45:00 +0200</pubDate>
-      <guid>https://agren.cc/tags/vmware/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Apple</title>
-      <link>https://agren.cc/tags/apple/</link>
-      <pubDate>Wed, 13 Sep 2023 19:08:00 +0200</pubDate>
-      <guid>https://agren.cc/tags/apple/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Wifi</title>
-      <link>https://agren.cc/tags/wifi/</link>
-      <pubDate>Sun, 25 Dec 2022 14:00:00 +0200</pubDate>
-      <guid>https://agren.cc/tags/wifi/</guid>
-      <description></description>
-    </item>
-  </channel>
+	<channel>
+		<title>Tags on agren.cc</title>
+		<link>https://agren.cc/tags/</link>
+		<description>Recent content in Tags on agren.cc</description>
+		<generator>Hugo</generator>
+		<language>en-us</language>
+		
+		
+		
+		
+			<lastBuildDate>Fri, 20 Nov 2026 22:01:00 +0200</lastBuildDate>
+		
+			<atom:link href="https://agren.cc/tags/index.xml" rel="self" type="application/rss+xml" />
+			<item>
+				<title>Incus</title>
+				<link>https://agren.cc/tags/incus/</link>
+				<pubDate>Fri, 20 Nov 2026 22:01:00 +0200</pubDate>
+				<guid>https://agren.cc/tags/incus/</guid>
+				<description></description>
+			</item>
+			<item>
+				<title>Linux</title>
+				<link>https://agren.cc/tags/linux/</link>
+				<pubDate>Fri, 20 Nov 2026 22:01:00 +0200</pubDate>
+				<guid>https://agren.cc/tags/linux/</guid>
+				<description></description>
+			</item>
+			<item>
+				<title>Proxmox</title>
+				<link>https://agren.cc/tags/proxmox/</link>
+				<pubDate>Fri, 20 Nov 2026 22:01:00 +0200</pubDate>
+				<guid>https://agren.cc/tags/proxmox/</guid>
+				<description></description>
+			</item>
+			<item>
+				<title>Sysadmin</title>
+				<link>https://agren.cc/tags/sysadmin/</link>
+				<pubDate>Fri, 20 Nov 2026 22:01:00 +0200</pubDate>
+				<guid>https://agren.cc/tags/sysadmin/</guid>
+				<description></description>
+			</item>
+			<item>
+				<title>Zfs</title>
+				<link>https://agren.cc/tags/zfs/</link>
+				<pubDate>Wed, 11 Feb 2026 21:00:00 +0200</pubDate>
+				<guid>https://agren.cc/tags/zfs/</guid>
+				<description></description>
+			</item>
+			<item>
+				<title>Gnome</title>
+				<link>https://agren.cc/tags/gnome/</link>
+				<pubDate>Sun, 14 Sep 2025 22:00:00 +0200</pubDate>
+				<guid>https://agren.cc/tags/gnome/</guid>
+				<description></description>
+			</item>
+			<item>
+				<title>Cloud-Init</title>
+				<link>https://agren.cc/tags/cloud-init/</link>
+				<pubDate>Thu, 31 Jul 2025 12:00:00 +0200</pubDate>
+				<guid>https://agren.cc/tags/cloud-init/</guid>
+				<description></description>
+			</item>
+			<item>
+				<title>Freebsd</title>
+				<link>https://agren.cc/tags/freebsd/</link>
+				<pubDate>Thu, 31 Jul 2025 12:00:00 +0200</pubDate>
+				<guid>https://agren.cc/tags/freebsd/</guid>
+				<description></description>
+			</item>
+			<item>
+				<title>Torrent</title>
+				<link>https://agren.cc/tags/torrent/</link>
+				<pubDate>Sun, 27 Jul 2025 12:00:00 +0200</pubDate>
+				<guid>https://agren.cc/tags/torrent/</guid>
+				<description></description>
+			</item>
+			<item>
+				<title>Tls</title>
+				<link>https://agren.cc/tags/tls/</link>
+				<pubDate>Sat, 07 Jun 2025 22:00:00 +0200</pubDate>
+				<guid>https://agren.cc/tags/tls/</guid>
+				<description></description>
+			</item>
+			<item>
+				<title>Opnsense</title>
+				<link>https://agren.cc/tags/opnsense/</link>
+				<pubDate>Sun, 30 Mar 2025 11:00:00 +0200</pubDate>
+				<guid>https://agren.cc/tags/opnsense/</guid>
+				<description></description>
+			</item>
+			<item>
+				<title>Javascript</title>
+				<link>https://agren.cc/tags/javascript/</link>
+				<pubDate>Sun, 02 Mar 2025 11:00:00 +0200</pubDate>
+				<guid>https://agren.cc/tags/javascript/</guid>
+				<description></description>
+			</item>
+			<item>
+				<title>Lxc</title>
+				<link>https://agren.cc/tags/lxc/</link>
+				<pubDate>Sun, 02 Mar 2025 11:00:00 +0200</pubDate>
+				<guid>https://agren.cc/tags/lxc/</guid>
+				<description></description>
+			</item>
+			<item>
+				<title>Systemd</title>
+				<link>https://agren.cc/tags/systemd/</link>
+				<pubDate>Sat, 01 Mar 2025 09:45:00 +0200</pubDate>
+				<guid>https://agren.cc/tags/systemd/</guid>
+				<description></description>
+			</item>
+			<item>
+				<title>Tailscale</title>
+				<link>https://agren.cc/tags/tailscale/</link>
+				<pubDate>Sat, 01 Mar 2025 09:45:00 +0200</pubDate>
+				<guid>https://agren.cc/tags/tailscale/</guid>
+				<description></description>
+			</item>
+			<item>
+				<title>Docker</title>
+				<link>https://agren.cc/tags/docker/</link>
+				<pubDate>Mon, 09 Dec 2024 15:01:00 +0200</pubDate>
+				<guid>https://agren.cc/tags/docker/</guid>
+				<description></description>
+			</item>
+			<item>
+				<title>Flatcar</title>
+				<link>https://agren.cc/tags/flatcar/</link>
+				<pubDate>Mon, 09 Dec 2024 15:01:00 +0200</pubDate>
+				<guid>https://agren.cc/tags/flatcar/</guid>
+				<description></description>
+			</item>
+			<item>
+				<title>Mail</title>
+				<link>https://agren.cc/tags/mail/</link>
+				<pubDate>Sat, 09 Nov 2024 16:00:00 +0100</pubDate>
+				<guid>https://agren.cc/tags/mail/</guid>
+				<description></description>
+			</item>
+			<item>
+				<title>Php</title>
+				<link>https://agren.cc/tags/php/</link>
+				<pubDate>Sat, 09 Nov 2024 16:00:00 +0100</pubDate>
+				<guid>https://agren.cc/tags/php/</guid>
+				<description></description>
+			</item>
+			<item>
+				<title>Vmware</title>
+				<link>https://agren.cc/tags/vmware/</link>
+				<pubDate>Mon, 23 Sep 2024 11:45:00 +0200</pubDate>
+				<guid>https://agren.cc/tags/vmware/</guid>
+				<description></description>
+			</item>
+			<item>
+				<title>Apple</title>
+				<link>https://agren.cc/tags/apple/</link>
+				<pubDate>Wed, 13 Sep 2023 19:08:00 +0200</pubDate>
+				<guid>https://agren.cc/tags/apple/</guid>
+				<description></description>
+			</item>
+			<item>
+				<title>Wifi</title>
+				<link>https://agren.cc/tags/wifi/</link>
+				<pubDate>Sun, 25 Dec 2022 14:00:00 +0200</pubDate>
+				<guid>https://agren.cc/tags/wifi/</guid>
+				<description></description>
+			</item>
+	</channel>
 </rss>

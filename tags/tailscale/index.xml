@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Tailscale on agren.cc</title>
-    <link>https://agren.cc/tags/tailscale/</link>
-    <description>Recent content in Tailscale on agren.cc</description>
-    <generator>Hugo</generator>
-    <language>en-us</language>
-    <lastBuildDate>Sat, 01 Mar 2025 09:45:00 +0200</lastBuildDate>
-    <atom:link href="https://agren.cc/tags/tailscale/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Making tailscaled dependable for sshd and other services</title>
-      <link>https://agren.cc/p/systemd-tailscale/</link>
-      <pubDate>Sat, 01 Mar 2025 09:45:00 +0200</pubDate>
-      <guid>https://agren.cc/p/systemd-tailscale/</guid>
-      <description>&lt;p&gt;If you use Tailscale on your server, you may have services that should&#xA;only listen on that IP. Unfortunately, the tailscaled service often goes&#xA;active before it&amp;rsquo;s actually done, breaking dependencies: here&amp;rsquo;s how to&#xA;fix it.&lt;/p&gt;</description>
-    </item>
-  </channel>
+	<channel>
+		<title>Tailscale on agren.cc</title>
+		<link>https://agren.cc/tags/tailscale/</link>
+		<description>Recent content in Tailscale on agren.cc</description>
+		<generator>Hugo</generator>
+		<language>en-us</language>
+		
+		
+		
+		
+			<lastBuildDate>Sat, 01 Mar 2025 09:45:00 +0200</lastBuildDate>
+		
+			<atom:link href="https://agren.cc/tags/tailscale/index.xml" rel="self" type="application/rss+xml" />
+			<item>
+				<title>Making tailscaled dependable for sshd and other services</title>
+				<link>https://agren.cc/p/systemd-tailscale/</link>
+				<pubDate>Sat, 01 Mar 2025 09:45:00 +0200</pubDate>
+				<guid>https://agren.cc/p/systemd-tailscale/</guid>
+				<description>&lt;p&gt;If you use Tailscale on your server, you may have services that should&#xA;only listen on that IP. Unfortunately, the tailscaled service often goes&#xA;active before it&amp;rsquo;s actually done, breaking dependencies: here&amp;rsquo;s how to&#xA;fix it.&lt;/p&gt;</description>
+			</item>
+	</channel>
 </rss>

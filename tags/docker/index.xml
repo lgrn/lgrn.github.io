@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Docker on agren.cc</title>
-    <link>https://agren.cc/tags/docker/</link>
-    <description>Recent content in Docker on agren.cc</description>
-    <generator>Hugo</generator>
-    <language>en-us</language>
-    <lastBuildDate>Mon, 09 Dec 2024 15:01:00 +0200</lastBuildDate>
-    <atom:link href="https://agren.cc/tags/docker/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Flatcar Linux VM under Incus on Debian</title>
-      <link>https://agren.cc/p/flatcar-on-incus/</link>
-      <pubDate>Mon, 09 Dec 2024 15:01:00 +0200</pubDate>
-      <guid>https://agren.cc/p/flatcar-on-incus/</guid>
-      <description>&lt;p&gt;Flatcar Linux is a fork of the now defunct CoreOS, specifically designed&#xA;to run container workloads. It has an immutable root file system and&#xA;automatic updates, and here&amp;rsquo;s how you can run it as a VM under Incus.&lt;/p&gt;</description>
-    </item>
-  </channel>
+	<channel>
+		<title>Docker on agren.cc</title>
+		<link>https://agren.cc/tags/docker/</link>
+		<description>Recent content in Docker on agren.cc</description>
+		<generator>Hugo</generator>
+		<language>en-us</language>
+		
+		
+		
+		
+			<lastBuildDate>Mon, 09 Dec 2024 15:01:00 +0200</lastBuildDate>
+		
+			<atom:link href="https://agren.cc/tags/docker/index.xml" rel="self" type="application/rss+xml" />
+			<item>
+				<title>Flatcar Linux VM under Incus on Debian</title>
+				<link>https://agren.cc/p/flatcar-on-incus/</link>
+				<pubDate>Mon, 09 Dec 2024 15:01:00 +0200</pubDate>
+				<guid>https://agren.cc/p/flatcar-on-incus/</guid>
+				<description>&lt;p&gt;Flatcar Linux is a fork of the now defunct CoreOS, specifically designed&#xA;to run container workloads. It has an immutable root file system and&#xA;automatic updates, and here&amp;rsquo;s how you can run it as a VM under Incus.&lt;/p&gt;</description>
+			</item>
+	</channel>
 </rss>

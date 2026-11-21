@@ -206,5 +206,5 @@ scripts, but even if that never happens, the workaround above is good
 enough for anyone with some scripting knowledge to build something cool.
 
 Thoughts and feedback are welcome via
-[@linus@telegrafverket.cc](https://telegrafverket.cc/@linus) -- email
-works too.
+[@linus@mastodon.acc.sunet.se](https://mastodon.acc.sunet.se/@linus)
+

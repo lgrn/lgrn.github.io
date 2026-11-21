@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Vmware on agren.cc</title>
-    <link>https://agren.cc/tags/vmware/</link>
-    <description>Recent content in Vmware on agren.cc</description>
-    <generator>Hugo</generator>
-    <language>en-us</language>
-    <lastBuildDate>Mon, 23 Sep 2024 11:45:00 +0200</lastBuildDate>
-    <atom:link href="https://agren.cc/tags/vmware/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Deploying FreeBSD on VMware</title>
-      <link>https://agren.cc/p/freebsd-on-vmware/</link>
-      <pubDate>Mon, 23 Sep 2024 11:45:00 +0200</pubDate>
-      <guid>https://agren.cc/p/freebsd-on-vmware/</guid>
-      <description>&lt;p&gt;This post is about multiple components involved in deploying FreeBSD to&#xA;a VMware environment. Since there are many moving parts this may also be&#xA;interesting in general to anyone doing &amp;ldquo;infrastructure as code&amp;rdquo; and&#xA;cloud deployments, the process is quite similar for Linux.&lt;/p&gt;</description>
-    </item>
-  </channel>
+	<channel>
+		<title>Vmware on agren.cc</title>
+		<link>https://agren.cc/tags/vmware/</link>
+		<description>Recent content in Vmware on agren.cc</description>
+		<generator>Hugo</generator>
+		<language>en-us</language>
+		
+		
+		
+		
+			<lastBuildDate>Mon, 23 Sep 2024 11:45:00 +0200</lastBuildDate>
+		
+			<atom:link href="https://agren.cc/tags/vmware/index.xml" rel="self" type="application/rss+xml" />
+			<item>
+				<title>Deploying FreeBSD on VMware</title>
+				<link>https://agren.cc/p/freebsd-on-vmware/</link>
+				<pubDate>Mon, 23 Sep 2024 11:45:00 +0200</pubDate>
+				<guid>https://agren.cc/p/freebsd-on-vmware/</guid>
+				<description>&lt;p&gt;This post is about multiple components involved in deploying FreeBSD to&#xA;a VMware environment. Since there are many moving parts this may also be&#xA;interesting in general to anyone doing &amp;ldquo;infrastructure as code&amp;rdquo; and&#xA;cloud deployments, the process is quite similar for Linux.&lt;/p&gt;</description>
+			</item>
+	</channel>
 </rss>

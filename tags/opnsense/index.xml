@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Opnsense on agren.cc</title>
-    <link>https://agren.cc/tags/opnsense/</link>
-    <description>Recent content in Opnsense on agren.cc</description>
-    <generator>Hugo</generator>
-    <language>en-us</language>
-    <lastBuildDate>Sun, 30 Mar 2025 11:00:00 +0200</lastBuildDate>
-    <atom:link href="https://agren.cc/tags/opnsense/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Manually set up services on OPNsense</title>
-      <link>https://agren.cc/p/opnsense-services/</link>
-      <pubDate>Sun, 30 Mar 2025 11:00:00 +0200</pubDate>
-      <guid>https://agren.cc/p/opnsense-services/</guid>
-      <description>&lt;p&gt;One of the main benefits of OPNsense is obviously the web interface, but&#xA;if you just want to set up a service manually like on FreeBSD, here&amp;rsquo;s how you can&#xA;do it. In this case, we&amp;rsquo;re setting up dnscrypt-proxy.&lt;/p&gt;</description>
-    </item>
-  </channel>
+	<channel>
+		<title>Opnsense on agren.cc</title>
+		<link>https://agren.cc/tags/opnsense/</link>
+		<description>Recent content in Opnsense on agren.cc</description>
+		<generator>Hugo</generator>
+		<language>en-us</language>
+		
+		
+		
+		
+			<lastBuildDate>Sun, 30 Mar 2025 11:00:00 +0200</lastBuildDate>
+		
+			<atom:link href="https://agren.cc/tags/opnsense/index.xml" rel="self" type="application/rss+xml" />
+			<item>
+				<title>Manually set up services on OPNsense</title>
+				<link>https://agren.cc/p/opnsense-services/</link>
+				<pubDate>Sun, 30 Mar 2025 11:00:00 +0200</pubDate>
+				<guid>https://agren.cc/p/opnsense-services/</guid>
+				<description>&lt;p&gt;One of the main benefits of OPNsense is obviously the web interface, but&#xA;if you just want to set up a service manually like on FreeBSD, here&amp;rsquo;s how you can&#xA;do it. In this case, we&amp;rsquo;re setting up dnscrypt-proxy.&lt;/p&gt;</description>
+			</item>
+	</channel>
 </rss>

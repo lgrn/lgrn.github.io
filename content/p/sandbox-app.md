@@ -96,5 +96,5 @@ cp -v /usr/share/applications/librewolf.desktop \
 ```
 
 Thoughts and feedback are welcome via
-[@linus@telegrafverket.cc](https://telegrafverket.cc/@linus) -- email
-works too.
+[@linus@mastodon.acc.sunet.se](https://mastodon.acc.sunet.se/@linus)
+

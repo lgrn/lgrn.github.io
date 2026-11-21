@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Php on agren.cc</title>
-    <link>https://agren.cc/tags/php/</link>
-    <description>Recent content in Php on agren.cc</description>
-    <generator>Hugo</generator>
-    <language>en-us</language>
-    <lastBuildDate>Sat, 09 Nov 2024 16:00:00 +0100</lastBuildDate>
-    <atom:link href="https://agren.cc/tags/php/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Roundcube with FrankenPHP on Debian</title>
-      <link>https://agren.cc/p/frankenphp/</link>
-      <pubDate>Sat, 09 Nov 2024 16:00:00 +0100</pubDate>
-      <guid>https://agren.cc/p/frankenphp/</guid>
-      <description>&lt;p&gt;FrankenPHP is a &amp;ldquo;modern application server for PHP built on top of the&#xA;Caddy web server&amp;rdquo;, which in its simplest form lets you serve PHP apps&#xA;without the nginx/apache config salad you may be used to. Here&amp;rsquo;s how to&#xA;set it up as a service on Debian.&lt;/p&gt;</description>
-    </item>
-  </channel>
+	<channel>
+		<title>Php on agren.cc</title>
+		<link>https://agren.cc/tags/php/</link>
+		<description>Recent content in Php on agren.cc</description>
+		<generator>Hugo</generator>
+		<language>en-us</language>
+		
+		
+		
+		
+			<lastBuildDate>Sat, 09 Nov 2024 16:00:00 +0100</lastBuildDate>
+		
+			<atom:link href="https://agren.cc/tags/php/index.xml" rel="self" type="application/rss+xml" />
+			<item>
+				<title>Roundcube with FrankenPHP on Debian</title>
+				<link>https://agren.cc/p/frankenphp/</link>
+				<pubDate>Sat, 09 Nov 2024 16:00:00 +0100</pubDate>
+				<guid>https://agren.cc/p/frankenphp/</guid>
+				<description>&lt;p&gt;FrankenPHP is a &amp;ldquo;modern application server for PHP built on top of the&#xA;Caddy web server&amp;rdquo;, which in its simplest form lets you serve PHP apps&#xA;without the nginx/apache config salad you may be used to. Here&amp;rsquo;s how to&#xA;set it up as a service on Debian.&lt;/p&gt;</description>
+			</item>
+	</channel>
 </rss>

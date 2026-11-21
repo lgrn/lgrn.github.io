@@ -245,5 +245,5 @@ Where `10.191.32.229` is the ip of your container. Now, as long as
 traffic hits `192.168.1.10:5000`, it should be forwarded correctly.
 
 Thoughts and feedback are welcome via
-[@linus@telegrafverket.cc](https://telegrafverket.cc/@linus) -- email
-works too.
+[@linus@mastodon.acc.sunet.se](https://mastodon.acc.sunet.se/@linus)
+
